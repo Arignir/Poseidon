@@ -1,0 +1,10 @@
+# Object files
+*.o
+*.iso
+*.d
+*.bin
+*.elf
+
+# Common editor files
+*~
+*#
