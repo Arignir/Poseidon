@@ -5,6 +5,12 @@
 *.bin
 *.elf
 
+# Target directory
+/target
+
+# Current arch
+/include/arch/current
+
 # Common editor files
 *~
 *#
