@@ -10,7 +10,7 @@
 incdir	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
 objs-y	+= $(addprefix $(incdir), \
+		handler_bootstrap.o \
 		handler.o \
 		idt.o \
-		isr.o \
 	)
