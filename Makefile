@@ -23,6 +23,14 @@ ifeq ($(V), 0)
 	Q		:= @
 endif
 
+# Target
+export target		?= release
+export TARGET		?= $(target)
+
+ifeq ($(filter $(TARGET),release debug),)
+$(error "target" must have the value "release" or "debug")
+endif
+
 # Target arch & triplet
 export ARCH		?= x86
 export TARGET_TRIPLET	?= i686-elf
@@ -31,9 +39,9 @@ export TARGET_TRIPLET	?= i686-elf
 export PROJDIR		:= $(shell pwd)
 
 # Create output directory
-export OUTDIR		:= $(PROJDIR)/target
+export OUTDIR		:= $(PROJDIR)/target/$(TARGET)
 ifneq ($(shell mkdir -p $(OUTDIR) && cd $(OUTDIR) && pwd), $(OUTDIR))
-	$(error Couldn't create output directory "$(OUTDIR)")
+$(error Couldn't create output directory "$(OUTDIR)")
 endif
 
 # Targets
@@ -78,6 +86,10 @@ monitor: iso
 debug: iso
 	$(Q)./scripts/run.sh -d -t -a "$(ARCH)" "$(ISO)"
 
+.PHONY: gdb
+gdb: iso
+	$(Q)./scripts/run.sh -g -a "$(ARCH)" "$(ISO)"
+
 .PHONY: kvm
 kvm: iso
 	$(Q)./scripts/run.sh -k -a "$(ARCH)" "$(ISO)"
@@ -101,6 +113,8 @@ re: clean
 	$(Q)printf "\n"
 	$(Q)printf "\t- make help     Shows this help\n"
 	$(Q)printf "\n"
+	$(Q)printf "\t- make target=  Indicate which target profile to use (\"debug\" or \"release\")\n"
+	$(Q)printf "\n"
 	$(Q)printf "\t- make all      Builds all targets (kernel and iso)\n"
 	$(Q)printf "\t- make kernel   Builds the kernel\n"
 	$(Q)printf "\t- make iso      Builds a complete iso using grub-mkrescue\n"
@@ -110,4 +124,5 @@ re: clean
 	$(Q)printf "\t- make run      Runs Poseidon's iso through QEMU, using the default configuration\n"
 	$(Q)printf "\t- make monitor  Runs Poseidon's iso through QEMU, using QEMU's minotor mode\n"
 	$(Q)printf "\t- make debug    Runs Poseidon's iso through QEMU, using QEMU's debug mode\n"
+	$(Q)printf "\t- make gdb      Runs Poseidon's iso through QEMU, connecting to a GDB server on localhost:1234\n"
 	$(Q)printf "\t- make kvm      Runs Poseidon's iso through QEMU, using KVM\n"

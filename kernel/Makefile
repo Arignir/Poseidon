@@ -14,7 +14,6 @@ LD	:= $(TARGET_TRIPLET)-ld
 
 # Variables
 CFLAGS	:= \
-	-O2 \
 	-MD \
 	-W \
 	-Wall \
@@ -36,6 +35,21 @@ CFLAGS	:= \
 	-fno-stack-protector \
 	-std=gnu11 \
 	-isystem $(PROJDIR)/include
+
+# Add new CFLAGS when building the "release" target.
+ifeq ($(TARGET), release)
+CFLAGS	+= \
+	-O2 \
+	-DRELEASE
+endif
+
+# Add new CFLAGS when building the "debug" target.
+ifeq ($(TARGET), debug)
+CFLAGS	+= \
+	-g3 \
+	-DDEBUG
+endif
+
 
 LDFLAGS	:= \
 	-nostdlib \
