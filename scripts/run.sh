@@ -16,6 +16,7 @@ function print_usage {
 	printf "\n"
 	printf "\t-a <arch>             Architecture (Default: i386)\n"
 	printf "\t-d                    Debug mode\n"
+	printf "\t-g                    Freeze on boot and connect to GDB\n"
 	printf "\t-t                    Monitor mode\n"
 	printf "\t-k                    Enables kvm (if available)\n"
 	printf "\t-m <MB>               Memory (in MB) (Default: 512MB)\n"
@@ -29,9 +30,10 @@ function print_usage {
 declare qemu="qemu-system-i386"
 declare qemu_args=" -serial stdio"
 
-while getopts dtkhm:a:c:s: FLAG; do
+while getopts dgtkhm:a:c:s: FLAG; do
 	case $FLAG in
-		d) qemu_args+=" -s -d int,cpu_reset,guest_errors,unimp --no-reboot";;
+		d) qemu_args+=" -d int,cpu_reset,guest_errors,unimp --no-reboot";;
+		g) qemu_args+=" -s -S";;
 		k) qemu_args+=" --enable-kvm";;
 		t) qemu_args=$(echo "$qemu_args" | sed s/serial/monitor/g);;
 		m) qemu_args+=" -m $OPTARG";;
