@@ -1,3 +1,3 @@
 # Poseidon
 
-Yet an other kernel.
+Yet another kernel.
