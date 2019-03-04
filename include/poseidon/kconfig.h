@@ -43,7 +43,7 @@
 # define KCONFIG_ARCH					x86
 
 // Sets to 1 if the targetted architecture is x86
-# define KCONFIG_X86					1
+# define KCONFIG_ARCH_X86				1
 
 /*
 ** Set to IO_PORT if the architecture is using port IO
