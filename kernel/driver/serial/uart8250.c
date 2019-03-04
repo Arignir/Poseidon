@@ -27,7 +27,7 @@
 # define USE_UART8250
 
 static
-struct io_port uart8250_port = {
+struct io_port const uart8250_port = {
 	.port = 0x3f8,
 };
 
