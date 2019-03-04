@@ -55,7 +55,8 @@ putsn(
 	}
 }
 
-static void
+static
+void
 uart8250_init(void)
 {
 	/* TODO: Name the offset so they look a bit less like magic values */
