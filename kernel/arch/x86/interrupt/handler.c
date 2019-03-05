@@ -8,6 +8,7 @@
 \******************************************************************************/
 
 #include <arch/x86/interrupt.h>
+#include <driver/pic/pic8259.h>
 #include <lib/interrupt.h>
 #include <lib/log.h>
 
@@ -22,19 +23,28 @@ void
 common_int_handler(
 	struct iframe *iframe
 ) {
-	switch (iframe->int_vector){
-		case INT_IRQ0...INT_NB:
+	switch (iframe->int_vector) {
+		case 0 ... INT_MAX_RESERVED_BY_INTEL:
+			// Panic on unhandled exceptions
+			panic("Unhandled exception %#x", iframe->int_vector);
+			break;
+		case INT_IRQ0 ... INT_NB:
 			if (irq_handlers[iframe->int_vector]) {
 				irq_handlers[iframe->int_vector]();
 			} else {
-				panic(
-					"Unhandled interrupt request %#x",
+				logln(
+					"Unhandled IRQ %#x",
 					iframe->int_vector
 				);
 			}
-			break;
-		default:
-			panic("Unhandled interrupt %#x", iframe->int_vector);
+
+			// Reset master/slave PIC if it's in the IRQ range
+			if (iframe->int_vector >= INT_IRQ0 && iframe->int_vector <= INT_IRQ15) {
+				if (iframe->int_vector >= INT_IRQ8) {
+					pic8259_slave_eoi();
+				}
+				pic8259_master_eoi();
+			}
 			break;
 	}
 }
