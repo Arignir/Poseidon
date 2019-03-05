@@ -28,7 +28,7 @@
 # include <poseidon/poseidon.h>
 
 /*
-** The different init levels than an init hook can suscribe to.
+** The different init levels that an init hook can suscribe to.
 */
 enum init_level
 {
@@ -52,7 +52,7 @@ enum init_level
 };
 
 /*
-** Any init hooks must match the following prototype.
+** All init hooks must match the following prototype.
 */
 typedef void(*init_hook_funcptr)(void);
 
