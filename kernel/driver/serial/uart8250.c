@@ -26,10 +26,7 @@
 #if KCONFIG_ARCH_IO_TECHNIQUE == IO_PORT
 # define USE_UART8250
 
-static
-struct io_port const uart8250_port = {
-	.port = 0x3f8,
-};
+NEW_IO_PORT(uart8250_port, 0x3F8);
 
 #endif
 
@@ -39,7 +36,7 @@ static
 int
 is_transmit_empty(void)
 {
-	return io_in8_offset(uart8250_port, 5) & 0x20;
+	return (io_in8_offset(uart8250_port, 5) & 0x20);
 }
 
 static void
