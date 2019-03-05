@@ -13,4 +13,5 @@ objs-y	+= $(addprefix $(incdir), \
 		boot.o \
 		gdt.o \
 		multiboot2.o \
+		setup.o \
 	)

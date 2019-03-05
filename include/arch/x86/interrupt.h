@@ -49,6 +49,9 @@ enum interrupt_vector
 	INT_PIT				= 0x20,
 	INT_KEYBOARD			= 0x21,
 
+	INT_IRQ8			= 0x28,
+	INT_IRQ15			= 0x30,
+
 	INT_APIC_TIMER			= 0x32,
 	INT_APIC_ERROR			= 0x33,
 

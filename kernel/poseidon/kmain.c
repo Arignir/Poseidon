@@ -59,6 +59,8 @@ find_next_hook(
 	return (found);
 }
 
+#include <lib/interrupt.h>
+
 /*
 ** Trigger all init hooks and execute `init`.
 **
@@ -77,6 +79,10 @@ kmain(void)
 	}
 
 	logln("Hello Kernel World!");
+
+	enable_interrupts();
+
+	while (42);
 
 	/* Start init here (WIP) */
 }

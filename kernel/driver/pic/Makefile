@@ -9,6 +9,6 @@
 
 incdir	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
-include \
-	$(incdir)serial/Makefile \
-	$(incdir)pic/Makefile
+objs-y	+= $(addprefix $(incdir), \
+		pic8259.o \
+	)
