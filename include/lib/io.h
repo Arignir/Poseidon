@@ -48,6 +48,17 @@ struct io_port
 	ushort port;
 };
 
+/*
+** Define a new `static struct io_port const` with the given name and port.
+**
+** This acts as a shortcut to reduce boilerplate.
+*/
+# define NEW_IO_PORT(_name, _port)					\
+	static								\
+	struct io_port const _name = {					\
+		.port = _port						\
+	}
+
 #  include <arch/current/api/io.h>
 
 /*
@@ -120,6 +131,19 @@ struct io_mm
 {
 	uintptr address;
 };
+
+/*
+** Define a new `static struct io_mm const` with the given name and address.
+**
+** This acts as a shortcut to reduce boilerplate.
+*/
+# define NEW_IO_MM(_name, _address)					\
+	static								\
+	struct io_port const _name = {					\
+		.address = _address					\
+	}
+
+#  include <arch/current/api/io.h>
 
 /*
 ** Send a byte of data to the port of address `port`.
