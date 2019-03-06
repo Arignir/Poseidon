@@ -152,7 +152,7 @@ static_assert(sizeof(struct gdt_segment_descriptor) == 8);
 */
 struct gdt_fatptr {
 	uint16 limit;
-	struct gdt_segment_descriptor *base;
+	struct gdt_segment_descriptor const *base;
 } __packed;
 
 static_assert(sizeof(struct gdt_fatptr) == 6);
