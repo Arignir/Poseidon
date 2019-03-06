@@ -18,10 +18,11 @@
 ** Continue the initialisation of the CPU.
 */
 static
-void
+status_t
 setup(void)
 {
 	pic8259_init();
+	return (OK);
 }
 
 REGISTER_INIT_HOOK(setup, &setup, INIT_LEVEL_ARCH_EARLY);

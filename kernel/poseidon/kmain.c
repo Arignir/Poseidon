@@ -62,17 +62,24 @@ find_next_hook(
 /*
 ** Trigger all init hooks and execute `init`.
 **
+** If an init hook doesn't return `OK`, the boot process is aborted.
+**
 ** Poseidon's architecture-independent entry point.
 */
 void
 kmain(void)
 {
-	/* Trigger all init hooks */
 	struct init_hook const *hook;
 
+	/* Trigger all init hooks, panic if one failed. */
 	hook = find_next_hook(NULL, __INIT_LEVEL_EARLIEST);
 	while (hook != NULL) {
-		hook->hook();
+		if (hook->hook() != OK) {
+			panic(
+				"the init hook \"%s\" failed to complete successfully.",
+				hook->name
+			);
+		}
 		hook = find_next_hook(hook, hook->level);
 	}
 
@@ -80,4 +87,3 @@ kmain(void)
 
 	/* Start init here (WIP) */
 }
-
