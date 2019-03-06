@@ -19,7 +19,7 @@
 ** gdt, so that any data structure depending on them don't need to be udpated
 ** when the kernel switches to the later one.
 **
-** (See `arch/x86/gdt.c` for more informations about the boot/dynamic gdt.)
+** (See `arch/x86/boot/gdt.c` for more informations about the boot/dynamic gdt.)
 */
 
 # define KERNEL_CODE_SELECTOR		0x08
