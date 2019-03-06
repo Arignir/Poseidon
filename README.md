@@ -1,4 +1,4 @@
-# Poseidon
+# 🔱 Poseidon
 
 Yet another work-in-progress kernel. Eh.
 
