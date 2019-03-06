@@ -26,6 +26,7 @@
 # define _POSEIDON_BOOT_INIT_HOOk_H_
 
 # include <poseidon/poseidon.h>
+# include <poseidon/status.h>
 
 /*
 ** The different init levels that an init hook can suscribe to.
@@ -54,7 +55,7 @@ enum init_level
 /*
 ** All init hooks must match the following prototype.
 */
-typedef void(*init_hook_funcptr)(void);
+typedef status_t (*init_hook_funcptr)(void);
 
 struct init_hook
 {

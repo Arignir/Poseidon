@@ -53,7 +53,7 @@ putsn(
 }
 
 static
-void
+status_t
 uart8250_init(void)
 {
 	/* TODO: Name the offset so they look a bit less like magic values */
@@ -65,6 +65,8 @@ uart8250_init(void)
 	io_out8_offset(uart8250_port, 3, 0x03); // 8 bits, no parity, one stop bit
 	io_out8_offset(uart8250_port, 2, 0xC7); // Enable FIFO, clear them, with 14-byte threshold
 	io_out8_offset(uart8250_port, 4, 0x0B); // IRQs enabled, RTS/DSR set
+
+	return (OK);
 }
 
 REGISTER_LOGGER(uart8250, &putsn);
