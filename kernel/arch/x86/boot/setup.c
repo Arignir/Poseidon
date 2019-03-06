@@ -17,6 +17,7 @@
 /*
 ** Continue the initialisation of the CPU.
 */
+__boot_text
 static
 status_t
 setup(void)
