@@ -9,10 +9,6 @@
 
 incdir	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
-objs-y	+= $(addprefix $(incdir), \
-		gdt.o \
-	)
-
 include	\
 	$(incdir)boot/Makefile \
 	$(incdir)interrupt/Makefile \
