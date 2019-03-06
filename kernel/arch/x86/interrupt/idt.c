@@ -39,6 +39,7 @@ struct idt_fatptr const idt_fatptr = {
 ** The table is initialized with a handler for all exceptions. Interrupts'
 ** handler can be added using the kernel's API.
 */
+__boot_text
 void
 setup_idt(void)
 {

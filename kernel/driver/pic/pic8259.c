@@ -57,6 +57,7 @@ pic8259_slave_eoi(void)
 ** This function does not use the init hook system because it is required at
 ** a very specific moment.
 */
+__boot_text
 void
 pic8259_init(void)
 {
