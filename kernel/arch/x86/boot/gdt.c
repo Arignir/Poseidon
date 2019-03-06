@@ -30,9 +30,9 @@
 ** A statically allocated GDT, used at the beginning, during boot time,
 ** until the kernel has dynamic allocation.
 */
-__boot_data
+__boot_rodata
 __aligned(16)
-struct gdt_segment_descriptor boot_gdt[] = {
+struct gdt_segment_descriptor const boot_gdt[] = {
 	/* 0x00: Null segment selector (required by Intel) */
 	NEW_NULL_DESCRIPTOR,
 
