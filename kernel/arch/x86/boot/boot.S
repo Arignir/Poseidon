@@ -66,21 +66,3 @@ loop:
 bsp_kernel_stack_bottom:
 	.skip KCONFIG_KERNEL_STACK_SIZE
 bsp_kernel_stack_top:
-
-/*
-** Bootstrap processor's page directory
-** This will also become the page directory of init.
-*/
-.section .data
-.align 4096
-boot_page_directory:
-	.skip PAGE_SIZE
-boot_page_directory_end:
-
-/*
-** Kernel's page table in the above page directory
-*/
-boot_kernel_page_table:
-	.rept 1024
-		.long 0x00000000
-	.endr
