@@ -8,7 +8,7 @@
 \******************************************************************************/
 
 /*
-** Continue the initialisation of the CPU, before calling `kmain()`.
+** Continue the initialisation of the CPU.
 */
 
 #include <poseidon/boot/init_hook.h>
