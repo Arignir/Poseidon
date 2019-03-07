@@ -81,7 +81,7 @@ pic8259_irq_unmask(uchar irq)
 	}
 
 	// Send the OCW1 to the corresponding PIC
-	if (irq <= 0x8) {
+	if (irq <= 0x7) {
 		io_out8_offset(master, DATA, pic_mask & 0xFF);
 	} else {
 		io_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
