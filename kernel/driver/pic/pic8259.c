@@ -32,6 +32,82 @@ NEW_IO_PORT(slave, 0xA0);
 # define DATA	0x1
 
 /*
+** Current IRQs mask on slave:master.
+** 0 = unmask, 1 = mask.
+*/
+static ushort pic_mask = 0;
+
+/*
+** Mask the IRQ.
+**
+** Note that `irq` should *NOT* be the absolute interrupt vector associated with
+** the IRQ (like `INT_IRQ0`), but the actual IRQ number as understood by the
+** chip, which range from 0 to 15.
+*/
+void
+pic8259_irq_mask(uchar irq)
+{
+	assert(irq <= 0xF);
+
+	// Send an OCW1
+	pic_mask |= (1 << irq);
+	if (irq <= 0x7) {
+		io_out8_offset(master, DATA, pic_mask & 0xFF);
+	} else {
+		io_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+	}
+}
+
+/*
+** Unmask the IRQ.
+**
+** Note that `irq` should *NOT* be the absolute interrupt vector associated with
+** the IRQ (like `INT_IRQ0`), but the actual IRQ number as understood by the
+** chip, which range from 0 to 15.
+*/
+void
+pic8259_irq_unmask(uchar irq)
+{
+	assert(irq <= 0xF);
+
+	// Unmask the IRQ
+	pic_mask &= ~(1 << irq);
+
+	// If the IRQ is handled by the slave AND the slave is masked,
+	// then unmask the slave
+	if (irq >= 0x8 && (pic_mask & (1 << 2))) {
+		pic_mask &= ~(1 << 2);
+		io_out8_offset(master, DATA, pic_mask & 0xFF);
+	}
+
+	// Send the OCW1 to the corresponding PIC
+	if (irq <= 0x8) {
+		io_out8_offset(master, DATA, pic_mask & 0xFF);
+	} else {
+		io_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+	}
+}
+
+/*
+** Set the IRQ mask.
+**
+** For each bit of `mask`, 1 indicate that the associate IRQ is masked
+** and 0 indicate that the associate IRQ is not masked.
+**
+** Therefore, if `mask` == 0xFFFF, all IRQ are masked, and if `mask` = 0, all
+** IRQs are not masked.
+*/
+void
+pic8259_set_irq_mask(ushort mask)
+{
+	// Send an OCW1
+	pic_mask = mask;
+
+	io_out8_offset(master, DATA, pic_mask & 0xFF);
+	io_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+}
+
+/*
 ** Send an End Of Interrupt (EOI) to the master PIC.
 */
 void
@@ -132,7 +208,7 @@ pic8259_init(void)
 	**
 	**   ID0-2: The slave ID
 	**
-	** We have one slave, with ID 2.
+	** We have one slave, with ID 2 connected at IRQ2.
 	*/
 	uchar icw3_master = 0b00000100;
 	uchar icw3_slave = 0b00000010;
@@ -166,6 +242,9 @@ pic8259_init(void)
 
 	io_out8_offset(slave, DATA, icw4);
 	io_delay();
+
+	// Unmask all IRQs
+	pic8259_set_irq_mask(0);
 }
 
 #endif /* ARCH_X86 */
