@@ -115,4 +115,16 @@ void				panic(char const *fmt, ...) __noreturn;
 # define XSTRINGIFY(a)		#a
 # define STRINGIFY(a)		XSTRINGIFY(a)
 
+/*
+** Use the pre-processor to forms a C symbol that is the concatenation of the
+** target architecture's name, an underscore (`_`) and the given parameter,
+**
+** Eg: `
+**     ARCH_SYMBOL(test)` will form the symbol `x86_test` if the target
+**         architecutre is x86.
+**
+** Requires that `poseidon/config.h` is included.
+*/
+# define ARCH_SYMBOL(sym)	CONCAT(ARCH, CONCAT(_, sym))
+
 #endif /* !_POSEIDON_POSEIDON_H_ */

@@ -75,7 +75,7 @@ io_out8(
 	struct io_port port,
 	uint8 data
 ) {
-	CONCAT(ARCH, _io_out8)(port, data);
+	ARCH_SYMBOL(io_out8)(port, data);
 }
 
 /*
@@ -89,7 +89,7 @@ io_out8_offset(
 	uint8 data
 ) {
 	port.port += offset;
-	CONCAT(ARCH, _io_out8)(port, data);
+	ARCH_SYMBOL(io_out8)(port, data);
 }
 
 /*
@@ -105,7 +105,7 @@ uint8
 io_in8(
 	struct io_port port
 ) {
-	return CONCAT(ARCH, _io_in8)(port);
+	return ARCH_SYMBOL(io_in8)(port);
 }
 
 /*
@@ -118,7 +118,7 @@ io_in8_offset(
 	ushort offset
 ) {
 	port.port += offset;
-	return CONCAT(ARCH, _io_in8)(port);
+	return ARCH_SYMBOL(io_in8)(port);
 }
 
 
@@ -159,7 +159,7 @@ io_out8(
 	struct io_mm port,
 	uint8 data
 ) {
-	CONCAT(ARCH, _io_out8)(port, data);
+	ARCH_SYMBOL(io_out8)(port, data);
 }
 
 /*
@@ -173,7 +173,7 @@ io_out8_offset(
 	uint8 data
 ) {
 	port.address += offset;
-	CONCAT(ARCH, _io_out8)(port, data);
+	ARCH_SYMBOL(io_out8)(port, data);
 }
 
 /*
@@ -189,7 +189,7 @@ uint8
 io_in8(
 	struct io_mm port
 ) {
-	return CONCAT(ARCH, _io_in8)(port);
+	return ARCH_SYMBOL(io_in8)(port);
 }
 
 /*
@@ -202,7 +202,7 @@ io_in8_offset(
 	ushort offset
 ) {
 	port.address += offset;
-	return CONCAT(ARCH, _io_in8)(port);
+	return ARCH_SYMBOL(io_in8)(port);
 }
 
 # endif /* KCONFIG_ARCH_IO_TECHNIQUE */
@@ -219,7 +219,7 @@ static inline
 void
 io_delay(void)
 {
-	CONCAT(ARCH, _io_delay)();
+	ARCH_SYMBOL(io_delay)();
 }
 
 

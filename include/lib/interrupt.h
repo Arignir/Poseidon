@@ -43,7 +43,7 @@ static inline
 bool
 interrupts_enabled(void)
 {
-	return CONCAT(ARCH, _interrupts_enabled)();
+	return ARCH_SYMBOL(interrupts_enabled)();
 }
 
 /*
@@ -58,7 +58,7 @@ static inline
 void
 enable_interrupts(void)
 {
-	CONCAT(ARCH, _enable_interrupts)();
+	ARCH_SYMBOL(enable_interrupts)();
 }
 
 /*
@@ -73,7 +73,7 @@ static inline
 void
 disable_interrupts(void)
 {
-	CONCAT(ARCH, _disable_interrupts)();
+	ARCH_SYMBOL(disable_interrupts)();
 }
 
 /*
@@ -92,7 +92,7 @@ void
 set_interrupts_state(
 	bool state
 ) {
-	CONCAT(ARCH, _set_interrupts_state)(state);
+	ARCH_SYMBOL(set_interrupts_state)(state);
 }
 
 /*
@@ -109,7 +109,7 @@ register_interrupt_handler(
 	uint vector,
 	interrupt_handler_t handler
 ) {
-	CONCAT(ARCH, _register_interrupt_handler)(vector, handler);
+	ARCH_SYMBOL(register_interrupt_handler)(vector, handler);
 }
 
 /*
@@ -125,7 +125,7 @@ void
 unregister_interrupt_handler(
 	uint vector
 ) {
-	CONCAT(ARCH, _unregister_interrupt_handler)(vector);
+	ARCH_SYMBOL(unregister_interrupt_handler)(vector);
 }
 
 /*
@@ -134,13 +134,13 @@ unregister_interrupt_handler(
 ** The architecture-dependant equivalent of this function should have the
 ** following prototype:
 **
-** `void $ARCH_unregister_interrupt_handler(void);`
+** `void $ARCH_halt(void);`
 */
 static inline
 void
 halt(void)
 {
-	CONCAT(ARCH, _halt)();
+	ARCH_SYMBOL(halt)();
 }
 
 #endif /* !_LIB_INTERRUPT_H_ */
