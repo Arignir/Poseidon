@@ -59,7 +59,7 @@ struct io_port
 		.port = _port						\
 	}
 
-#  include <arch/current/api/io.h>
+#  include <arch/target/api/io.h>
 
 /*
 ** Send a byte of data to the port of index `port`.
@@ -143,7 +143,7 @@ struct io_mm
 		.address = _address					\
 	}
 
-#  include <arch/current/api/io.h>
+#  include <arch/target/api/io.h>
 
 /*
 ** Send a byte of data to the port of address `port`.

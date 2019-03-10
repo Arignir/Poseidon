@@ -104,7 +104,7 @@ void				panic(char const *fmt, ...) __noreturn;
 /*
 ** Pre-processor trick to concat a macro with an other macro or static text.
 **
-** Mostly used to forge function names based on current architecture.
+** Mostly used to forge function names based on target architecture.
 */
 # define XCONCAT(a, b)		a##b
 # define CONCAT(a, b)		XCONCAT(a, b)
