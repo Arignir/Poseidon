@@ -8,7 +8,7 @@
 \******************************************************************************/
 
 /*
-** Represents the current configuration of the kernel.
+** Represents the target configuration of the kernel.
 **
 ** This example is for the x86 architecture.
 */

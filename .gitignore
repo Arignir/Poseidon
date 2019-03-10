@@ -8,8 +8,8 @@
 # Target directory
 /target
 
-# Current arch
-/include/arch/current
+# Target arch
+/include/arch/target
 
 # Common editor files
 *~
