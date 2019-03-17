@@ -56,7 +56,7 @@ enum				status
 	/* Mapping errors */
 	ERR_ALREADY_MAPPED,		/* The given virtual address is already mapped */
 	ERR_NOT_MAPPED,			/* The given virtual address is not mapped*/
-	ERR_CANT_MAP,			/* The mapping can't be done (reasons may be arch-dependant) */
+	ERR_CANT_MAP,			/* The mapping can't be done (reasons may be arch-dependent) */
 
 	/* Filesystem errors */
 	ERR_ALREADY_MOUNTED,		/* The given mountpoint is already taken */

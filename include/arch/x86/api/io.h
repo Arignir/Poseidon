@@ -11,8 +11,8 @@
 ** Implementation of `include/lib/io.h` for the x86 architecture.
 */
 
-#ifndef _ARCH_X86_IO_H_
-# define _ARCH_X86_IO_H_
+#ifndef _ARCH_X86_API_IO_H_
+# define _ARCH_X86_API_IO_H_
 
 /*
 ** Ensure this file isn't included on its own.
@@ -66,4 +66,4 @@ x86_io_delay(void)
 	);
 }
 
-#endif /* !_ARCH_X86_IO_H_ */
+#endif /* !_ARCH_X86_API_IO_H_ */

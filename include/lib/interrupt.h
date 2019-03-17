@@ -34,7 +34,7 @@ typedef void (*interrupt_handler_t)(void);
 **
 ** Return true if they are, false otherwise.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `bool $ARCH_interrupts_enabled(void);`
@@ -49,7 +49,7 @@ interrupts_enabled(void)
 /*
 ** Enable all maskable interrupts.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_enable_interrupts(void);`
@@ -64,7 +64,7 @@ enable_interrupts(void)
 /*
 ** Disable all maskable interrupts.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_disable_interrupts(void);`
@@ -82,7 +82,7 @@ disable_interrupts(void)
 ** If true is given as parameter, the maskable interrupts are enabled.
 ** Otherwise, the interrupts are disabled.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_set_interrupts_state(bool state);`
@@ -98,7 +98,7 @@ set_interrupts_state(
 /*
 ** Register an interrupt handler for a specific interrupt vector.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_register_interrupt_handler(uint vector, interrupt_handler_t handler);`
@@ -115,7 +115,7 @@ register_interrupt_handler(
 /*
 ** Unregister an interrupt handler for a specific interrupt vector.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_unregister_interrupt_handler(uint vector);`
@@ -131,7 +131,7 @@ unregister_interrupt_handler(
 /*
 ** Halt the computer until the next interrupt.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_halt(void);`

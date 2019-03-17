@@ -64,7 +64,7 @@ struct io_port
 /*
 ** Send a byte of data to the port of index `port`.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_io_out8(struct io_port port, uint8 data)`
@@ -95,7 +95,7 @@ io_out8_offset(
 /*
 ** Reads a byte of data from the port of index `port`.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `uint8 $ARCH_io_in8(struct io_port port);`
@@ -148,7 +148,7 @@ struct io_mm
 /*
 ** Send a byte of data to the port of address `port`.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_io_out8(struct io_mm port, uint8 data)`
@@ -179,7 +179,7 @@ io_out8_offset(
 /*
 ** Reads a byte of data from the port of address `port`.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `uint8 $ARCH_io_in8(struct io_mm port);`
@@ -210,7 +210,7 @@ io_in8_offset(
 /*
 ** Waits for the port to be ready to be used again.
 **
-** The architecture-dependant equivalent of this function should have the
+** The architecture-dependent equivalent of this function should have the
 ** following prototype:
 **
 ** `void $ARCH_io_delay(void);`
