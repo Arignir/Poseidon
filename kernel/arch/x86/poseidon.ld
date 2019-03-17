@@ -19,6 +19,8 @@ SECTIONS
 	*/
 	. = 1M;
 
+	KERNEL_PHYS_START = .;
+
 	/*
 	** Place the multiboot header on top of everything
 	** Then put the .text section
@@ -53,6 +55,8 @@ SECTIONS
 		*(COMMON)
 		*(.bss)
 	}
+
+	KERNEL_PHYS_END = .;
 }
 
 

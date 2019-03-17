@@ -64,7 +64,10 @@ typedef uint64_t		uint64;
 typedef uintptr_t		uintptr;
 
 /* Print a message and halt the computer. */
-void				panic(char const *fmt, ...) __noreturn;
+void	panic(char const *fmt, ...) __noreturn;
+
+# define unimplemented()							\
+	panic("the function %s() was called but is not implemented.", __func__)
 
 /* Panics if the given constant expression evaluates to false */
 # define static_assert(e)							\
@@ -126,5 +129,12 @@ void				panic(char const *fmt, ...) __noreturn;
 ** Requires that `poseidon/config.h` is included.
 */
 # define ARCH_SYMBOL(sym)	CONCAT(ARCH, CONCAT(_, sym))
+
+/*
+** Constants provided by the linker that indicate the beginning and end of
+** the kernel.
+*/
+extern char const KERNEL_PHYS_START[];
+extern char const KERNEL_PHYS_END[];
 
 #endif /* !_POSEIDON_POSEIDON_H_ */
