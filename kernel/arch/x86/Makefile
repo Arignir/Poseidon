@@ -7,8 +7,8 @@
 ##
 ################################################################################
 
-incdir	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+ldir	:= $(GET_LOCAL_DIR)
 
 include	\
-	$(incdir)boot/Makefile \
-	$(incdir)interrupt/Makefile \
+	$(ldir)boot/Makefile \
+	$(ldir)interrupt/Makefile \

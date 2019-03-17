@@ -7,11 +7,12 @@
 ##
 ################################################################################
 
-# This file contains x86 related build variables.
-# Those override the default ones and/or create new one which are used by the
+# This file contains the x86 related build variables.
+#
+# Those override the default ones and/or create new ones which are used by the
 # main Makefile.
 
-incdir	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+ldir	:= $(GET_LOCAL_DIR)
 
 # Add x86-specific flags
 CFLAGS	+= \
@@ -19,4 +20,4 @@ CFLAGS	+= \
 	-mgeneral-regs-only \
 
 LDFLAGS	+= \
-	-T $(incdir)poseidon.ld
+	-T $(ldir)poseidon.ld

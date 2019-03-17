@@ -7,8 +7,8 @@
 ##
 ################################################################################
 
-incdir	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+ldir	:= $(GET_LOCAL_DIR)
 
-objs-y	+= $(addprefix $(incdir), \
+objs-y	+= $(addprefix $(ldir), \
 		pic8259.o \
 	)
