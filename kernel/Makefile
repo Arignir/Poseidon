@@ -50,6 +50,8 @@ CFLAGS	+= \
 	-DDEBUG
 endif
 
+# Find the local directory of the included makefile
+GET_LOCAL_DIR	= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
 LDFLAGS	:= \
 	-nostdlib \

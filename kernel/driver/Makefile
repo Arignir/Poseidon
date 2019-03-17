@@ -7,8 +7,8 @@
 ##
 ################################################################################
 
-incdir	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+ldir	:= $(GET_LOCAL_DIR)
 
 include \
-	$(incdir)serial/Makefile \
-	$(incdir)pic/Makefile
+	$(ldir)serial/Makefile \
+	$(ldir)pic/Makefile
