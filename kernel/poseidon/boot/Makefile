@@ -10,9 +10,5 @@
 ldir	:= $(GET_LOCAL_DIR)
 
 objs-y	+= $(addprefix $(ldir), \
-		kmain.o \
-		panic.o \
+		init_hook.o \
 	)
-
-include \
-	$(ldir)boot/Makefile \

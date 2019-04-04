@@ -67,7 +67,7 @@ struct init_hook
 /*
 ** Usage: `REGISTER_INIT_HOOK("name", &func, DESIRED_INIT_LEVEL)`
 **
-** Registers an init hook given it's name, an address to call and an init level,
+** Registers an init hook given its name, an address to call and an init level,
 ** and stores it in the reserved section of the binary dedicated to init hook.
 */
 # define REGISTER_INIT_HOOK(n, h, l)					\
@@ -77,5 +77,7 @@ struct init_hook
 		.level = (l),						\
 		.hook = (h),						\
 	}
+
+struct init_hook const *	find_next_init_hook();
 
 #endif /* !_POSEIDON_BOOT_INIT_HOOK_H_ */
