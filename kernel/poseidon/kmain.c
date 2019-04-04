@@ -20,45 +20,6 @@
 #include <poseidon/boot/init_hook.h>
 #include <lib/log.h>
 
-/* Init hooks are located within the 'poseidon_init_hooks' section */
-extern struct init_hook const __start_poseidon_init_hooks[] __weak;
-extern struct init_hook const __stop_poseidon_init_hooks[] __weak;
-
-/*
-** Find the next uncalled hook which init level is above or equal the given one.
-*/
-__boot_text
-static
-struct init_hook const *
-find_next_hook(
-	struct init_hook const *last,
-	enum init_level level
-) {
-	struct init_hook const *hook;
-	struct init_hook const *found;
-	bool seen_last;
-
-	found = NULL;
-	seen_last = false;
-	for (hook = __start_poseidon_init_hooks; hook < __stop_poseidon_init_hooks; ++hook)
-	{
-		seen_last |= (hook == last);
-		if (hook->level < level
-			|| (found && found->level <= hook->level)) {
-			continue;
-		}
-		if (hook->level > level) {
-			found = hook;
-			continue;
-		}
-		if (hook->level == level && seen_last && hook != last) {
-			found = hook;
-			break;
-		}
-	}
-	return (found);
-}
-
 /*
 ** Trigger all init hooks and execute `init`.
 **
@@ -72,7 +33,7 @@ kmain(void)
 	struct init_hook const *hook;
 
 	/* Trigger all init hooks, panic if one failed. */
-	hook = find_next_hook(NULL, __INIT_LEVEL_EARLIEST);
+	hook = find_next_init_hook(NULL, __INIT_LEVEL_EARLIEST);
 	while (hook != NULL) {
 		if (hook->hook() != OK) {
 			panic(
@@ -80,7 +41,7 @@ kmain(void)
 				hook->name
 			);
 		}
-		hook = find_next_hook(hook, hook->level);
+		hook = find_next_init_hook(hook, hook->level);
 	}
 
 	logln("Hello Kernel World!");
