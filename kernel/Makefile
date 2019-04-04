@@ -73,9 +73,11 @@ include	poseidon/Makefile
 objs-y	:= $(patsubst $(PROJDIR)%, $(OUTDIR)%, $(objs-y))
 deps	:= $(objs-y:.o=.d)
 
-# Prepare target folder & symlink
+# Prepare target/ folder and include/arch/target symlink
 $(shell mkdir -p $(dir $(objs-y)))
-$(shell unlink $(PROJDIR)/include/arch/target && ln -s $(PROJDIR)/include/arch/$(ARCH)/ $(PROJDIR)/include/arch/target)
+$(shell rm -f $(PROJDIR)/include/arch/target)
+$(shell ln -s $(PROJDIR)/include/arch/$(ARCH)/ $(PROJDIR)/include/arch/target)
+
 
 .PHONY:	all
 all:	$(ELF)
