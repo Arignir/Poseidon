@@ -39,6 +39,11 @@ start:
 	jmp $KERNEL_CODE_SELECTOR, $.far_jmp
 .far_jmp:
 
+	// Save the multiboot pointer before calling any C code
+	.extern mb_tag
+	add $8, %ebx
+	mov %ebx, (mb_tag)
+
 	// Setup IDT
 	.extern setup_idt
 	call setup_idt

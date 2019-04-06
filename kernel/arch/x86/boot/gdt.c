@@ -23,7 +23,6 @@
 ** one when we have all the information we need to generate it.
 */
 
-
 #include <arch/x86/gdt.h>
 
 /*

@@ -17,6 +17,7 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <stdbool.h>
+# include <poseidon/status.h>
 
 /*
 ** A useful set of macros that act like keywords that are not available
@@ -67,39 +68,64 @@ typedef uintptr_t		uintptr;
 void	panic(char const *fmt, ...) __noreturn;
 
 # define unimplemented()							\
-	panic("the function %s() was called but is not implemented.", __func__)
+	panic(									\
+		"the function %s() was called but is not implemented (in %s at line %u).", \
+		__func__,							\
+		__FILE__,							\
+		__LINE__							\
+	)
 
-/* Panics if the given constant expression evaluates to false */
+/* Panic if the given constant expression evaluates to false */
 # define static_assert(e)							\
 	_Static_assert(								\
 		e,								\
-		"(" #e ") evaluated to false"					\
+		"(" #e ") evaluated to false (in " __FILE__ " at line)"		\
 	)
 
-/* Panics if the given expression evaluates to false */
+/* Panic if the given expression evaluates to `false` */
 # define assert(expr)								\
 	do {									\
 		if (unlikely(!(expr))) {					\
-			panic("assert(%s) failed (in %s at line %u).\n",	\
-				#expr, __FILE__, __LINE__);			\
+			panic(							\
+				"assert(%s) failed (in %s at line %u).\n",	\
+				#expr,						\
+				__FILE__,					\
+				__LINE__					\
+			);							\
+		}								\
+	}									\
+	while (0)
+
+/* Panic if the given expression does not evaluate to `OK` */
+# define assert_ok(expr)							\
+	do {									\
+		status_t __s = (expr);						\
+		if (unlikely(__s != OK)) {					\
+			panic(							\
+				"assert_ok(%s) failed: %s (in %s at line %u).\n",	\
+				#expr,						\
+				status_str[__s],				\
+				__FILE__,					\
+				__LINE__					\
+			);							\
 		}								\
 	}									\
 	while (0)
 
 /*
-** Place the following data in the ".data.boot" section, which will be freed
+** Put the following data in the ".data.boot" section, which will be freed
 ** at the end of kernel initialisation.
 */
 # define __boot_data		__section(".data.boot")
 
 /*
-** Place the following constant data in the ".rodata.boot" section, which will
+** Put the following constant data in the ".rodata.boot" section, which will
 ** be freed at the end of kernel initialisation.
 */
 # define __boot_rodata		__section(".rodata.boot")
 
 /*
-** Place the following data in the ".text.boot" section, which will be freed
+** Put the following data in the ".text.boot" section, which will be freed
 ** at the end of kernel initialisation.
 */
 # define __boot_text		__section(".text.boot")
@@ -107,13 +133,13 @@ void	panic(char const *fmt, ...) __noreturn;
 /*
 ** Pre-processor trick to concat a macro with an other macro or static text.
 **
-** Mostly used to forge function names based on target architecture.
+** Mostly used to forge a function name based on the target architecture.
 */
 # define XCONCAT(a, b)		a##b
 # define CONCAT(a, b)		XCONCAT(a, b)
 
 /*
-** Pre-processor trick to stringify a macro, mostly used to debug macros.
+** Pre-processor trick to stringify a macro, usually used to debug a macro.
 */
 # define XSTRINGIFY(a)		#a
 # define STRINGIFY(a)		XSTRINGIFY(a)
@@ -131,10 +157,11 @@ void	panic(char const *fmt, ...) __noreturn;
 # define ARCH_SYMBOL(sym)	CONCAT(ARCH, CONCAT(_, sym))
 
 /*
-** Constants provided by the linker that indicate the beginning and end of
-** the kernel.
+** Round `x` up to be `y`-aligned.
+**
+** Note that `y` must be a power of two and the return value has the same
+** type than `x`.
 */
-extern char const KERNEL_PHYS_START[];
-extern char const KERNEL_PHYS_END[];
+# define ALIGN(x, y)		((typeof(x))(((uintptr)(x) + ((y) - 1)) & ~((y) - 1)))
 
 #endif /* !_POSEIDON_POSEIDON_H_ */
