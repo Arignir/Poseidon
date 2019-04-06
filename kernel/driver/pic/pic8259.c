@@ -118,7 +118,7 @@ pic8259_master_eoi(void)
 }
 
 /*
-** Send an End Of Interrupt (EOI) to the master PIC.
+** Send an End Of Interrupt (EOI) to the slave PIC.
 */
 void
 pic8259_slave_eoi(void)
