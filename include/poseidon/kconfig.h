@@ -21,7 +21,7 @@
 ** targeted architecture.
 */
 
-// Use a multiboot-compliant bootloader to set-up graphic mode.
+/* Use a multiboot-compliant bootloader to set-up graphic mode. */
 # define KCONFIG_MULTIBOOT_FRAMEBUFFER			0
 
 /*
@@ -39,10 +39,10 @@
 ** architecture.
 */
 
-// Architecture's name
+/* Architecture's name. */
 # define KCONFIG_ARCH					x86
 
-// Sets to 1 if the targetted architecture is x86
+/* Sets to true if the targetted architecture is x86. */
 # define KCONFIG_ARCH_X86				1
 
 /*
@@ -53,13 +53,13 @@
 */
 # define KCONFIG_ARCH_IO_METHOD				IO_PMIO
 
-// Size of a pointer, in bits.
+/* Size of a pointer, in bits. */
 # define ARCH_BITS					32
 
-// Size of a page (in bytes).
+/* Size of a page (in bytes). */
 # define KCONFIG_PAGE_SIZE				4096u
 
-// The following are shortcuts for commonly used options.
+/* The following are shortcuts for commonly used options. */
 # define ARCH						KCONFIG_ARCH
 # define ARCH_X86					KCONFIG_ARCH_X86
 # define ARCH_BITS					KCONFIG_ARCH_BITS
