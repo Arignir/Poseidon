@@ -31,20 +31,9 @@ typedef uintptr physaddr_t;
 typedef void *virtaddr_t;
 
 /*
-** The equivalent of NULL for frames.
+** The equivalent of NULL for physical addresses.
 */
 # define PHYS_NULL	((physaddr_t)0)
-
-/*
-** A region of the physical memory.
-**
-** `start` end `len` must be page-aligned.
-*/
-struct phys_mem_region
-{
-	physaddr_t start;
-	size_t length;
-};
 
 /*
 ** Constants provided by the linker that indicate the beginning and end of
