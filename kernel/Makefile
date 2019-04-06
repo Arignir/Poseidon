@@ -15,6 +15,7 @@ LD	:= $(TARGET_TRIPLET)-ld
 # Variables
 CFLAGS	:= \
 	-MD \
+	-pipe \
 	-W \
 	-Wall \
 	-Wextra \
