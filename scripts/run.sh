@@ -28,7 +28,7 @@ function print_usage {
 
 # Qemu command and args
 declare qemu="qemu-system-i386"
-declare qemu_args=" -serial stdio"
+declare qemu_args=" -serial stdio -m 512"
 
 while getopts dgtkhm:a:c:s: FLAG; do
 	case $FLAG in
