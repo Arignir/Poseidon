@@ -26,7 +26,6 @@
 # define _POSEIDON_BOOT_INIT_HOOk_H_
 
 # include <poseidon/poseidon.h>
-# include <poseidon/status.h>
 
 /*
 ** The different init levels that an init hook can suscribe to.

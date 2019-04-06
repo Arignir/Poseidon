@@ -19,8 +19,8 @@
 ** IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _POSEIDON_MULTIBOOT2_H_
-#define _POSEIDON_MULTIBOOT2_H_
+#ifndef _POSEIDON_BOOT_MULTIBOOT2_H_
+#define _POSEIDON_BOOT_MULTIBOOT2_H_
 
 /* How many bytes from the start of the file we search for the header.  */
 #define MULTIBOOT_SEARCH			32768
@@ -78,6 +78,16 @@
 #define MULTIBOOT_CONSOLE_FLAGS_EGA_TEXT_SUPPORTED 2
 
 #ifndef __ASSEMBLER__
+
+#include <poseidon/poseidon.h>
+#include <poseidon/memory.h>
+
+void    multiboot_load(void);
+
+extern struct multiboot_tag_string const *mb_cmdline;
+extern struct multiboot_tag_string const *mb_bootloader;
+extern struct multiboot_tag_basic_meminfo const *mb_meminfo;
+extern struct multiboot_tag_mmap const *mb_mmap;
 
 typedef unsigned char		multiboot_uint8_t;
 typedef unsigned short		multiboot_uint16_t;
@@ -372,4 +382,4 @@ struct multiboot_tag_efi_mmap
 
 #endif /* ! __ASSEMBLER__ */
 
-#endif /* ! _POSEIDON_MULTIBOOT2_H_ */
+#endif /* ! _POSEIDON_BOOT_MULTIBOOT2_H_ */

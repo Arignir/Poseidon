@@ -11,4 +11,5 @@ ldir	:= $(GET_LOCAL_DIR)
 
 objs-y	+= $(addprefix $(ldir), \
 		init_hook.o \
+		multiboot2.o \
 	)

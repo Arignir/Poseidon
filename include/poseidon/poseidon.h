@@ -157,10 +157,11 @@ void	panic(char const *fmt, ...) __noreturn;
 # define ARCH_SYMBOL(sym)	CONCAT(ARCH, CONCAT(_, sym))
 
 /*
-** Constants provided by the linker that indicate the beginning and end of
-** the kernel.
+** Round `x` up to be `y`-aligned.
+**
+** Note that `y` must be a power of two and the return value has the same
+** type than `x`.
 */
-extern char const KERNEL_PHYS_START[];
-extern char const KERNEL_PHYS_END[];
+# define ALIGN(x, y)		((typeof(x))(((uintptr)(x) + ((y) - 1)) & ~((y) - 1)))
 
 #endif /* !_POSEIDON_POSEIDON_H_ */
