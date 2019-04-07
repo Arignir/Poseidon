@@ -7,46 +7,17 @@
 ##
 ################################################################################
 
-# Version
-export MAJOR		:= 0
-export MINOR		:= 1
-export PATCH		:= 0
-export EXTRA		:= -indev
-export VERSION		:= $(MAJOR).$(MINOR).$(PATCH)$(EXTRA)
-export NAME		:= poseidon_$(VERSION)
-
-# Verbosity
-export Q		:=
-export V		?= 0
-ifeq ($(V), 0)
-	MAKEFLAGS	+= --silent
-	Q		:= @
-endif
-
-# Target
-export target		?= release
-export TARGET		?= $(target)
-
-ifeq ($(filter $(TARGET),release debug),)
-$(error "target" must have the value "release" or "debug")
-endif
-
-# Target arch & triplet
-export ARCH		?= x86
-export TARGET_TRIPLET	?= i686-elf
-
 # Project directory
-export PROJDIR		:= $(shell pwd)
+export PROJECT_DIR	:= $(shell pwd)
 
-# Create output directory
-export OUTDIR		:= $(PROJDIR)/target/$(TARGET)
-ifneq ($(shell mkdir -p $(OUTDIR) && cd $(OUTDIR) && pwd), $(OUTDIR))
-$(error Couldn't create output directory "$(OUTDIR)")
-endif
+include $(PROJECT_DIR)/scripts/make/version.mk
+include $(PROJECT_DIR)/scripts/make/verbose.mk
+include $(PROJECT_DIR)/scripts/make/arch.mk
+include $(PROJECT_DIR)/scripts/make/target.mk
 
 # Targets
-export ISO		:= $(OUTDIR)/$(NAME).iso
-export ELF		:= $(OUTDIR)/kernel/$(NAME).elf
+export ISO		:= $(TARGET_DIR)/$(NAME).iso
+export ELF		:= $(TARGET_DIR)/kernel/$(NAME).elf
 
 # Do not print "Entering directory ..."
 MAKEFLAGS		+= --no-print-directory
@@ -101,7 +72,8 @@ kvm_monitor: iso
 
 .PHONY: clean
 clean:
-	$(Q)$(RM) -r $(OUTDIR)
+	$(Q)$(MAKE) -C kernel clean
+	$(Q)$(RM) -rf $(ISO)
 
 .PHONY: re
 re: clean
