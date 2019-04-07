@@ -39,8 +39,6 @@ multiboot_load(void)
 		return;
 	}
 
-	struct multiboot_tag_framebuffer const *fb;
-
 	while (tag->type != MULTIBOOT_TAG_TYPE_END)
 	{
 		switch (tag->type)
