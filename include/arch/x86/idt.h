@@ -146,4 +146,6 @@ static_assert(sizeof(struct idt_fatptr) == 6);
 		},								\
 	}
 
+void		setup_idt(void);
+
 #endif /* !_ARCH_X86_IDT_H_ */

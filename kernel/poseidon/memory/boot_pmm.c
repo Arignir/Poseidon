@@ -22,6 +22,7 @@
 
 #include <poseidon/memory/boot_pmm.h>
 #include <poseidon/boot/multiboot2.h>
+#include <poseidon/boot/init_hook.h>
 
 /* The first frame of the boot-allocable physical address space. */
 __boot_data
@@ -100,3 +101,5 @@ boot_pmm_init(void)
 	boot_pmm_next_frame = boot_pmm_first_frame;
 	return (OK);
 }
+
+REGISTER_INIT_HOOK(boot_pmm, &boot_pmm_init, INIT_LEVEL_BOOT_KALLOC - 1);

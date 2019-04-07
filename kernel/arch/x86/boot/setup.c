@@ -12,9 +12,7 @@
 */
 
 #include <poseidon/boot/init_hook.h>
-#include <poseidon/boot/multiboot2.h>
-#include <poseidon/memory/boot_pmm.h>
-#include <driver/pic/pic8259.h>
+#include <arch/x86/idt.h>
 
 /*
 ** Continue the initialisation of the CPU.
@@ -24,9 +22,7 @@ static
 status_t
 setup(void)
 {
-	multiboot_load();
-	boot_pmm_init();
-	pic8259_init();
+	setup_idt();
 	return (OK);
 }
 

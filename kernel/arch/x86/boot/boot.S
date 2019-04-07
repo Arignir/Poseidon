@@ -44,16 +44,11 @@ start:
 	add $8, %ebx
 	mov %ebx, (mb_tag)
 
-	// Setup IDT
-	.extern setup_idt
-	call setup_idt
+	// Load the multiboot structure
+	.extern multiboot_load
+	call multiboot_load
 
-	// Load IDT
-	.extern idt_fatptr
-	mov $idt_fatptr, %eax
-	lidt (%eax)
-
-	// Go to C code
+	// Continue the initialisation of the kernel by calling `kmain()`.
 	.extern kmain
 	call kmain
 
