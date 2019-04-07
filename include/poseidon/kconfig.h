@@ -54,7 +54,7 @@
 # define KCONFIG_ARCH_IO_METHOD				IO_PMIO
 
 /* Size of a pointer, in bits. */
-# define ARCH_BITS					32
+# define KCONFIG_ARCH_BITS				32
 
 /* Size of a page (in bytes). */
 # define KCONFIG_PAGE_SIZE				4096u
