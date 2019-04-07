@@ -23,6 +23,7 @@ struct multiboot_tag_string const *mb_cmdline = NULL;
 struct multiboot_tag_string const *mb_bootloader = NULL;
 struct multiboot_tag_basic_meminfo const *mb_meminfo = NULL;
 struct multiboot_tag_mmap const *mb_mmap = NULL;
+struct multiboot_tag_framebuffer const *mb_fb = NULL;
 
 /*
 ** Parse the multiboot structure to save pointers to the most common tags.
@@ -37,6 +38,8 @@ multiboot_load(void)
 	if (!mb_tag) {
 		return;
 	}
+
+	struct multiboot_tag_framebuffer const *fb;
 
 	while (tag->type != MULTIBOOT_TAG_TYPE_END)
 	{
@@ -53,6 +56,9 @@ multiboot_load(void)
 			break;
 		case MULTIBOOT_TAG_TYPE_MMAP:
 			mb_mmap = (struct multiboot_tag_mmap const *)tag;
+			break;
+		case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
+			mb_fb = (struct multiboot_tag_framebuffer const *)tag;
 			break;
 		}
 
