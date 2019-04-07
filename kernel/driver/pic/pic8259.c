@@ -16,6 +16,7 @@
 
 #if ARCH_X86
 
+# include <poseidon/boot/init_hook.h>
 # include <arch/x86/interrupt.h>
 # include <lib/io.h>
 
@@ -134,7 +135,7 @@ pic8259_slave_eoi(void)
 ** a very specific moment.
 */
 __boot_text
-void
+status_t
 pic8259_init(void)
 {
 	/*
@@ -245,6 +246,11 @@ pic8259_init(void)
 
 	// Unmask all IRQs
 	pic8259_set_irq_mask(0);
+
+	return (OK);
 }
 
+REGISTER_INIT_HOOK(pic8259, &pic8259_init, INIT_LEVEL_ARCH);
+
 #endif /* ARCH_X86 */
+

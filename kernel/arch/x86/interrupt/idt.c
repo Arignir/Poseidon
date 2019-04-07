@@ -46,7 +46,8 @@ setup_idt(void)
 	extern uchar isr_bootstraps[];
 	uint i;
 
-
+	// Set the default handler for each exception/interruption.
+	// This handler will redirect to `common_int_handler()`.
 	for (i = 0; i < INT_NB; ++i) {
 		idt[i] = NEW_IDT_INTERRUPT_GATE_ENTRY(
 			isr_bootstraps + i * 16, // Each isr bootstrap is 16 bytes long
@@ -55,4 +56,12 @@ setup_idt(void)
 			.segment_selector = KERNEL_CODE_SELECTOR,
 		);
 	}
+
+	// Load the IDT
+	asm volatile(
+		"lidt (%%eax)"
+		:
+		: "a"(&idt_fatptr)
+		:
+	);
 }

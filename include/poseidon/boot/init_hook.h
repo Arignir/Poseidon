@@ -14,12 +14,12 @@
 ** in a library etc.
 **
 ** Those functions are registered in an array of `struct init_hook` which is
-** stored in a special section of the kernel so `kmain()` can retrieve all of
+** stored in a special section of the kernel so the kernel can retrieve all of
 ** them easily.
 **
 ** To register a new init hook, use the macro
-** `NEW_INIT_HOOK("name", &func, DESIRED_INIT_LEVEL)`, do *not* add it by hand
-** within the section. The macro will do it for you.
+** `REGISTER_INIT_HOOK("name", &func, DESIRED_INIT_LEVEL)`, do *not* add it by
+** hand within the section. The macro will do it for you.
 */
 
 #ifndef _POSEIDON_BOOT_INIT_HOOK_H_
@@ -32,22 +32,21 @@
 */
 enum init_level
 {
-	/* An init hook should *not* suscribe to __INIT_LEVEL_EARLIEST */
-	__INIT_LEVEL_EARLIEST		= 0x1,
+	/* An init hook should *not* suscribe to `__INIT_LEVEL_EARLIEST` */
+	__INIT_LEVEL_EARLIEST		= 0,
 
-	INIT_LEVEL_ARCH_EARLY,
-	INIT_LEVEL_DRIVER_EARLY,
+	INIT_LEVEL_ARCH_EARLY		= 101,
+	INIT_LEVEL_DRIVER_EARLY		= 201,
 
-	INIT_LEVEL_MULTIBOOT,
+	INIT_LEVEL_BOOT_KALLOC		= 301,
 
-	INIT_LEVEL_PMM,
-	INIT_LEVEL_VMM,
+	INIT_LEVEL_KALLOC		= 401,
 
-	INIT_LEVEL_ARCH,
-	INIT_LEVEL_FILESYSTEM,
-	INIT_LEVEL_DRIVERS,
+	INIT_LEVEL_ARCH			= 501,
+	INIT_LEVEL_FILESYSTEM		= 601,
+	INIT_LEVEL_DRIVERS		= 701,
 
-	/* An init hook should *not* suscribe to __INIT_LEVEL_LATEST */
+	/* An init hook should *not* suscribe to `__INIT_LEVEL_LATEST` */
 	__INIT_LEVEL_LATEST,
 };
 
