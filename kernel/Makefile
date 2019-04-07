@@ -7,13 +7,20 @@
 ##
 ################################################################################
 
-# Compiler
-CC	:= $(TARGET_TRIPLET)-gcc
-AS	:= $(TARGET_TRIPLET)-as
-LD	:= $(TARGET_TRIPLET)-ld
+# Project directory
+export PROJECT_DIR	:= $(realpath $(shell pwd)/../)
+
+include $(PROJECT_DIR)/scripts/make/version.mk
+include $(PROJECT_DIR)/scripts/make/verbose.mk
+include $(PROJECT_DIR)/scripts/make/arch.mk
+include $(PROJECT_DIR)/scripts/make/target.mk
+include $(PROJECT_DIR)/scripts/make/localdir.mk
+
+# Target
+export ELF		:= $(TARGET_DIR)/kernel/$(NAME).elf
 
 # Variables
-CFLAGS	:= \
+CFLAGS	+= \
 	-MD \
 	-pipe \
 	-W \
@@ -35,34 +42,17 @@ CFLAGS	:= \
 	-fno-omit-frame-pointer \
 	-fno-stack-protector \
 	-std=gnu11 \
-	-isystem $(PROJDIR)/include
-
-# Add new CFLAGS when building the "release" target.
-ifeq ($(TARGET), release)
-CFLAGS	+= \
-	-O2 \
-	-DRELEASE
-endif
-
-# Add new CFLAGS when building the "debug" target.
-ifeq ($(TARGET), debug)
-CFLAGS	+= \
-	-g3 \
-	-DDEBUG
-endif
-
-# Find the local directory of the included makefile
-GET_LOCAL_DIR	= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+	-isystem $(PROJECT_DIR)/include
 
 LDFLAGS	:= \
 	-nostdlib \
 	-lgcc
 
-# Include arch-dependent variables and rules.
-include arch/$(ARCH)/Arch.mk
-
 # Objects
 objs-y	:=
+
+# Include arch-dependent variables and rules.
+include arch/$(ARCH)/Arch.mk
 
 # Include makefiles of top subfolders
 include arch/$(ARCH)/Makefile
@@ -71,28 +61,36 @@ include	driver/Makefile
 include	poseidon/Makefile
 
 # Prepend objects with target folder
-objs-y	:= $(patsubst $(PROJDIR)%, $(OUTDIR)%, $(objs-y))
+objs-y	:= $(patsubst $(PROJECT_DIR)%, $(TARGET_DIR)%, $(objs-y))
 deps	:= $(objs-y:.o=.d)
 
 # Prepare target/ folder and include/arch/target symlink
 $(shell mkdir -p $(dir $(objs-y)))
-$(shell rm -f $(PROJDIR)/include/arch/target)
-$(shell ln -s $(PROJDIR)/include/arch/$(ARCH)/ $(PROJDIR)/include/arch/target)
+$(shell rm -f $(PROJECT_DIR)/include/arch/target)
+$(shell ln -s $(PROJECT_DIR)/include/arch/$(ARCH)/ $(PROJECT_DIR)/include/arch/target)
 
 
 .PHONY:	all
 all:	$(ELF)
+
+.PHONY: clean
+clean:
+	$(Q)$(RM) -r $(TARGET_DIR)/kernel
+
+.PHONY: re
+re: clean
+	$(Q)$(MAKE)
 
 $(ELF): $(objs-y)
 	$(Q)printf "  LD\t $(notdir $@)\n"
 	$(Q)$(CC) $(objs-y) $(CFLAGS) $(LDFLAGS) -o $(ELF)
 
 -include $(deps)
-$(OUTDIR)/%.o: $(PROJDIR)/%.c
+$(TARGET_DIR)/%.o: $(PROJECT_DIR)/%.c
 	$(Q)printf "  CC\t $*.c\n"
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
 -include $(deps)
-$(OUTDIR)/%.o: $(PROJDIR)/%.S
+$(TARGET_DIR)/%.o: $(PROJECT_DIR)/%.S
 	$(Q)printf "  AS\t $*.S\n"
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
