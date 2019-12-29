@@ -20,10 +20,10 @@
 __boot_text
 static
 status_t
-setup(void)
+setup_cpu(void)
 {
 	setup_idt();
 	return (OK);
 }
 
-REGISTER_INIT_HOOK(setup, &setup, INIT_LEVEL_ARCH_EARLY);
+REGISTER_INIT_HOOK(setup_cpu, &setup_cpu, INIT_LEVEL_ARCH_EARLY);
