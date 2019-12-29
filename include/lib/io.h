@@ -34,8 +34,8 @@
 */
 enum io_method
 {
-	IO_PORT_MAPPED			= 1, /* Port-mapped IO		*/
-	IO_MEMORY_MAPPED		= 2, /* Memory-mapped IO	*/
+    IO_PORT_MAPPED          = 1, /* Port-mapped IO      */
+    IO_MEMORY_MAPPED        = 2, /* Memory-mapped IO    */
 };
 
 # if KCONFIG_ARCH_IO_METHOD == IO_PORT_MAPPED
@@ -45,7 +45,7 @@ enum io_method
 */
 struct io_port
 {
-	ushort port;
+    ushort port;
 };
 
 /*
@@ -53,11 +53,11 @@ struct io_port
 **
 ** This acts as a shortcut to reduce boilerplate.
 */
-# define NEW_IO_PORT(_name, _port)					\
-	static								\
-	struct io_port const _name = {					\
-		.port = _port						\
-	}
+# define NEW_IO_PORT(_name, _port)                  \
+    static                              			\
+    struct io_port const _name = {                  \
+        .port = _port                       		\
+    }
 
 #  include <arch/target/api/io.h>
 
@@ -72,10 +72,10 @@ struct io_port
 static inline
 void
 io_out8(
-	struct io_port port,
-	uint8 data
+    struct io_port port,
+    uint8 data
 ) {
-	ARCH_SYMBOL(io_out8)(port, data);
+    ARCH_SYMBOL(io_out8)(port, data);
 }
 
 /*
@@ -84,12 +84,12 @@ io_out8(
 static inline
 void
 io_out8_offset(
-	struct io_port port,
-	ushort offset,
-	uint8 data
+    struct io_port port,
+    ushort offset,
+    uint8 data
 ) {
-	port.port += offset;
-	ARCH_SYMBOL(io_out8)(port, data);
+    port.port += offset;
+    ARCH_SYMBOL(io_out8)(port, data);
 }
 
 /*
@@ -103,9 +103,9 @@ io_out8_offset(
 static inline
 uint8
 io_in8(
-	struct io_port port
+    struct io_port port
 ) {
-	return ARCH_SYMBOL(io_in8)(port);
+    return ARCH_SYMBOL(io_in8)(port);
 }
 
 /*
@@ -114,11 +114,11 @@ io_in8(
 static inline
 uint8
 io_in8_offset(
-	struct io_port port,
-	ushort offset
+    struct io_port port,
+    ushort offset
 ) {
-	port.port += offset;
-	return ARCH_SYMBOL(io_in8)(port);
+    port.port += offset;
+    return ARCH_SYMBOL(io_in8)(port);
 }
 
 
@@ -129,7 +129,7 @@ io_in8_offset(
 */
 struct io_mm
 {
-	uintptr address;
+    uintptr address;
 };
 
 /*
@@ -137,11 +137,11 @@ struct io_mm
 **
 ** This acts as a shortcut to reduce boilerplate.
 */
-# define NEW_IO_MM(_name, _address)					\
-	static								\
-	struct io_port const _name = {					\
-		.address = _address					\
-	}
+# define NEW_IO_MM(_name, _address)                 \
+    static                              			\
+    struct io_port const _name = {                  \
+        .address = _address                 		\
+    }
 
 #  include <arch/target/api/io.h>
 
@@ -156,10 +156,10 @@ struct io_mm
 static inline
 void
 io_out8(
-	struct io_mm port,
-	uint8 data
+    struct io_mm port,
+    uint8 data
 ) {
-	ARCH_SYMBOL(io_out8)(port, data);
+    ARCH_SYMBOL(io_out8)(port, data);
 }
 
 /*
@@ -168,12 +168,12 @@ io_out8(
 static inline
 void
 io_out8_offset(
-	struct io_mm port,
-	ushort offset,
-	uint8 data
+    struct io_mm port,
+    ushort offset,
+    uint8 data
 ) {
-	port.address += offset;
-	ARCH_SYMBOL(io_out8)(port, data);
+    port.address += offset;
+    ARCH_SYMBOL(io_out8)(port, data);
 }
 
 /*
@@ -187,9 +187,9 @@ io_out8_offset(
 static inline
 uint8
 io_in8(
-	struct io_mm port
+    struct io_mm port
 ) {
-	return ARCH_SYMBOL(io_in8)(port);
+    return ARCH_SYMBOL(io_in8)(port);
 }
 
 /*
@@ -198,11 +198,11 @@ io_in8(
 static inline
 uint8
 io_in8_offset(
-	struct io_mm port,
-	ushort offset
+    struct io_mm port,
+    ushort offset
 ) {
-	port.address += offset;
-	return ARCH_SYMBOL(io_in8)(port);
+    port.address += offset;
+    return ARCH_SYMBOL(io_in8)(port);
 }
 
 # endif /* KCONFIG_ARCH_IO_TECHNIQUE */
@@ -219,8 +219,7 @@ static inline
 void
 io_delay(void)
 {
-	ARCH_SYMBOL(io_delay)();
+    ARCH_SYMBOL(io_delay)();
 }
-
 
 #endif /* !_LIB_IO_H_ */

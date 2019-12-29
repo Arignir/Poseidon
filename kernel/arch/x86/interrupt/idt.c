@@ -29,8 +29,8 @@ struct idt_descriptor idt[INT_NB];
 */
 __aligned(16)
 struct idt_fatptr const idt_fatptr = {
-	.limit = sizeof(idt) - 1,
-	.base = idt,
+    .limit = sizeof(idt) - 1,
+    .base = idt,
 };
 
 /*
@@ -43,25 +43,25 @@ __boot_text
 void
 setup_idt(void)
 {
-	extern uchar isr_bootstraps[];
-	uint i;
+    extern uchar isr_bootstraps[];
+    uint i;
 
-	// Set the default handler for each exception/interruption.
-	// This handler will redirect to `common_int_handler()`.
-	for (i = 0; i < INT_NB; ++i) {
-		idt[i] = NEW_IDT_INTERRUPT_GATE_ENTRY(
-			isr_bootstraps + i * 16, // Each isr bootstrap is 16 bytes long
-			.present = true,
-			.dpl = 0,
-			.segment_selector = KERNEL_CODE_SELECTOR,
-		);
-	}
+    // Set the default handler for each exception/interruption.
+    // This handler will redirect to `common_int_handler()`.
+    for (i = 0; i < INT_NB; ++i) {
+        idt[i] = NEW_IDT_INTERRUPT_GATE_ENTRY(
+            isr_bootstraps + i * 16, // Each isr bootstrap is 16 bytes long
+            .present = true,
+            .dpl = 0,
+            .segment_selector = KERNEL_CODE_SELECTOR,
+        );
+    }
 
-	// Load the IDT
-	asm volatile(
-		"lidt (%%eax)"
-		:
-		: "a"(&idt_fatptr)
-		:
-	);
+    // Load the IDT
+    asm volatile(
+        "lidt (%%eax)"
+        :
+        : "a"(&idt_fatptr)
+        :
+    );
 }

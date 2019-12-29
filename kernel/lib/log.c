@@ -22,18 +22,18 @@ extern struct logger const __stop_poseidon_logger[] __weak;
 static
 int
 log_fmt_callback(
-	char const *buffer,
-	size_t len,
-	void *tmp __unused
+    char const *buffer,
+    size_t len,
+    void *tmp __unused
 ) {
-	struct logger const *logger;
+    struct logger const *logger;
 
-	logger = __start_poseidon_logger;
-	while (logger < __stop_poseidon_logger) {
-		logger->print(buffer, len);
-		++logger;
-	}
-	return (len);
+    logger = __start_poseidon_logger;
+    while (logger < __stop_poseidon_logger) {
+        logger->print(buffer, len);
+        ++logger;
+    }
+    return (len);
 }
 
 /*
@@ -41,15 +41,15 @@ log_fmt_callback(
 */
 void
 log(
-	char const *fmt,
-	...
+    char const *fmt,
+    ...
 ) {
-	va_list va;
-	va_start(va, fmt);
+    va_list va;
+    va_start(va, fmt);
 
-	format(fmt, va, &log_fmt_callback, NULL);
+    format(fmt, va, &log_fmt_callback, NULL);
 
-	va_end(va);
+    va_end(va);
 }
 
 /*
@@ -57,16 +57,16 @@ log(
 */
 void
 logln(
-	char const *fmt,
-	...
+    char const *fmt,
+    ...
 ) {
-	va_list va;
-	va_start(va, fmt);
+    va_list va;
+    va_start(va, fmt);
 
-	format(fmt, va, &log_fmt_callback, NULL);
-	log_fmt_callback("\n", 1, NULL);
+    format(fmt, va, &log_fmt_callback, NULL);
+    log_fmt_callback("\n", 1, NULL);
 
-	va_end(va);
+    va_end(va);
 }
 
 /*
@@ -75,10 +75,10 @@ logln(
 */
 void
 vlog(
-	char const *fmt,
-	va_list va
+    char const *fmt,
+    va_list va
 ) {
-	format(fmt, va, &log_fmt_callback, NULL);
+    format(fmt, va, &log_fmt_callback, NULL);
 }
 
 /*
@@ -87,9 +87,9 @@ vlog(
 */
 void
 vlogln(
-	char const *fmt,
-	va_list va
+    char const *fmt,
+    va_list va
 ) {
-	format(fmt, va, &log_fmt_callback, NULL);
-	log_fmt_callback("\n", 1, NULL);
+    format(fmt, va, &log_fmt_callback, NULL);
+    log_fmt_callback("\n", 1, NULL);
 }

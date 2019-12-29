@@ -32,22 +32,22 @@
 */
 enum init_level
 {
-	/* An init hook should *not* suscribe to `__INIT_LEVEL_EARLIEST` */
-	__INIT_LEVEL_EARLIEST		= 0,
+    /* An init hook should *not* suscribe to `__INIT_LEVEL_EARLIEST` */
+    __INIT_LEVEL_EARLIEST       = 0,
 
-	INIT_LEVEL_ARCH_EARLY		= 101,
-	INIT_LEVEL_DRIVER_EARLY		= 201,
+    INIT_LEVEL_ARCH_EARLY       = 101,
+    INIT_LEVEL_DRIVER_EARLY     = 201,
 
-	INIT_LEVEL_BOOT_KALLOC		= 301,
+    INIT_LEVEL_BOOT_KALLOC      = 301,
 
-	INIT_LEVEL_KALLOC		= 401,
+    INIT_LEVEL_KALLOC           = 401,
 
-	INIT_LEVEL_ARCH			= 501,
-	INIT_LEVEL_FILESYSTEM		= 601,
-	INIT_LEVEL_DRIVERS		= 701,
+    INIT_LEVEL_ARCH             = 501,
+    INIT_LEVEL_FILESYSTEM       = 601,
+    INIT_LEVEL_DRIVERS          = 701,
 
-	/* An init hook should *not* suscribe to `__INIT_LEVEL_LATEST` */
-	__INIT_LEVEL_LATEST,
+    /* An init hook should *not* suscribe to `__INIT_LEVEL_LATEST` */
+    __INIT_LEVEL_LATEST,
 };
 
 /*
@@ -57,9 +57,9 @@ typedef status_t (*init_hook_funcptr)(void);
 
 struct init_hook
 {
-	char const *name;
-	enum init_level level;
-	init_hook_funcptr hook;
+    char const *name;
+    enum init_level level;
+    init_hook_funcptr hook;
 };
 
 /*
@@ -68,14 +68,14 @@ struct init_hook
 ** Registers an init hook given its name, an address to call and an init level,
 ** and stores it in the reserved section of the binary dedicated to init hook.
 */
-# define REGISTER_INIT_HOOK(n, h, l)					\
-	__aligned(sizeof(void *)) __used __section("poseidon_init_hooks")\
-	static struct init_hook const _init_hook_struct_##n = {		\
-		.name = #n,						\
-		.level = (l),						\
-		.hook = (h),						\
-	}
+# define REGISTER_INIT_HOOK(n, h, l)                                    \
+    __aligned(sizeof(void *)) __used __section("poseidon_init_hooks")   \
+    static struct init_hook const _init_hook_struct_##n = {             \
+        .name = #n,                                                     \
+        .level = (l),                                                   \
+        .hook = (h),                                                    \
+    }
 
-struct init_hook const *	find_next_init_hook();
+struct init_hook const *    find_next_init_hook();
 
 #endif /* !_POSEIDON_BOOT_INIT_HOOK_H_ */

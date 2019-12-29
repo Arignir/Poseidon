@@ -22,8 +22,8 @@ static
 status_t
 setup_cpu(void)
 {
-	setup_idt();
-	return (OK);
+    setup_idt();
+    return (OK);
 }
 
 REGISTER_INIT_HOOK(setup_cpu, &setup_cpu, INIT_LEVEL_ARCH_EARLY);

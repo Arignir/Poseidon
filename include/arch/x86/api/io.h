@@ -28,42 +28,42 @@
 static inline
 void
 x86_io_out8(
-	struct io_port port,
-	uint8 data
+    struct io_port port,
+    uint8 data
 ) {
-	asm volatile (
-		"out %0, %1"
-		:
-		: "a"(data), "d"(port.port)
-		:
-	);
+    asm volatile (
+        "out %0, %1"
+        :
+        : "a"(data), "d"(port.port)
+        :
+    );
 }
 
 static inline
 uint8
 x86_io_in8(struct io_port port)
 {
-	uchar data;
+    uchar data;
 
-	asm volatile (
-		"in %1, %0"
-		: "=a"(data)
-		: "d"(port.port)
-		:
-	);
-	return (data);
+    asm volatile (
+        "in %1, %0"
+        : "=a"(data)
+        : "d"(port.port)
+        :
+    );
+    return (data);
 }
 
 static inline
 void
 x86_io_delay(void)
 {
-	asm volatile(
-		"outb %%al, $0x80"
-		:
-		: "a"(0)
-		:
-	);
+    asm volatile(
+        "outb %%al, $0x80"
+        :
+        : "a"(0)
+        :
+    );
 }
 
 #endif /* !_ARCH_X86_API_IO_H_ */

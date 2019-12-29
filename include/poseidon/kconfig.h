@@ -22,7 +22,7 @@
 */
 
 /* Use a multiboot-compliant bootloader to set-up graphic mode. */
-# define KCONFIG_MULTIBOOT_FRAMEBUFFER			0
+# define KCONFIG_MULTIBOOT_FRAMEBUFFER          0
 
 /*
 ** Kernel stack size, in bytes
@@ -31,7 +31,7 @@
 ** You shouldn't put it lower than 16kB: the kernel expects to run with
 ** at least that amount of stack.
 */
-# define KCONFIG_KERNEL_STACK_SIZE			(16 * KCONFIG_PAGE_SIZE)
+# define KCONFIG_KERNEL_STACK_SIZE              (16 * KCONFIG_PAGE_SIZE)
 
 /*
 ** The following are properties depending on the targetted architecture and
@@ -40,10 +40,10 @@
 */
 
 /* Architecture's name. */
-# define KCONFIG_ARCH					x86
+# define KCONFIG_ARCH                           x86
 
 /* Sets to true if the targetted architecture is x86. */
-# define KCONFIG_ARCH_X86				1
+# define KCONFIG_ARCH_X86                       1
 
 /*
 ** Set to IO_PORT_MAPPED if the architecture is using port IO
@@ -51,18 +51,18 @@
 **
 ** IO_PORT and IO_MM are defined in `include/lib/io.h`.
 */
-# define KCONFIG_ARCH_IO_METHOD				IO_PORT_MAPPED
+# define KCONFIG_ARCH_IO_METHOD                 IO_PORT_MAPPED
 
 /* Size of a pointer, in bits. */
-# define KCONFIG_ARCH_BITS				32
+# define KCONFIG_ARCH_BITS                      32
 
 /* Size of a page (in bytes). */
-# define KCONFIG_PAGE_SIZE				4096u
+# define KCONFIG_PAGE_SIZE                      4096u
 
 /* The following are shortcuts for commonly used options. */
-# define ARCH						KCONFIG_ARCH
-# define ARCH_X86					KCONFIG_ARCH_X86
-# define ARCH_BITS					KCONFIG_ARCH_BITS
-# define PAGE_SIZE					KCONFIG_PAGE_SIZE
+# define ARCH                                   KCONFIG_ARCH
+# define ARCH_X86                               KCONFIG_ARCH_X86
+# define ARCH_BITS                              KCONFIG_ARCH_BITS
+# define PAGE_SIZE                              KCONFIG_PAGE_SIZE
 
 #endif /* !_KCONFIG_POSEIDON_H_ */

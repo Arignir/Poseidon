@@ -30,21 +30,21 @@
 void
 kmain(void)
 {
-	struct init_hook const *hook;
+    struct init_hook const *hook;
 
-	/* Trigger all init hooks, panic if one failed. */
-	hook = find_next_init_hook(NULL, __INIT_LEVEL_EARLIEST);
-	while (hook != NULL) {
-		if (hook->hook() != OK) {
-			panic(
-				"the init hook \"%s\" failed to complete successfully.",
-				hook->name
-			);
-		}
-		hook = find_next_init_hook(hook, hook->level);
-	}
+    /* Trigger all init hooks, panic if one failed. */
+    hook = find_next_init_hook(NULL, __INIT_LEVEL_EARLIEST);
+    while (hook != NULL) {
+        if (hook->hook() != OK) {
+            panic(
+                "the init hook \"%s\" failed to complete successfully.",
+                hook->name
+            );
+        }
+        hook = find_next_init_hook(hook, hook->level);
+    }
 
-	logln("Hello Kernel World!");
+    logln("Hello Kernel World!");
 
-	/* Start init here (WIP) */
+    /* Start init here (WIP) */
 }
