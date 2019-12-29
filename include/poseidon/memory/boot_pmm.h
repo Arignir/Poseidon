@@ -13,7 +13,7 @@
 # include <poseidon/memory.h>
 # include <poseidon/poseidon.h>
 
-status_t	boot_pmm_init(void);
-physaddr_t	boot_pmm_alloc_frame(void);
+status_t    boot_pmm_init(void);
+physaddr_t  boot_pmm_alloc_frame(void);
 
 #endif /* !_POSEIDON_MEMORY_BOOT_PMM_H_ */

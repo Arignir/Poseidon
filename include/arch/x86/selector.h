@@ -22,10 +22,10 @@
 ** (See `arch/x86/boot/gdt.c` for more informations about the boot/dynamic gdt.)
 */
 
-# define KERNEL_CODE_SELECTOR		0x08
-# define KERNEL_DATA_SELECTOR		0x10
-# define USER_CODE_SELECTOR		0x18
-# define USER_DATA_SELECTOR		0x20
-# define TSS_SELECTOR			0x28
+# define KERNEL_CODE_SELECTOR       0x08
+# define KERNEL_DATA_SELECTOR       0x10
+# define USER_CODE_SELECTOR         0x18
+# define USER_DATA_SELECTOR         0x20
+# define TSS_SELECTOR               0x28
 
 #endif /* !_ARCH_X86_SELECTOR_H_ */

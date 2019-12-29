@@ -33,7 +33,7 @@ typedef void *virtaddr_t;
 /*
 ** The equivalent of NULL for physical addresses.
 */
-# define PHYS_NULL	((physaddr_t)0)
+# define PHYS_NULL  ((physaddr_t)0)
 
 /*
 ** Constants provided by the linker that indicate the beginning and end of

@@ -43,7 +43,7 @@ static inline
 bool
 interrupts_enabled(void)
 {
-	return ARCH_SYMBOL(interrupts_enabled)();
+    return ARCH_SYMBOL(interrupts_enabled)();
 }
 
 /*
@@ -58,7 +58,7 @@ static inline
 void
 enable_interrupts(void)
 {
-	ARCH_SYMBOL(enable_interrupts)();
+    ARCH_SYMBOL(enable_interrupts)();
 }
 
 /*
@@ -73,7 +73,7 @@ static inline
 void
 disable_interrupts(void)
 {
-	ARCH_SYMBOL(disable_interrupts)();
+    ARCH_SYMBOL(disable_interrupts)();
 }
 
 /*
@@ -90,9 +90,9 @@ disable_interrupts(void)
 static inline
 void
 set_interrupts_state(
-	bool state
+    bool state
 ) {
-	ARCH_SYMBOL(set_interrupts_state)(state);
+    ARCH_SYMBOL(set_interrupts_state)(state);
 }
 
 /*
@@ -106,10 +106,10 @@ set_interrupts_state(
 static inline
 void
 register_interrupt_handler(
-	uint vector,
-	interrupt_handler_t handler
+    uint vector,
+    interrupt_handler_t handler
 ) {
-	ARCH_SYMBOL(register_interrupt_handler)(vector, handler);
+    ARCH_SYMBOL(register_interrupt_handler)(vector, handler);
 }
 
 /*
@@ -123,9 +123,9 @@ register_interrupt_handler(
 static inline
 void
 unregister_interrupt_handler(
-	uint vector
+    uint vector
 ) {
-	ARCH_SYMBOL(unregister_interrupt_handler)(vector);
+    ARCH_SYMBOL(unregister_interrupt_handler)(vector);
 }
 
 /*
@@ -140,7 +140,7 @@ static inline
 void
 halt(void)
 {
-	ARCH_SYMBOL(halt)();
+    ARCH_SYMBOL(halt)();
 }
 
 #endif /* !_LIB_INTERRUPT_H_ */

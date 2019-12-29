@@ -21,30 +21,29 @@ extern struct init_hook const __stop_poseidon_init_hooks[] __weak;
 __boot_text
 struct init_hook const *
 find_next_init_hook(
-	struct init_hook const *last,
-	enum init_level level
+    struct init_hook const *last,
+    enum init_level level
 ) {
-	struct init_hook const *hook;
-	struct init_hook const *found;
-	bool seen_last;
+    struct init_hook const *hook;
+    struct init_hook const *found;
+    bool seen_last;
 
-	found = NULL;
-	seen_last = false;
-	for (hook = __start_poseidon_init_hooks; hook < __stop_poseidon_init_hooks; ++hook)
-	{
-		seen_last |= (hook == last);
-		if (hook->level < level
-			|| (found && found->level <= hook->level)) {
-			continue;
-		}
-		if (hook->level > level) {
-			found = hook;
-			continue;
-		}
-		if (hook->level == level && seen_last && hook != last) {
-			found = hook;
-			break;
-		}
-	}
-	return (found);
+    found = NULL;
+    seen_last = false;
+    for (hook = __start_poseidon_init_hooks; hook < __stop_poseidon_init_hooks; ++hook)
+    {
+        seen_last |= (hook == last);
+        if (hook->level < level || (found && found->level <= hook->level)) {
+            continue;
+        }
+        if (hook->level > level) {
+            found = hook;
+            continue;
+        }
+        if (hook->level == level && seen_last && hook != last) {
+            found = hook;
+            break;
+        }
+    }
+    return (found);
 }

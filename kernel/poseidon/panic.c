@@ -18,21 +18,22 @@
 */
 void
 panic(
-	char const *fmt,
-	...
+    char const *fmt,
+    ...
 ) {
-	va_list va;
+    va_list va;
 
-	disable_interrupts();
+    disable_interrupts();
 
-	va_start(va, fmt);
+    va_start(va, fmt);
 
-	logln("");
-	log("Kernel panicked: ");
-	vlogln(fmt, va);
+    logln("");
+    log("Kernel panicked: ");
+    vlogln(fmt, va);
 
-	va_end(va);
+    va_end(va);
 
-	while (42)
-		halt();
+    while (42) {
+        halt();
+    }
 }

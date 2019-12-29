@@ -16,8 +16,8 @@
 
 /*
 ** Ensure this file isn't included on its own.
-** The file `include/lib/interrupt.h` should be included instead, which, in turn,
-** includes this one.
+** The file `include/lib/interrupt.h` should be included instead, which, in
+** turn, includes this one.
 */
 # ifndef _LIB_INTERRUPT_H_
 #  error Please include `lib/interrupt.h` instead of `arch/x86/api/interrupt.h`.
@@ -30,79 +30,79 @@ static inline
 bool
 x86_interrupts_enabled(void)
 {
-	struct eflags eflags = get_eflags();
-	return eflags.intf;
+    struct eflags eflags = get_eflags();
+    return eflags.intf;
 }
 
 static inline
 void
 x86_enable_interrupts(void) {
-	asm volatile (
-		"sti;"
-		:
-		:
-		: "cc"
-	);
+    asm volatile (
+        "sti;"
+        :
+        :
+        : "cc"
+    );
 }
 
 static inline
 void
 x86_disable_interrupts(void) {
-	asm volatile (
-		"cli;"
-		:
-		:
-		: "cc"
-	);
+    asm volatile (
+        "cli;"
+        :
+        :
+        : "cc"
+    );
 }
 
 static inline
 void
 x86_set_interrupts_state(
-	bool state
+    bool state
 ) {
-	if (state) {
-		sti();
-	} else {
-		cli();
-	}
+    if (state) {
+        sti();
+    } else {
+        cli();
+    }
 }
 
 static inline
 void
 x86_halt(void)
 {
-	asm volatile(
-		"hlt;"
-		:
-		:
-		:
-	);
+    asm volatile(
+        "hlt;"
+        :
+        :
+        :
+    );
 }
 
 static inline
 void
 x86_register_interrupt_handler(
-	uint vector,
-	interrupt_handler_t handler
+    uint vector,
+    interrupt_handler_t handler
 ) {
-	extern interrupt_handler_t irq_handlers[];
+    extern interrupt_handler_t irq_handlers[];
 
-	assert(vector >= INT_IRQ0 && vector < INT_NB);
+    assert(vector >= INT_IRQ0 && vector < INT_NB);
 
-	irq_handlers[vector] = handler;
+    irq_handlers[vector] = handler;
 }
 
 static inline
 void
 x86_unregister_interrupt_handler(
-	uint vector
+    uint vector
 ) {
-	extern interrupt_handler_t irq_handlers[];
+    extern interrupt_handler_t irq_handlers[];
 
-	assert(vector >= INT_IRQ0 && vector < INT_NB);
+    assert(vector >= INT_IRQ0 && vector < INT_NB);
 
-	irq_handlers[vector] = NULL;
+    irq_handlers[vector] = NULL;
 }
 
 #endif /* !_ARCH_X86_API_INTERRUPT_H_ */
