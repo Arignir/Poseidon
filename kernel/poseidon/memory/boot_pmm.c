@@ -49,7 +49,7 @@ boot_pmm_alloc_frame(void)
 	// TODO: Panic when this function is called and the main memory
 	// allocator is initialized.
 
-	if (boot_pmm_next_frame <= boot_pmm_last_frame) {
+	if (boot_pmm_next_frame < boot_pmm_last_frame) {
 		physaddr_t res = boot_pmm_next_frame;
 		boot_pmm_next_frame += PAGE_SIZE;
 		return (res);
@@ -61,7 +61,7 @@ boot_pmm_alloc_frame(void)
 /*
 ** Set up the boot physical memory manager.
 **
-** Called early by the arch-dependent setup code.
+** Called early as an init hook.
 **
 ** Goes through the multiboot structure to find the biggest available physical
 ** memory region.
