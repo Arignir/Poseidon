@@ -83,14 +83,14 @@ re: clean
 
 $(ELF): $(objs-y)
 	$(Q)printf "  LD\t $(notdir $@)\n"
-	$(Q)$(CC) $(objs-y) $(CFLAGS) $(LDFLAGS) -o $(ELF)
+	$(Q)$(BUILD_CC) $(objs-y) $(CFLAGS) $(LDFLAGS) -o $(ELF)
 
 -include $(deps)
 $(TARGET_DIR)/%.o: $(PROJECT_DIR)/%.c
 	$(Q)printf "  CC\t $*.c\n"
-	$(Q)$(CC) $(CFLAGS) -c $< -o $@
+	$(Q)$(BUILD_CC) $(CFLAGS) -c $< -o $@
 
 -include $(deps)
 $(TARGET_DIR)/%.o: $(PROJECT_DIR)/%.S
 	$(Q)printf "  AS\t $*.S\n"
-	$(Q)$(CC) $(CFLAGS) -c $< -o $@
+	$(Q)$(BUILD_CC) $(CFLAGS) -c $< -o $@
