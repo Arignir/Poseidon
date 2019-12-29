@@ -27,11 +27,11 @@
 /*
 ** Kernel stack size, in bytes
 **
-** Too little, and you'll stack overflow, too much, and you'll loose memory.
-** You shouldn't put it lower than 16kB, as must kernel code expects to run with
+** Too little, and you'll stack overflow. Too much, and you'll loose memory.
+** You shouldn't put it lower than 16kB: the kernel expects to run with
 ** at least that amount of stack.
 */
-# define KCONFIG_KERNEL_STACK_SIZE			16 * KCONFIG_PAGE_SIZE
+# define KCONFIG_KERNEL_STACK_SIZE			(16 * KCONFIG_PAGE_SIZE)
 
 /*
 ** The following are properties depending on the targetted architecture and
@@ -46,12 +46,12 @@
 # define KCONFIG_ARCH_X86				1
 
 /*
-** Set to IO_PORT if the architecture is using port IO
-** Set to IO_MM if the architecture is using memory mapped IO.
+** Set to IO_PORT_MAPPED if the architecture is using port IO
+** Set to IO_MEMORY_MAPPED if the architecture is using memory mapped IO.
 **
 ** IO_PORT and IO_MM are defined in `include/lib/io.h`.
 */
-# define KCONFIG_ARCH_IO_METHOD				IO_PMIO
+# define KCONFIG_ARCH_IO_METHOD				IO_PORT_MAPPED
 
 /* Size of a pointer, in bits. */
 # define KCONFIG_ARCH_BITS				32
