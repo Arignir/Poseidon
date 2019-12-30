@@ -24,47 +24,47 @@ isr_bootstraps:
 
 .set i, 0
 .rept 256
-	.align 16		// We make sure each isr is 16 bytes long
-	.if (i == 8 || (i >= 10 && i <= 14) || i == 17)
-		pushl $i	// Interrupt vector
-		jmp isr_wrapper
-	.else
-		pushl $0	// Fake error code
-		pushl $i	// Interrupt vector
-		jmp isr_wrapper
-	.endif
-	.set i, i + 1
+    .align 16           // We make sure each isr is 16 bytes long
+    .if (i == 8 || (i >= 10 && i <= 14) || i == 17)
+        pushl $i        // Interrupt vector
+        jmp isr_wrapper
+    .else
+        pushl $0        // Fake error code
+        pushl $i        // Interrupt vector
+        jmp isr_wrapper
+    .endif
+    .set i, i + 1
 .endr
 
 isr_wrapper:
-	pushal			// Push edi, esi, ebp, esp, ebx, edx, ecx, eax
+    pushal              // Push edi, esi, ebp, esp, ebx, edx, ecx, eax
 
-	push %ds		// Save segment registers
-	push %ss
-	push %es
-	push %fs
-	push %gs
+    push %ds            // Save segment registers
+    push %ss
+    push %es
+    push %fs
+    push %gs
 
-	mov $KERNEL_DATA_SELECTOR, %ax
-	mov %ax, %ds
-	mov %ax, %ss
-	mov %ax, %es
-	mov %ax, %fs
-	mov %ax, %gs
+    mov $KERNEL_DATA_SELECTOR, %ax
+    mov %ax, %ds
+    mov %ax, %ss
+    mov %ax, %es
+    mov %ax, %fs
+    mov %ax, %gs
 
-	push %esp		// Push iframe onto the stack
+    push %esp           // Push iframe onto the stack
 
-	.extern common_int_handler
-	call common_int_handler
+    .extern common_int_handler
+    call common_int_handler
 
-	add $0x4, %esp		// Pop iframe
+    add $0x4, %esp      // Pop iframe
 
-	pop %gs			// Restore segment registers
-	pop %fs
-	pop %es
-	pop %ss
-	pop %ds
+    pop %gs             // Restore segment registers
+    pop %fs
+    pop %es
+    pop %ss
+    pop %ds
 
-	popal			// Pop edi, esi, ebp, esp, ebx, edx, ecx, eax
-	add $0x8, %esp		// Pop interrupt vector and error code
-	iret			// Return from interrupt (pop eip, cs, eflags, ss, esp)
+    popal               // Pop edi, esi, ebp, esp, ebx, edx, ecx, eax
+    add $0x8, %esp      // Pop interrupt vector and error code
+    iret                // Return from interrupt (pop eip, cs, eflags, ss, esp)
