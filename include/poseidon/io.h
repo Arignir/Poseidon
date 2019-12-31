@@ -13,7 +13,7 @@
 ** The IO system is made to prevent compilation if the kernel is provided with
 ** memory-mapped informations on a port-based architecture or vice-versa.
 **
-** `kconfig.h\ provides a variable named `KCONFIG_ARCH_IO_METHOD` holding
+** `kconfig.h` provides a variable named `KCONFIG_ARCH_IO_METHOD` holding
 ** which method is used to talk to peripheral devices.
 ** The members of `enum io_method` are all possible values for this variable.
 **
@@ -22,8 +22,8 @@
 ** in mind that new values *may* appear one day.
 */
 
-#ifndef _LIB_IO_H_
-# define _LIB_IO_H_
+#ifndef _POSEIDON_IO_H_
+# define _POSEIDON_IO_H_
 
 # include <poseidon/poseidon.h>
 # include <poseidon/kconfig.h>
@@ -222,4 +222,4 @@ io_delay(void)
     ARCH_SYMBOL(io_delay)();
 }
 
-#endif /* !_LIB_IO_H_ */
+#endif /* !_POSEIDON_IO_H_ */

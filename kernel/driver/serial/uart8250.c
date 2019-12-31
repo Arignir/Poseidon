@@ -17,7 +17,7 @@
 
 #include <poseidon/kconfig.h>
 #include <poseidon/boot/init_hook.h>
-#include <lib/io.h>
+#include <poseidon/io.h>
 #include <lib/log.h>
 
 /*

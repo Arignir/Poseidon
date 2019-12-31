@@ -49,7 +49,7 @@
 ** Set to IO_PORT_MAPPED if the architecture is using port IO
 ** Set to IO_MEMORY_MAPPED if the architecture is using memory mapped IO.
 **
-** IO_PORT and IO_MM are defined in `include/lib/io.h`.
+** Those constant are defined in `include/poseidon/io.h`.
 */
 # define KCONFIG_ARCH_IO_METHOD                 IO_PORT_MAPPED
 

@@ -9,7 +9,7 @@
 
 #include <arch/x86/interrupt.h>
 #include <driver/pic/pic8259.h>
-#include <lib/interrupt.h>
+#include <poseidon/interrupt.h>
 #include <lib/log.h>
 
 interrupt_handler_t irq_handlers[INT_NB - INT_IRQ0];

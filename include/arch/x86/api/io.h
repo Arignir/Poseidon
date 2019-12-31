@@ -16,12 +16,12 @@
 
 /*
 ** Ensure this file isn't included on its own.
-** The file `include/lib/io.h` should be included instead, which, in turn,
+** The file `include/poseidon/io.h` should be included instead, which, in turn,
 ** includes this one.
 */
-# ifndef _LIB_IO_H_
-#  error Please include `lib/io.h` instead of `arch/x86/api/io.h`.
-# endif /* !_LIB_IO_H_ */
+# ifndef _POSEIDON_IO_H_
+#  error Please include `poseidon/io.h` instead of `arch/x86/api/io.h`.
+# endif /* !_POSEIDON_IO_H_ */
 
 # include <poseidon/poseidon.h>
 
