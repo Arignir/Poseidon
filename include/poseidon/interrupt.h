@@ -11,8 +11,8 @@
 ** Architecture-independent API to manipulate maskable interrupts.
 */
 
-#ifndef _LIB_INTERRUPT_H_
-# define _LIB_INTERRUPT_H_
+#ifndef _POSEIDON_INTERRUPT_H_
+# define _POSEIDON_INTERRUPT_H_
 
 # include <poseidon/poseidon.h>
 # include <poseidon/kconfig.h>
@@ -143,4 +143,4 @@ halt(void)
     ARCH_SYMBOL(halt)();
 }
 
-#endif /* !_LIB_INTERRUPT_H_ */
+#endif /* !_POSEIDON_INTERRUPT_H_ */

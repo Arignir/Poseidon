@@ -8,7 +8,7 @@
 \******************************************************************************/
 
 /*
-** Architecture-independent API to manipulate, allocate and free the memory.
+** Architecture-independent API to manipulate, allocate and free memory.
 */
 
 #ifndef _POSEIDON_MEMORY_H_

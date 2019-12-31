@@ -8,7 +8,7 @@
 \******************************************************************************/
 
 /*
-** Implementation of `include/lib/interrupt.h` for the x86 architecture.
+** Implementation of `include/poseidon/interrupt.h` for the x86 architecture.
 */
 
 #ifndef _ARCH_X86_API_INTERRUPT_H_
@@ -16,12 +16,12 @@
 
 /*
 ** Ensure this file isn't included on its own.
-** The file `include/lib/interrupt.h` should be included instead, which, in
+** The file `include/poseidon/interrupt.h` should be included instead, which, in
 ** turn, includes this one.
 */
-# ifndef _LIB_INTERRUPT_H_
-#  error Please include `lib/interrupt.h` instead of `arch/x86/api/interrupt.h`.
-# endif /* !_LIB_INTERRUPT_H_ */
+# ifndef _POSEIDON_INTERRUPT_H_
+#  error Please include `poseidon/interrupt.h` instead of `arch/x86/api/interrupt.h`.
+# endif /* !_POSEIDON_INTERRUPT_H_ */
 
 # include <arch/x86/register.h>
 # include <arch/x86/interrupt.h>

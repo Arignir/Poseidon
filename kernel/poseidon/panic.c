@@ -7,7 +7,7 @@
 **
 \******************************************************************************/
 
-#include <lib/interrupt.h>
+#include <poseidon/interrupt.h>
 #include <lib/log.h>
 #include <stdarg.h>
 

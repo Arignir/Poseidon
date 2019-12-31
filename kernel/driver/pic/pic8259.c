@@ -18,7 +18,7 @@
 
 # include <poseidon/boot/init_hook.h>
 # include <arch/x86/interrupt.h>
-# include <lib/io.h>
+# include <poseidon/io.h>
 
 /*
 ** Define two ports: the master and slave PIC.
