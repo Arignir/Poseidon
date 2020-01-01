@@ -34,47 +34,23 @@ typedef void (*interrupt_handler_t)(void);
 **
 ** Return true if they are, false otherwise.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `bool $ARCH_interrupts_enabled(void);`
+** Architectures must implement this function.
 */
-static inline
-bool
-interrupts_enabled(void)
-{
-    return ARCH_SYMBOL(interrupts_enabled)();
-}
+static inline bool      interrupts_enabled(void) __arch_alias(interrupts_enabled);
 
 /*
 ** Enable all maskable interrupts.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_enable_interrupts(void);`
+** Architectures must implement this function.
 */
-static inline
-void
-enable_interrupts(void)
-{
-    ARCH_SYMBOL(enable_interrupts)();
-}
+static inline void      enable_interrupts(void) __arch_alias(enable_interrupts);
 
 /*
 ** Disable all maskable interrupts.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_disable_interrupts(void);`
+** Architectures must implement this function.
 */
-static inline
-void
-disable_interrupts(void)
-{
-    ARCH_SYMBOL(disable_interrupts)();
-}
+static inline void      disable_interrupts(void) __arch_alias(disable_interrupts);
 
 /*
 ** Enable or disable all maskable interrupts.
@@ -82,65 +58,29 @@ disable_interrupts(void)
 ** If true is given as parameter, the maskable interrupts are enabled.
 ** Otherwise, the interrupts are disabled.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_set_interrupts_state(bool state);`
+** Architectures must implement this function.
 */
-static inline
-void
-set_interrupts_state(
-    bool state
-) {
-    ARCH_SYMBOL(set_interrupts_state)(state);
-}
+static inline void      set_interrupts_state(bool state) __arch_alias(set_interrupts_state);
 
 /*
 ** Register an interrupt handler for a specific interrupt vector.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_register_interrupt_handler(uint vector, interrupt_handler_t handler);`
+** Architectures must implement this function.
 */
-static inline
-void
-register_interrupt_handler(
-    uint vector,
-    interrupt_handler_t handler
-) {
-    ARCH_SYMBOL(register_interrupt_handler)(vector, handler);
-}
+static inline void      register_interrupt_handler(uint vector, interrupt_handler_t handler) __arch_alias(register_interrupt_handler);
 
 /*
 ** Unregister an interrupt handler for a specific interrupt vector.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_unregister_interrupt_handler(uint vector);`
+** Architectures must implement this function.
 */
-static inline
-void
-unregister_interrupt_handler(
-    uint vector
-) {
-    ARCH_SYMBOL(unregister_interrupt_handler)(vector);
-}
+static inline void      unregister_interrupt_handler(uint vector) __arch_alias(unregister_interrupt_handler);
 
 /*
 ** Halt the computer until the next interrupt.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_halt(void);`
+** Architectures must implement this function.
 */
-static inline
-void
-halt(void)
-{
-    ARCH_SYMBOL(halt)();
-}
+static inline void      halt(void) __arch_alias(halt);
 
 #endif /* !_POSEIDON_INTERRUPT_H_ */

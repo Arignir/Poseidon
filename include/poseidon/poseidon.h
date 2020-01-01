@@ -26,6 +26,7 @@
 # define inline             __inline
 # define asm                __asm__
 # define restrict           __restrict
+# define __always_inline    __attribute__((always_inline))
 # define __pure             __attribute__((pure))
 # define __const            __attribute__((const))
 # define __cold             __attribute__((cold))
@@ -34,8 +35,9 @@
 # define __unused           __attribute__((unused))
 # define __packed           __attribute__((packed))
 # define __weak             __attribute__((weak))
-# define __aligned(x)       __attribute__((aligned (x)))
-# define __section(s)       __attribute__((section (s)))
+# define __alias(x)         __attribute__((alias(x)))
+# define __aligned(x)       __attribute__((aligned(x)))
+# define __section(s)       __attribute__((section(s)))
 # define __noreturn         __attribute__((noreturn))
 # define likely(x)          __builtin_expect((x), 1)
 # define unlikely(x)        __builtin_expect((x), 0)
@@ -145,19 +147,32 @@ void    panic(char const *fmt, ...) __noreturn;
 # define STRINGIFY(a)       XSTRINGIFY(a)
 
 /*
-** Use the pre-processor to forms a C symbol that is the concatenation of the
+** Use the pre-processor to forms a C identifier that is the concatenation of the
 ** target architecture's name, an underscore (`_`) and the given parameter,
 **
-** Eg: `
-**     ARCH_SYMBOL(test)` will form the symbol `x86_test` if the target
-**         architecutre is x86.
+** Eg:
+**      // Form the identifier `x86_test` (if the target architecture is x86).
+**      `ARCH_IDENTIFIER(test)`
 **
 ** Requires that `poseidon/config.h` is included.
 */
-# define ARCH_SYMBOL(sym)   CONCAT(ARCH, CONCAT(_, sym))
+# define ARCH_IDENTIFIER(_identifier)   CONCAT(ARCH, CONCAT(_, _identifier))
 
 /*
-** Round `x` up to be `y`-aligned.
+** Define the attached function as an alias to its arch-dependent counterpart.
+**
+** The given argument is the function's name.
+**
+** Eg:
+**      `void my_func(int x) __arch_alias(my_func);`
+**
+** Calling `my_func()` will instead call `x86_my_fuc()` (if the target
+** architecture is x86).
+*/
+# define __arch_alias(_func) __alias(STRINGIFY(ARCH_IDENTIFIER(_func)))
+
+/*
+** Round up `x` to be `y`-aligned.
 **
 ** Note that `y` must be a power of two and the return value has the same
 ** type than `x`.
