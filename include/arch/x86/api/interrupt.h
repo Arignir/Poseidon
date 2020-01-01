@@ -23,6 +23,7 @@
 #  error Please include `poseidon/interrupt.h` instead of `arch/x86/api/interrupt.h`.
 # endif /* !_POSEIDON_INTERRUPT_H_ */
 
+# include <poseidon/poseidon.h>
 # include <arch/x86/register.h>
 # include <arch/x86/interrupt.h>
 

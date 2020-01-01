@@ -13,13 +13,13 @@
 ** The IO system is made to prevent compilation if the kernel is provided with
 ** memory-mapped informations on a port-based architecture or vice-versa.
 **
-** `kconfig.h` provides a variable named `KCONFIG_ARCH_IO_METHOD` holding
+** `kconfig.h` provides a variable named `KCONFIG_ARCH_IO_METHOD` telling
 ** which method is used to talk to peripheral devices.
-** The members of `enum io_method` are all possible values for this variable.
+** It must match one of the  `IO_*` constants.
 **
-** You have a guaranteee that `KCONFIG_ARCH_IO_METHOD` will match one
-** (and only one) of the values of `enum io_method`, but you must keep
-** in mind that new values *may* appear one day.
+** You have a guaranteee that `KCONFIG_ARCH_IO_METHOD` will match one (and only
+** one) of those constants, but you must keep in mind that new constants *may*
+** appear one day.
 */
 
 #ifndef _POSEIDON_IO_H_
@@ -32,11 +32,8 @@
 ** An enumeration of all the techniques an architecture may use as its primary
 ** way to communicate with external devices.
 */
-enum io_method
-{
-    IO_PORT_MAPPED          = 1, /* Port-mapped IO      */
-    IO_MEMORY_MAPPED        = 2, /* Memory-mapped IO    */
-};
+# define IO_PORT_MAPPED         1 /* Port-mapped IO     */
+# define IO_MEMORY_MAPPED       2 /* Memory-Mapped IO   */
 
 # if KCONFIG_ARCH_IO_METHOD == IO_PORT_MAPPED
 
@@ -54,9 +51,9 @@ struct io_port
 ** This acts as a shortcut to reduce boilerplate.
 */
 # define NEW_IO_PORT(_name, _port)                  \
-    static                              			\
+    static                                          \
     struct io_port const _name = {                  \
-        .port = _port                       		\
+        .port = _port                               \
     }
 
 #  include <arch/target/api/io.h>
@@ -64,19 +61,9 @@ struct io_port
 /*
 ** Send a byte of data to the port of index `port`.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_io_out8(struct io_port port, uint8 data)`
+** Architectures must implement this function.
 */
-static inline
-void
-io_out8(
-    struct io_port port,
-    uint8 data
-) {
-    ARCH_SYMBOL(io_out8)(port, data);
-}
+static inline void    io_out8(struct io_port port, uint8 data) __arch_alias(io_out8);
 
 /*
 ** Send a byte of data to the port of index `port + offset`.
@@ -89,24 +76,15 @@ io_out8_offset(
     uint8 data
 ) {
     port.port += offset;
-    ARCH_SYMBOL(io_out8)(port, data);
+    io_out8(port, data);
 }
 
 /*
 ** Reads a byte of data from the port of index `port`.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `uint8 $ARCH_io_in8(struct io_port port);`
+** Architectures must implement this function.
 */
-static inline
-uint8
-io_in8(
-    struct io_port port
-) {
-    return ARCH_SYMBOL(io_in8)(port);
-}
+static inline uint8   io_in8(struct io_port port) __arch_alias(io_in8);
 
 /*
 ** Reads a byte of data from the port of index `port + offset`.
@@ -118,11 +96,10 @@ io_in8_offset(
     ushort offset
 ) {
     port.port += offset;
-    return ARCH_SYMBOL(io_in8)(port);
+    return io_in8(port);
 }
 
-
-# elif KCONFIG_ARCH_IO_TECHNIQUE == IO_MEMORY_MAPPED
+# elif KCONFIG_ARCH_IO_METHOD == IO_MEMORY_MAPPED
 
 /*
 ** Strong typing the address of a memory-mapped io port.
@@ -138,29 +115,17 @@ struct io_mm
 ** This acts as a shortcut to reduce boilerplate.
 */
 # define NEW_IO_MM(_name, _address)                 \
-    static                              			\
+    static                                          \
     struct io_port const _name = {                  \
-        .address = _address                 		\
+        .address = _address                         \
     }
 
 #  include <arch/target/api/io.h>
 
 /*
 ** Send a byte of data to the port of address `port`.
-**
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_io_out8(struct io_mm port, uint8 data)`
 */
-static inline
-void
-io_out8(
-    struct io_mm port,
-    uint8 data
-) {
-    ARCH_SYMBOL(io_out8)(port, data);
-}
+static inline void      io_out8(struct io_mm port, uint8 data) __arch_alias(io_out8);
 
 /*
 ** Send a byte of data to the port of address `port + offset`.
@@ -173,7 +138,7 @@ io_out8_offset(
     uint8 data
 ) {
     port.address += offset;
-    ARCH_SYMBOL(io_out8)(port, data);
+    io_out8(port, data);
 }
 
 /*
@@ -184,13 +149,7 @@ io_out8_offset(
 **
 ** `uint8 $ARCH_io_in8(struct io_mm port);`
 */
-static inline
-uint8
-io_in8(
-    struct io_mm port
-) {
-    return ARCH_SYMBOL(io_in8)(port);
-}
+static inline uint8     io_in8(struct io_mm port) __arch_alias(io_in8);
 
 /*
 ** Reads a byte of data from the port of address `port + offset`.
@@ -202,7 +161,7 @@ io_in8_offset(
     ushort offset
 ) {
     port.address += offset;
-    return ARCH_SYMBOL(io_in8)(port);
+    return io_in8(port);
 }
 
 # endif /* KCONFIG_ARCH_IO_TECHNIQUE */
@@ -210,16 +169,8 @@ io_in8_offset(
 /*
 ** Waits for the port to be ready to be used again.
 **
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `void $ARCH_io_delay(void);`
+** Architectures must implement this function.
 */
-static inline
-void
-io_delay(void)
-{
-    ARCH_SYMBOL(io_delay)();
-}
+static inline void  io_delay(void) __arch_alias(io_delay);
 
 #endif /* !_POSEIDON_IO_H_ */

@@ -23,7 +23,7 @@
 /*
 ** The UART8250 driver is only implemented for port-based IO yet.
 */
-#if KCONFIG_ARCH_IO_TECHNIQUE == IO_PORT
+#if KCONFIG_ARCH_IO_METHOD == IO_PORT_MAPPED
 # define USE_UART8250
 
 NEW_IO_PORT(uart8250_port, 0x3F8);
