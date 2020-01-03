@@ -84,4 +84,32 @@ set_eflags(
     );
 }
 
+static inline
+uintptr
+get_cr3(void)
+{
+    uintptr cr3;
+
+    asm volatile (
+        "mov %%cr3, %0"
+        : "=rm"(cr3)
+        :
+        :
+    );
+    return (cr3);
+}
+
+static inline
+void
+set_cr3(
+    uintptr cr3
+) {
+    asm volatile (
+        "mov %0, %%cr3"
+        :
+        : "g"(cr3)
+        : "memory"
+    );
+}
+
 #endif /* !_ARCH_X86_REGISTER_H_ */

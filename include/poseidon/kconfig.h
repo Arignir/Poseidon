@@ -34,6 +34,18 @@
 # define KCONFIG_KERNEL_STACK_SIZE              (16 * KCONFIG_PAGE_SIZE)
 
 /*
+** The following are options meaningful only if the target archecture is
+** x86. They are ignored otherwise.
+*/
+
+/*
+** Use Physical Address Extension.
+**
+** If enabled, the kernel can use up to 64GB of RAM in 32-bits mode.
+*/
+# define KCONFIG_X86_USE_PAE                    0
+
+/*
 ** The following are properties depending on the targetted architecture and
 ** shouldn't be modified unless you are porting Poseidon to another
 ** architecture.
