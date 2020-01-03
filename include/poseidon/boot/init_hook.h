@@ -38,9 +38,14 @@ enum init_level
     INIT_LEVEL_ARCH_EARLY       = 101,
     INIT_LEVEL_DRIVER_EARLY     = 201,
 
-    INIT_LEVEL_BOOT_KALLOC      = 301,
+    INIT_LEVEL_BOOT_PMM         = 301,
+    INIT_LEVEL_BOOT_VMM         = 302,
+    INIT_LEVEL_BOOT_KALLOC      = 303,
 
-    INIT_LEVEL_KALLOC           = 401,
+    INIT_LEVEL_PMM              = 401,
+    INIT_LEVEL_VMM              = 402,
+    INIT_LEVEL_KALLOC           = 403,
+
 
     INIT_LEVEL_ARCH             = 501,
     INIT_LEVEL_FILESYSTEM       = 601,

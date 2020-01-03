@@ -9,6 +9,9 @@
 
 /*
 ** Architecture-independent API to manipulate, allocate and free memory.
+**
+** This file defines the most important and high-level functions to manipulate
+** memory. More low-level ones can be found in `poseidon/memory/`.
 */
 
 #ifndef _POSEIDON_MEMORY_H_
@@ -18,15 +21,18 @@
 # include <arch/target/api/memory.h>
 
 /*
+** Two types are defined below: `physaddr_t` and `virtaddr_t`.
+** They are used by memory-related functions to create a clear distinction
+** between physical and virtual addresses, therefore avoiding any confusion.
+*/
+
+/*
 ** A physical address.
 */
 typedef uintptr physaddr_t;
 
 /*
 ** A virtual address.
-**
-** This type is mostly used inside the memory allocators, to create a clear
-** distinction between physical and virtual addresses and avoid any confusion.
 */
 typedef void *virtaddr_t;
 

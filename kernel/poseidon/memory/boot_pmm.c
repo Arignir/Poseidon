@@ -64,7 +64,7 @@ boot_pmm_alloc_frame(void)
 ** Called early as an init hook.
 **
 ** Goes through the multiboot structure to find the biggest available physical
-** memory region.
+** memory region, and uses it to allocate boot memory.
 */
 __boot_text
 status_t
@@ -106,4 +106,4 @@ boot_pmm_init(void)
     return (OK);
 }
 
-REGISTER_INIT_HOOK(boot_pmm, &boot_pmm_init, INIT_LEVEL_BOOT_KALLOC - 1);
+REGISTER_INIT_HOOK(boot_pmm, &boot_pmm_init, INIT_LEVEL_BOOT_PMM);
