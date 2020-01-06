@@ -22,6 +22,13 @@ struct cpuid {
     uint32 max_cpuid;                   // The max. input value for CPUID
     uint32 max_extended_cpuid;          // The max. input value for extended CPUID
 
+    // The maximum physical-address width supported by the processor, *in bits*.
+    // This is equivalent to the constant MAXPHYADDR used throughouh intel spec.
+    uint maxphyaddr;
+
+    // The maximum virtual-address width supported by the processor, *in bits*.
+    uint maxvirtaddr;
+
     char vendor_id[13];                 // CPU Vendor ID String (null terminated)
     char brand[49];                     // CPU Brand String (null terminated)
 
