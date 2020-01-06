@@ -269,6 +269,31 @@ load_cpuid_features(void)
             );
         }
     }
+
+    // Find the maximum physical address number
+    if (cpu_features.max_extended_cpuid >= 0x80000008) {
+        uint8 eax[4];
+        asm volatile(
+            "cpuid"
+            :
+                "=a"(*(uint32 *)eax)
+            : "a"(0x80000008)
+            : "ebx", "ecx", "edx"
+        );
+        cpu_features.maxphyaddr = eax[0];
+        cpu_features.maxvirtaddr = eax[1];
+    } else {
+        /*
+        ** The intel spec gives default values if CPUID function 0x80000008
+        ** isn't supported.
+        */
+        if (cpu_features.features.pae) {
+            cpu_features.maxphyaddr = 48;
+        } else {
+            cpu_features.maxphyaddr = 32;
+        }
+        cpu_features.maxvirtaddr = 32;
+    }
 }
 
 /*
@@ -284,6 +309,11 @@ dump_cpuid(void)
     logln("model name       | %s", cpu_features.brand);
     logln("stepping         | %i", cpu_features.version.stepping_id);
     logln("clflush size     | %i", cpu_features.clflush_size);
+    logln(
+        "address size     | %i bits physical, %i bits virtual",
+        cpu_features.maxphyaddr,
+        cpu_features.maxvirtaddr
+    );
 
     log("flag             |");
     for (uint i = 0; i < ARRAY_LENGTH(cpu_features.features.values); ++i) {
