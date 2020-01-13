@@ -14,4 +14,5 @@ objs-y	+= $(addprefix $(ldir), \
 		gdt.o \
 		multiboot2.o \
 		setup.o \
+		cpuid.o \
 	)
