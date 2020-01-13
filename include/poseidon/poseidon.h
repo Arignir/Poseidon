@@ -66,6 +66,9 @@ typedef uint32_t            uint32;
 typedef uint64_t            uint64;
 typedef uintptr_t           uintptr;
 
+/* Return the length of a statically allocated array */
+# define ARRAY_LENGTH(x)    (sizeof(x) / sizeof(x[0]))
+
 /* Print a message and halt the computer. */
 void    panic(char const *fmt, ...) __noreturn;
 

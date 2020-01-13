@@ -13,6 +13,7 @@
 
 #include <poseidon/boot/init_hook.h>
 #include <arch/x86/idt.h>
+#include <arch/x86/cpuid.h>
 
 /*
 ** Continue the initialisation of the CPU.
@@ -23,6 +24,17 @@ status_t
 setup_cpu(void)
 {
     setup_idt();
+
+    /* Ensure CPUID is available */
+    if (!detect_cpuid()) {
+        panic("The CPU doesn't support the CPUID instruction.");
+    }
+
+    load_cpuid_features();
+
+    logln("Dumping CPUID:");
+    dump_cpuid();
+
     return (OK);
 }
 
