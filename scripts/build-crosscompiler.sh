@@ -21,6 +21,11 @@ function print_usage {
 	exit 1
 }
 
+function die {
+	printf "$1\n"
+	exit 1
+}
+
 function main() {
 	while getopts h FLAG; do
 		case $FLAG in
@@ -57,7 +62,7 @@ function main() {
 		# Download and extract binutils
 
 		printf "  WGET\t binutils-$binutils_version.tar.xz\n"
-		wget "https://ftp.gnu.org/gnu/binutils/binutils-$binutils_version.tar.xz" -O binutils.tar.xz > /dev/null &>1
+		wget "https://ftp.gnu.org/gnu/binutils/binutils-$binutils_version.tar.xz" -O binutils.tar.xz &> /dev/null
 
 		printf "  TAR\t binutils-$binutils_version.tar.xz\n"
 		tar xf binutils.tar.xz
@@ -67,13 +72,13 @@ function main() {
 
 		# Download and extract gcc
 
-		printf "  WGET\t gcc-$binutils_version.tar.xz\n"
-		wget "https://ftp.gnu.org/gnu/gcc/gcc-$gcc_version/gcc-$gcc_version.tar.xz" -O gcc.tar.xz > /dev/null &>1
+		printf "  WGET\t gcc-$gcc_version.tar.xz\n"
+		wget "https://ftp.gnu.org/gnu/gcc/gcc-$gcc_version/gcc-$gcc_version.tar.xz" -O gcc.tar.xz &> /dev/null
 
-		printf "  TAR\t gcc-$binutils_version.tar.xz\n"
+		printf "  TAR\t gcc-$gcc_version.tar.xz\n"
 		tar xf gcc.tar.xz
 
-		printf "  MV\t gcc-$binutils_version\n"
+		printf "  MV\t gcc-$gcc_version\n"
 		mv gcc-* gcc
 
 		# Build binutils
@@ -83,13 +88,16 @@ function main() {
 
 		printf "  MAKE\t binutils $binutils_version\n"
 		pushd "binutils/build" > /dev/null
-			../configure --prefix="$install_dir" --with-sysroot --disable-nls --disable-werror --target="$target_triplet" &>1 > configure.log ||
-				( printf "Configuration failed. See $cross_dir/binutils/configure.log for more information.\n" ; exit 1 )
-			make > build.log 2>1 ||
-				( printf "Build failed. See $cross_dir/binutils/build.log for more information.\n" ; exit 1 )
-			make install > install.log 2>1 ||
-				( printf "Install failed. See $cross_dir/binutils/install.log for more information.\n" ; exit 1 )
+			../configure --prefix="$install_dir" --with-sysroot --disable-nls --disable-werror --target="$target_triplet" &> configure.log ||
+				die "Configuration failed. See $cross_dir/binutils/configure.log for more information."
+			make &> build.log ||
+				die "Build failed. See $cross_dir/binutils/build.log for more information."
+			make install &> install.log ||
+				die "Install failed. See $cross_dir/binutils/install.log for more information."
 		popd > /dev/null
+
+		printf "  RM\t binutils-$binutils_version.tar.xz\n"
+		rm -rf binutils.tar.xz
 
 		# Build gcc
 
@@ -98,17 +106,21 @@ function main() {
 
 		printf "  MAKE\t gcc $gcc_version\n"
 		pushd "gcc/build" > /dev/null
-			../configure --prefix="$install_dir" --disable-nls --enable-languages=c --without-headers --target="$target_triplet" &>1 > configure.log ||
-				( printf "Configuration failed. See $cross_dir/gcc/configure.log for more information.\n" ; exit 1 )
-			make all-gcc > build.log 2>1 ||
-				( printf "Build failed. See $cross_dir/gcc/build.log for more information.\n" ; exit 1 )
-			make all-target-libgcc >> build.log 2>1 ||
-				( printf "Build failed. See $cross_dir/gcc/build.log for more information.\n" ; exit 1 )
-			make install-gcc > install.log 2>1 ||
-				( printf "Install failed. See $cross_dir/gcc/install.log for more information.\n" ; exit 1 )
-			make install-target-libgcc >> install.log 2>1 ||
-				( printf "Install failed. See $cross_dir/gcc/install.log for more information.\n" ; exit 1 )
+			../configure --prefix="$install_dir" --disable-nls --enable-languages=c --without-headers --target="$target_triplet" &> configure.log ||
+				die "Configuration failed. See $cross_dir/gcc/configure.log for more information."
+			make all-gcc &> build.log ||
+				die "Build failed. See $cross_dir/gcc/build.log for more information."
+			make all-target-libgcc &>> build.log ||
+				die "Build failed. See $cross_dir/gcc/build.log for more information."
+			make install-gcc &> install.log ||
+				die "Install failed. See $cross_dir/gcc/install.log for more information."
+			make install-target-libgcc &>> install.log ||
+				die "Install failed. See $cross_dir/gcc/install.log for more information."
 		popd > /dev/null
+
+		printf "  RM\t gcc-$gcc_version.tar.xz\n"
+		rm -rf gcc.tar.xz
+
 	popd > /dev/null
 }
 

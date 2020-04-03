@@ -35,21 +35,24 @@ enum init_level
     /* An init hook should *not* suscribe to `__INIT_LEVEL_EARLIEST` */
     __INIT_LEVEL_EARLIEST       = 0,
 
-    INIT_LEVEL_ARCH_EARLY       = 101,
-    INIT_LEVEL_DRIVER_EARLY     = 201,
+    INIT_LEVEL_MULTIBOOT        = 101,
+    INIT_LEVEL_ARCH_EARLY       = 201,
+    INIT_LEVEL_PLATFORM_EARLY   = 301,
+    INIT_LEVEL_DRIVER_EARLY     = 401,
 
-    INIT_LEVEL_BOOT_PMM         = 301,
-    INIT_LEVEL_BOOT_VMM         = 302,
-    INIT_LEVEL_BOOT_KALLOC      = 303,
+    INIT_LEVEL_BOOT_PMM         = 501,
+    INIT_LEVEL_BOOT_VMM         = 502,
+    INIT_LEVEL_BOOT_KALLOC      = 503,
 
-    INIT_LEVEL_PMM              = 401,
-    INIT_LEVEL_VMM              = 402,
-    INIT_LEVEL_KALLOC           = 403,
+    INIT_LEVEL_PMM              = 601,
+    INIT_LEVEL_VMM              = 602,
+    INIT_LEVEL_KALLOC           = 603,
 
 
-    INIT_LEVEL_ARCH             = 501,
-    INIT_LEVEL_FILESYSTEM       = 601,
-    INIT_LEVEL_DRIVERS          = 701,
+    INIT_LEVEL_ARCH             = 701,
+    INIT_LEVEL_PLATFORM         = 801,
+    INIT_LEVEL_FILESYSTEM       = 901,
+    INIT_LEVEL_DRIVERS          = 1001,
 
     /* An init hook should *not* suscribe to `__INIT_LEVEL_LATEST` */
     __INIT_LEVEL_LATEST,
@@ -68,10 +71,10 @@ struct init_hook
 };
 
 /*
-** Usage: `REGISTER_INIT_HOOK("name", &func, DESIRED_INIT_LEVEL)`
+** Usage: `REGISTER_INIT_HOOK(name, &func, DESIRED_INIT_LEVEL)`
 **
 ** Registers an init hook given its name, an address to call and an init level,
-** and stores it in the reserved section of the binary dedicated to init hook.
+** and stores it in the reserved section of the binary dedicated to init hooks.
 */
 # define REGISTER_INIT_HOOK(n, h, l)                                    \
     __aligned(sizeof(void *)) __used __section("poseidon_init_hooks")   \
@@ -81,6 +84,6 @@ struct init_hook
         .hook = (h),                                                    \
     }
 
-struct init_hook const *    find_next_init_hook();
+struct init_hook const  *find_next_init_hook();
 
 #endif /* !_POSEIDON_BOOT_INIT_HOOK_H_ */

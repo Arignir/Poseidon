@@ -10,6 +10,7 @@
 
 # Target arch
 /include/arch/target
+/include/platform/target
 
 # Common editor files
 *~

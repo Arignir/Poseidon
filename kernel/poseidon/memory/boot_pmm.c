@@ -23,6 +23,7 @@
 #include <poseidon/memory/boot_pmm.h>
 #include <poseidon/boot/multiboot2.h>
 #include <poseidon/boot/init_hook.h>
+#include <poseidon/kconfig.h>
 
 /* The first frame of the boot-allocable physical address space. */
 __boot_data
@@ -51,7 +52,7 @@ boot_pmm_alloc_frame(void)
 
     if (boot_pmm_next_frame < boot_pmm_last_frame) {
         physaddr_t res = boot_pmm_next_frame;
-        boot_pmm_next_frame += PAGE_SIZE;
+        boot_pmm_next_frame += KCONFIG_FRAME_SIZE;
         return (res);
     } else {
         return (PHYS_NULL);

@@ -7,7 +7,6 @@
 **
 \******************************************************************************/
 
-#include <poseidon/memory/vmm.h>
 #include <poseidon/boot/init_hook.h>
 
 static

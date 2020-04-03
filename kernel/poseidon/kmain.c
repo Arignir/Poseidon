@@ -44,7 +44,5 @@ kmain(void)
         hook = find_next_init_hook(hook, hook->level);
     }
 
-    logln("Hello Kernel World!");
-
     /* Start init here (WIP) */
 }

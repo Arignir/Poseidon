@@ -12,7 +12,7 @@ export PROJECT_DIR	:= $(realpath $(shell pwd)/../)
 
 include $(PROJECT_DIR)/scripts/make/version.mk
 include $(PROJECT_DIR)/scripts/make/verbose.mk
-include $(PROJECT_DIR)/scripts/make/arch.mk
+include $(PROJECT_DIR)/scripts/make/platform.mk
 include $(PROJECT_DIR)/scripts/make/target.mk
 include $(PROJECT_DIR)/scripts/make/localdir.mk
 
@@ -42,20 +42,22 @@ CFLAGS	+= \
 	-fno-omit-frame-pointer \
 	-fno-stack-protector \
 	-std=gnu11 \
-	-isystem $(PROJECT_DIR)/include
+	-isystem $(PROJECT_DIR)/include \
+	-DARCH=$(ARCH) \
 
 LDFLAGS	:= \
 	-nostdlib \
-	-lgcc
+	-lgcc \
 
 # Objects
 objs-y	:=
 
-# Include arch-dependent variables and rules.
-include arch/$(ARCH)/Arch.mk
+# Include platform-dependent variables and rules.
+include platform/$(PLATFORM)/Platform.mk
 
 # Include makefiles of top subfolders
 include arch/$(ARCH)/Makefile
+include platform/$(PLATFORM)/Makefile
 include	lib/Makefile
 include	driver/Makefile
 include	poseidon/Makefile
@@ -68,6 +70,8 @@ deps	:= $(objs-y:.o=.d)
 $(shell mkdir -p $(dir $(objs-y)))
 $(shell rm -f $(PROJECT_DIR)/include/arch/target)
 $(shell ln -s $(PROJECT_DIR)/include/arch/$(ARCH)/ $(PROJECT_DIR)/include/arch/target)
+$(shell rm -f $(PROJECT_DIR)/include/platform/target)
+$(shell ln -s $(PROJECT_DIR)/include/platform/$(PLATFORM)/ $(PROJECT_DIR)/include/platform/target)
 
 
 .PHONY:	all

@@ -7,10 +7,14 @@
 **
 \******************************************************************************/
 
+#include <poseidon/boot/init_hook.h>
 #include <poseidon/boot/multiboot2.h>
 #include <poseidon/memory.h>
 
-/* The multiboot structure, filled by the bootloader */
+/*
+** The multiboot structure, filled by the bootloader.
+** This variable is set early in the boot process.
+*/
 struct multiboot_tag const *mb_tag = NULL;
 
 /*
@@ -26,9 +30,10 @@ struct multiboot_tag_mmap const *mb_mmap = NULL;
 struct multiboot_tag_framebuffer const *mb_fb = NULL;
 
 /*
-** Parse the multiboot structure to save pointers to the most common tags.
+** Parse the multiboot structure and save pointers to the most common tags.
 */
-void
+static
+status_t
 multiboot_load(void)
 {
     struct multiboot_tag const *tag;
@@ -36,7 +41,7 @@ multiboot_load(void)
     tag = mb_tag;
 
     if (!mb_tag) {
-        return;
+        return (OK);
     }
 
     while (tag->type != MULTIBOOT_TAG_TYPE_END)
@@ -66,4 +71,8 @@ multiboot_load(void)
             8
         );
     }
+    return (OK);
 }
+
+REGISTER_INIT_HOOK(multiboot2_load, &multiboot_load, INIT_LEVEL_MULTIBOOT);
+
