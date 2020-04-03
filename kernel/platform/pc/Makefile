@@ -1,3 +1,4 @@
+
 ################################################################################
 ##
 ##  This file is part of the Poseidon Kernel, and is made available under
@@ -9,7 +10,5 @@
 
 ldir	:= $(GET_LOCAL_DIR)
 
-objs-y	+= $(addprefix $(ldir), \
-		boot_pmm.o \
-		vmm.o \
-	)
+include \
+	$(ldir)pic/Makefile \

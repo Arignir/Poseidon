@@ -74,7 +74,7 @@ void    panic(char const *fmt, ...) __noreturn;
 
 # define unimplemented()                            \
     panic(                                          \
-        "the function %s() was called but is not implemented (in %s at line %u).", \
+        "%s() was called but is not implemented (in %s at line %u).", \
         __func__,                                   \
         __FILE__,                                   \
         __LINE__                                    \
@@ -154,10 +154,11 @@ void    panic(char const *fmt, ...) __noreturn;
 ** target architecture's name, an underscore (`_`) and the given parameter,
 **
 ** Eg:
-**      // Form the identifier `x86_test` (if the target architecture is x86).
+**      // Form the identifier `x86_64_test` (if the target architecture is
+**      // x86_64).
 **      `ARCH_IDENTIFIER(test)`
 **
-** Requires that `poseidon/config.h` is included.
+** Requires that `poseidon/kconfig.h` is included.
 */
 # define ARCH_IDENTIFIER(_identifier)   CONCAT(ARCH, CONCAT(_, _identifier))
 
@@ -169,8 +170,10 @@ void    panic(char const *fmt, ...) __noreturn;
 ** Eg:
 **      `void my_func(int x) __arch_alias(my_func);`
 **
-** Calling `my_func()` will instead call `x86_my_fuc()` (if the target
-** architecture is x86).
+** Calling `my_func()` will instead call `x86_64_my_fuc()` (if the target
+** architecture is x86_64).
+**
+** Requires that `poseidon/kconfig.h` is included.
 */
 # define __arch_alias(_func) __alias(STRINGIFY(ARCH_IDENTIFIER(_func)))
 

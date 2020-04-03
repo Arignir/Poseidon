@@ -10,6 +10,9 @@
 ldir	:= $(GET_LOCAL_DIR)
 
 objs-y	+= $(addprefix $(ldir), \
-		boot_pmm.o \
-		vmm.o \
+		multiboot2.o \
+		gdt.o \
+		boot.o \
+		setup.o \
+		cpuid.o \
 	)

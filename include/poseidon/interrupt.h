@@ -27,7 +27,7 @@
 */
 typedef void (*interrupt_handler_t)(void);
 
-#include <arch/target/api/interrupt.h>
+# include <arch/target/api/interrupt.h>
 
 /*
 ** Test if interrupts are enabled.

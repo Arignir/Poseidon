@@ -41,11 +41,4 @@ typedef void *virtaddr_t;
 */
 # define PHYS_NULL  ((physaddr_t)0)
 
-/*
-** Constants provided by the linker that indicate the beginning and end of
-** the kernel.
-*/
-extern char const KERNEL_PHYS_START[];
-extern char const KERNEL_PHYS_END[];
-
 #endif /* !_POSEIDON_MEMORY_H_ */

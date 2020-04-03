@@ -11,4 +11,3 @@ ldir	:= $(GET_LOCAL_DIR)
 
 include \
 	$(ldir)serial/Makefile \
-	$(ldir)pic/Makefile

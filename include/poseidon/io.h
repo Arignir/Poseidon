@@ -35,7 +35,7 @@
 # define IO_PORT_MAPPED         1 /* Port-mapped IO     */
 # define IO_MEMORY_MAPPED       2 /* Memory-Mapped IO   */
 
-# if KCONFIG_ARCH_IO_METHOD == IO_PORT_MAPPED
+# if KCONFIG_IO_METHOD == IO_PORT_MAPPED
 
 /*
 ** Strong typing the port number.
@@ -99,7 +99,7 @@ io_in8_offset(
     return io_in8(port);
 }
 
-# elif KCONFIG_ARCH_IO_METHOD == IO_MEMORY_MAPPED
+# elif KCONFIG_IO_METHOD == IO_MEMORY_MAPPED
 
 /*
 ** Strong typing the address of a memory-mapped io port.
@@ -164,7 +164,7 @@ io_in8_offset(
     return io_in8(port);
 }
 
-# endif /* KCONFIG_ARCH_IO_TECHNIQUE */
+# endif /* KCONFIG_IO_METHOD */
 
 /*
 ** Waits for the port to be ready to be used again.
