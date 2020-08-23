@@ -79,11 +79,18 @@
 
 #ifndef __ASSEMBLER__
 
+#include <poseidon/memory.h>
+
 extern struct multiboot_tag_string const *mb_cmdline;
 extern struct multiboot_tag_string const *mb_bootloader;
 extern struct multiboot_tag_basic_meminfo const *mb_meminfo;
 extern struct multiboot_tag_mmap const *mb_mmap;
 extern struct multiboot_tag_framebuffer const *mb_fb;
+
+extern physaddr_t mb_tag_pa;
+extern uint32 mb_tag_len;
+
+status_t multiboot_load(void);
 
 typedef unsigned char		multiboot_uint8_t;
 typedef unsigned short		multiboot_uint16_t;

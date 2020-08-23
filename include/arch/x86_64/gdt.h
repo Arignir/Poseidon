@@ -25,27 +25,27 @@
 */
 struct gdt_code_segment_descriptor
 {
-    uint16 limit_low: 16;
-    uint16 base_low: 16;
-    uint8 base_mid: 8;
+    size_t limit_low: 16;
+    size_t base_low: 16;
+    size_t base_mid: 8;
     union {
         struct {
-            uint8 accessed: 1;
-            uint8 readable: 1;
-            uint8 conforming: 1;
-            uint8 _reserved0: 1;
-            uint8 _reserved1: 1;
-            uint8 dpl: 2;
-            uint8 present: 1;
-            uint8 limit_high: 4;
-            uint8 avl: 1;
-            uint8 long_mode: 1;
-            uint8 default_op_size: 1;
-            uint8 granularity: 1;
-        };
-        uint16 flags: 16;
-    };
-    uint8 base_high: 8;
+            size_t accessed: 1;
+            size_t readable: 1;
+            size_t conforming: 1;
+            size_t _reserved0: 1;
+            size_t _reserved1: 1;
+            size_t dpl: 2;
+            size_t present: 1;
+            size_t limit_high: 4;
+            size_t avl: 1;
+            size_t long_mode: 1;
+            size_t default_op_size: 1;
+            size_t granularity: 1;
+        } __packed;
+        size_t flags: 16;
+    } __packed;
+    size_t base_high: 8;
 } __packed;
 
 static_assert(sizeof(struct gdt_code_segment_descriptor) == 8);
@@ -57,27 +57,27 @@ static_assert(sizeof(struct gdt_code_segment_descriptor) == 8);
 */
 struct gdt_data_segment_descriptor
 {
-    uint16 limit_low: 16;
-    uint16 base_low: 16;
-    uint8 base_mid: 8;
+    size_t limit_low: 16;
+    size_t base_low: 16;
+    size_t base_mid: 8;
     union {
         struct {
-            uint8 accessed: 1;
-            uint8 writable: 1;
-            uint8 direction: 1;
-            uint8 _reserved0: 1;
-            uint8 _reserved1: 1;
-            uint8 dpl: 2;
-            uint8 present: 1;
-            uint8 limit_high: 4;
-            uint8 avl: 1;
-            uint8 long_mode: 1;
-            uint8 big: 1;
-            uint8 granularity: 1;
-        };
-        uint16 flags: 16;
-    };
-    uint8 base_high: 8;
+            size_t accessed: 1;
+            size_t writable: 1;
+            size_t direction: 1;
+            size_t _reserved0: 1;
+            size_t _reserved1: 1;
+            size_t dpl: 2;
+            size_t present: 1;
+            size_t limit_high: 4;
+            size_t avl: 1;
+            size_t long_mode: 1;
+            size_t big: 1;
+            size_t granularity: 1;
+        } __packed;
+        size_t flags: 16;
+    } __packed;
+    size_t base_high: 8;
 } __packed;
 
 static_assert(sizeof(struct gdt_data_segment_descriptor) == 8);
@@ -89,22 +89,22 @@ static_assert(sizeof(struct gdt_data_segment_descriptor) == 8);
 */
 struct gdt_system_segment_descriptor
 {
-    uint16 limit_low: 16;
-    uint16 base_low: 16;
-    uint8 base_mid: 8;
+    size_t limit_low: 16;
+    size_t base_low: 16;
+    size_t base_mid: 8;
     union {
         struct {
-            uint8 type: 4;
-            uint8 _reserved0: 1;
-            uint8 dpl: 2;
-            uint8 present: 1;
-            uint8 limit_high: 4;
-            uint8 _reserved1: 3;
-            uint8 granularity: 1;
-        };
-        uint16 flags: 16;
-    };
-    uint8 base_high: 8;
+            size_t type: 4;
+            size_t _reserved0: 1;
+            size_t dpl: 2;
+            size_t present: 1;
+            size_t limit_high: 4;
+            size_t _reserved1: 3;
+            size_t granularity: 1;
+        } __packed;
+        size_t flags: 16;
+    } __packed;
+    size_t base_high: 8;
 } __packed;
 
 static_assert(sizeof(struct gdt_system_segment_descriptor) == 8);
@@ -144,7 +144,7 @@ struct gdt_segment_descriptor
         struct gdt_code_segment_descriptor code;
         struct gdt_data_segment_descriptor data;
         struct gdt_system_segment_descriptor system;
-        uint64 value: 64;
+        uint64 raw : 64;
     };
 };
 
@@ -167,7 +167,7 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
 */
 # define NEW_NULL_DESCRIPTOR                        \
     (struct gdt_segment_descriptor) {               \
-        .value = 0                                  \
+        .raw = 0                                    \
     }
 /*
 ** Create a code segment descriptor, using the given base and limit.

@@ -10,8 +10,5 @@
 ldir	:= $(GET_LOCAL_DIR)
 
 objs-y	+= $(addprefix $(ldir), \
-		kheap.o \
-		memory.o \
-		pmm.o \
 		vmm.o \
 	)

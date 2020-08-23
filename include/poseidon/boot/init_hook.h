@@ -33,26 +33,17 @@
 enum init_level
 {
     /* An init hook should *not* suscribe to `__INIT_LEVEL_EARLIEST` */
-    __INIT_LEVEL_EARLIEST       = 0,
+    __INIT_LEVEL_EARLIEST       = 000,
 
-    INIT_LEVEL_MULTIBOOT        = 101,
-    INIT_LEVEL_ARCH_EARLY       = 201,
-    INIT_LEVEL_PLATFORM_EARLY   = 301,
-    INIT_LEVEL_DRIVER_EARLY     = 401,
+    INIT_LEVEL_ARCH_EARLY       = 101,
+    INIT_LEVEL_PLATFORM_EARLY   = 201,
+    INIT_LEVEL_DRIVER_EARLY     = 301,
 
-    INIT_LEVEL_BOOT_PMM         = 501,
-    INIT_LEVEL_BOOT_VMM         = 502,
-    INIT_LEVEL_BOOT_KALLOC      = 503,
+    INIT_LEVEL_MEMORY           = 401,
 
-    INIT_LEVEL_PMM              = 601,
-    INIT_LEVEL_VMM              = 602,
-    INIT_LEVEL_KALLOC           = 603,
-
-
-    INIT_LEVEL_ARCH             = 701,
-    INIT_LEVEL_PLATFORM         = 801,
-    INIT_LEVEL_FILESYSTEM       = 901,
-    INIT_LEVEL_DRIVERS          = 1001,
+    INIT_LEVEL_ARCH             = 501,
+    INIT_LEVEL_PLATFORM         = 601,
+    INIT_LEVEL_DRIVERS          = 701,
 
     /* An init hook should *not* suscribe to `__INIT_LEVEL_LATEST` */
     __INIT_LEVEL_LATEST,

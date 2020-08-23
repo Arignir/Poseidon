@@ -20,7 +20,7 @@ SECTIONS
     */
     . = 1M;
 
-    KERNEL_START = .;
+    PROVIDE(kernel_start = .);
 
     /*
     ** Place the multiboot header on top of everything
@@ -50,9 +50,6 @@ SECTIONS
         *(.data.boot);
     }
 
-    . = ALIGN(4K);
-    PROVIDE(__start_bss = .);
-
     /* Read-write data (uninitialized) and stack */
     .bss ALIGN(4K) :
     {
@@ -61,7 +58,27 @@ SECTIONS
     }
 
     . = ALIGN(4K);
-    PROVIDE(__stop_bss = .);
 
-    KERNEL_END = .;
+    PROVIDE(kernel_end = .);
+
+    /*
+    ** This is where the heap begins in the virtual address space.
+    **
+    ** Do not worry, the kheap allocator won't erase the content
+    ** of `kernel_boot_heap` (defined below). That arary is
+    ** a bunch of physical frames distributed by the frame allocator
+    ** at boot time. They aren't identity mapped.
+    */
+    PROVIDE(kernel_heap_start = .);
+
+    /*
+    ** Provide a bit of RAM to feed the boot heap with known-free physical memory.
+    **
+    ** See `poseidon/memory/pmm.c` for an explanation about why put this section
+    ** after the kernel.
+    */
+    .kernel_boot_heap ALIGN(4K) :
+    {
+        *(.kernel_boot_heap);
+    }
 }

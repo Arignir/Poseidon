@@ -27,8 +27,12 @@
 ** Warning: the following values aren't meant to be modified by the user.
 */
 
-/* The PC platform uses port-based IO. */
-# define KCONFIG_IO_METHOD                      (IO_PORT_MAPPED)
+/* Facilitate target platform check */
+# define KCONFIG_PLATFORM_PC
+
+/* The PC platform uses both port-based and memory-based IO. */
+# define KCONFIG_IO_PORT                        1
+# define KCONFIG_IO_MEMORY                      1
 
 /* Kernel stack size, in bytes. */
 # define KCONFIG_KERNEL_STACK_SIZE              (16 * KCONFIG_PAGE_SIZE)
@@ -41,5 +45,8 @@
 
 /* Size of a frame (in bytes). */
 # define KCONFIG_FRAME_SIZE                     4096u
+
+/* Size of the boot kheap (in bytes). Atm it is 4MB. */
+# define KCONFIG_BOOT_KHEAP_SIZE                (4u * 1024u * 1024u)
 
 #endif /* !_KCONFIG_PLATFORM_PC_H_ */

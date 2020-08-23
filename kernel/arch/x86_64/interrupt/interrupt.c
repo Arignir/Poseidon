@@ -8,11 +8,75 @@
 \******************************************************************************/
 
 #include <arch/x86_64/interrupt.h>
-#include <driver/pic/pic8259.h>
-#include <poseidon/interrupt.h>
 #include <lib/log.h>
+#include <poseidon/interrupt.h>
+#include <platform/pc/pic/pic8259.h>
 
-interrupt_handler_t irq_handlers[INT_NB - INT_IRQ0];
+static interrupt_handler_t irq_handlers[INT_NB - INT_IRQ0];
+
+/*
+** Test if interruptions are enabled.
+*/
+bool
+interrupts_enabled(void)
+{
+    struct rflags rflags;
+
+    rflags = get_rflags();
+    return rflags.intf;
+}
+
+void
+enable_interrupts(void)
+{
+    asm volatile (
+        "sti"
+        :
+        :
+        : "cc"
+    );
+}
+
+void
+disable_interrupts(void)
+{
+    asm volatile (
+        "cli"
+        :
+        :
+        : "cc"
+    );
+}
+
+void
+halt(void)
+{
+    asm volatile(
+        "hlt"
+        :
+        :
+        :
+    );
+}
+
+void
+register_interrupt_handler(
+    uint vector,
+    interrupt_handler_t handler
+) {
+    debug_assert(vector >= INT_IRQ0 && vector < INT_NB);
+
+    irq_handlers[vector] = handler;
+}
+
+void
+unregister_interrupt_handler(
+    uint vector
+) {
+    debug_assert(vector >= INT_IRQ0 && vector < INT_NB);
+
+    irq_handlers[vector] = NULL;
+}
 
 /*
 ** Dispatch the execution to the appropriate interrupt handler.

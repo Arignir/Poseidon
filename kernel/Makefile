@@ -43,7 +43,8 @@ CFLAGS	+= \
 	-fno-stack-protector \
 	-std=gnu11 \
 	-isystem $(PROJECT_DIR)/include \
-	-DARCH=$(ARCH) \
+	-DKCONFIG_ARCH_$(ARCH) \
+	-DKCONFIG_PLATFORM_$(PLATFORM) \
 
 LDFLAGS	:= \
 	-nostdlib \
@@ -57,10 +58,10 @@ include platform/$(PLATFORM)/Platform.mk
 
 # Include makefiles of top subfolders
 include arch/$(ARCH)/Makefile
+include	poseidon/Makefile
 include platform/$(PLATFORM)/Makefile
 include	lib/Makefile
 include	driver/Makefile
-include	poseidon/Makefile
 
 # Prepend objects with target folder
 objs-y	:= $(patsubst $(PROJECT_DIR)%, $(TARGET_DIR)%, $(objs-y))

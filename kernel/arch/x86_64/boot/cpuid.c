@@ -3,7 +3,7 @@
 **  This file is part of the Poseidon Kernel, and is made available under
 **  the terms of the GNU General Public License version 2.
 **
-**  Copyright (C) 2020 - Benjamin Grange <benjamin.grange@epitech.eu>
+**  Copyright (C) 2020 - The Poseidon Authors
 **
 \******************************************************************************/
 
@@ -14,7 +14,7 @@
 
 struct cpuid cpu_features;
 
-static char const * const features_name[ARRAY_LENGTH(cpu_features.features.values)][32] = {
+static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)][32] = {
     // EDX when CPUID.EAX=0x1
     [0] = {
         [0] = "fpu",
@@ -191,7 +191,7 @@ load_cpuid_features(void)
         asm volatile(
             "cpuid"
             :
-                "=a"(cpu_features.version.value),
+                "=a"(cpu_features.version.raw),
                 "=b"(ebx),
                 "=c"(cpu_features.features.value_1_ecx),
                 "=d"(cpu_features.features.value_1_edx)
@@ -316,11 +316,11 @@ dump_cpuid(void)
     );
 
     log("flag             |");
-    for (uint i = 0; i < ARRAY_LENGTH(cpu_features.features.values); ++i) {
+    for (uint i = 0; i < ARRAY_LENGTH(cpu_features.features.raw); ++i) {
         for (uint j = 0; j < 32; ++j) {
             char const *feature_name = features_name[i][j];
             if (feature_name) { // feature_name is NULL for reserved bytes
-                if ((cpu_features.features.values[i] >> j & 0x1)) {
+                if ((cpu_features.features.raw[i] >> j & 0x1)) {
                     log(" %s", feature_name);
                 }
             }
