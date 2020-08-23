@@ -25,31 +25,31 @@ struct rflags
 {
     union {
         struct {
-            uint8 cf: 1;
-            uint8 _reserved0: 1;
-            uint8 pf: 1;
-            uint8 _reserved1: 1;
-            uint8 af: 1;
-            uint8 _reserved2: 1;
-            uint8 zf: 1;
-            uint8 sf: 1;
-            uint8 tf: 1;
-            uint8 intf: 1;
-            uint8 df: 1;
-            uint8 of: 1;
-            uint8 iopl: 2;
-            uint8 nt: 1;
-            uint8 _reserved3: 1;
-            uint8 rf: 1;
-            uint8 vm: 1;
-            uint8 ac: 1;
-            uint8 vif: 1;
-            uint8 vip: 1;
-            uint8 id: 1;
-            uint16 _reserved4: 10;
-            uint32 _reserved5: 32;
+            size_t cf: 1;
+            size_t : 1;
+            size_t pf: 1;
+            size_t : 1;
+            size_t af: 1;
+            size_t : 1;
+            size_t zf: 1;
+            size_t sf: 1;
+            size_t tf: 1;
+            size_t intf: 1;
+            size_t df: 1;
+            size_t of: 1;
+            size_t iopl: 2;
+            size_t nt: 1;
+            size_t : 1;
+            size_t rf: 1;
+            size_t vm: 1;
+            size_t ac: 1;
+            size_t vif: 1;
+            size_t vip: 1;
+            size_t id: 1;
+            size_t : 10;
+            size_t : 32;
         } __packed;
-        uint32 value;
+        uint64 value;
     } __packed;
 } __packed;
 
@@ -94,12 +94,12 @@ struct cr3
 {
     union {
         struct {
-            uintptr _ignored_0: 3;
-            uintptr pwt: 1;             // Page-level write through
-            uintptr pcd: 1;             // Page-level cache disable
-            uintptr _ignored_1: 7;
-            uintptr pagedir: 20;        // Physical address of a page directory
-            uintptr _reserved_1: 32;
+            size_t : 3;
+            size_t pwt: 1;             // Page-level write through
+            size_t pcd: 1;             // Page-level cache disable
+            size_t : 7;
+            size_t pagedir: 20;        // Physical address of a page directory
+            size_t : 32;
         };
         uintptr value;
     };

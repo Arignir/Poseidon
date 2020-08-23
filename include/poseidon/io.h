@@ -10,103 +10,33 @@
 /*
 ** Architecture-independent API to read and write to peripheral devices.
 **
-** The IO system is made to prevent compilation if the kernel is provided with
-** memory-mapped informations on a port-based architecture or vice-versa.
+** There are multiple ways architectures implements IO. This module is a generic
+** implementation of memory-mapped IO.
 **
-** `kconfig.h` provides a variable named `KCONFIG_ARCH_IO_METHOD` telling
-** which method is used to talk to peripheral devices.
-** It must match one of the  `IO_*` constants.
+** Some architectures may complement this implementation with extra functions.
 **
-** You have a guaranteee that `KCONFIG_ARCH_IO_METHOD` will match one (and only
-** one) of those constants, but you must keep in mind that new constants *may*
-** appear one day.
+** The PC platform also implements port-based IO, described in
+** `arch/x86_64/api/io.h`.
+**
+** This module also implements an extra, generic, api that automatically
+** redirects the requests to the platform's preffered IO technique's
+** implementation.
 */
 
 #ifndef _POSEIDON_IO_H_
 # define _POSEIDON_IO_H_
 
 # include <poseidon/poseidon.h>
-# include <poseidon/kconfig.h>
-
-/*
-** An enumeration of all the techniques an architecture may use as its primary
-** way to communicate with external devices.
-*/
-# define IO_PORT_MAPPED         1 /* Port-mapped IO     */
-# define IO_MEMORY_MAPPED       2 /* Memory-Mapped IO   */
-
-# if KCONFIG_IO_METHOD == IO_PORT_MAPPED
-
-/*
-** Strong typing the port number.
-*/
-struct io_port
-{
-    ushort port;
-};
-
-/*
-** Define a new `static struct io_port const` with the given name and port.
-**
-** This acts as a shortcut to reduce boilerplate.
-*/
-# define NEW_IO_PORT(_name, _port)                  \
-    static                                          \
-    struct io_port const _name = {                  \
-        .port = _port                               \
-    }
-
-#  include <arch/target/api/io.h>
-
-/*
-** Send a byte of data to the port of index `port`.
-**
-** Architectures must implement this function.
-*/
-static inline void    io_out8(struct io_port port, uint8 data) __arch_alias(io_out8);
-
-/*
-** Send a byte of data to the port of index `port + offset`.
-*/
-static inline
-void
-io_out8_offset(
-    struct io_port port,
-    ushort offset,
-    uint8 data
-) {
-    port.port += offset;
-    io_out8(port, data);
-}
-
-/*
-** Reads a byte of data from the port of index `port`.
-**
-** Architectures must implement this function.
-*/
-static inline uint8   io_in8(struct io_port port) __arch_alias(io_in8);
-
-/*
-** Reads a byte of data from the port of index `port + offset`.
-*/
-static inline
-uint8
-io_in8_offset(
-    struct io_port port,
-    ushort offset
-) {
-    port.port += offset;
-    return io_in8(port);
-}
-
-# elif KCONFIG_IO_METHOD == IO_MEMORY_MAPPED
+# include <poseidon/memory.h>
 
 /*
 ** Strong typing the address of a memory-mapped io port.
+**
+** Note that `address` must be a virtual address.
 */
 struct io_mm
 {
-    uintptr address;
+    virtaddr_t address;
 };
 
 /*
@@ -120,43 +50,49 @@ struct io_mm
         .address = _address                         \
     }
 
-#  include <arch/target/api/io.h>
-
 /*
 ** Send a byte of data to the port of address `port`.
 */
-static inline void      io_out8(struct io_mm port, uint8 data) __arch_alias(io_out8);
+static inline
+void
+io_mm_out8(
+    struct io_mm port,
+    uint8 data
+) {
+    *(uint8 *)port.address = data;
+}
 
 /*
 ** Send a byte of data to the port of address `port + offset`.
 */
 static inline
 void
-io_out8_offset(
+io_mm_out8_offset(
     struct io_mm port,
     ushort offset,
     uint8 data
 ) {
-    port.address += offset;
-    io_out8(port, data);
+    port.address = (uint8 *)port.address + offset;
+    io_mm_out8(port, data);
 }
 
 /*
-** Reads a byte of data from the port of address `port`.
-**
-** The architecture-dependent equivalent of this function should have the
-** following prototype:
-**
-** `uint8 $ARCH_io_in8(struct io_mm port);`
-*/
-static inline uint8     io_in8(struct io_mm port) __arch_alias(io_in8);
-
-/*
-** Reads a byte of data from the port of address `port + offset`.
+** Read a byte of data from the port of address `port`.
 */
 static inline
 uint8
-io_in8_offset(
+io_mm_in8(
+    struct io_mm port
+) {
+    return *(uint8 *)port.address;
+}
+
+/*
+** Read a byte of data from the port of address `port + offset`.
+*/
+static inline
+uint8
+io_mm_in8_offset(
     struct io_mm port,
     ushort offset
 ) {
@@ -164,13 +100,21 @@ io_in8_offset(
     return io_in8(port);
 }
 
-# endif /* KCONFIG_IO_METHOD */
-
 /*
-** Waits for the port to be ready to be used again.
-**
-** Architectures must implement this function.
+** The following is a generic API that redirects to the favorite IO technique
+** for all platforms.
 */
-static inline void  io_delay(void) __arch_alias(io_delay);
+
+# ifdef KCONFIG_PLATFORM_PC
+#  define io_out8(...)              io_port_out8(__VA_ARGS__)
+#  define io_out8_offset(...)       io_port_out8_offset(__VA_ARGS__)
+#  define io_in8(...)               io_port_in8(__VA_ARGS__)
+#  define io_in8_offset(...)        io_port_in8_offset(__VA_ARGS__)
+# else
+#  define io_out8(...)              io_mm_out8(__VA_ARGS__)
+#  define io_out8_offset(...)       io_mm_out8_offset(__VA_ARGS__)
+#  define io_in8(...)               io_mm_in8(__VA_ARGS__)
+#  define io_in8_offset(...)        io_mm_in8_offset(__VA_ARGS__)
+# endif /* KCONFIG_PLATFORM_PC */
 
 #endif /* !_POSEIDON_IO_H_ */

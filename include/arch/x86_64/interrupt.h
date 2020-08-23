@@ -112,17 +112,17 @@ enum idt_gate_descriptor_type
 */
 struct idt_descriptor
 {
-    uintptr offset_low: 16;
-    uintptr segment_selector: 16;
-    uintptr ist: 3;
-    uintptr _reserved0: 5;
-    uintptr type: 4;
-    uintptr _reserved1: 1;
-    uintptr dpl: 2;
-    uintptr present: 1;
-    uintptr offset_mid: 16;
-    uintptr offset_high: 32;
-    uintptr _reserved2: 32;
+    size_t offset_low: 16;
+    size_t segment_selector: 16;
+    size_t ist: 3;
+    size_t _reserved0: 5;
+    size_t type: 4;
+    size_t _reserved1: 1;
+    size_t dpl: 2;
+    size_t present: 1;
+    size_t offset_mid: 16;
+    size_t offset_high: 32;
+    size_t _reserved2: 32;
 } __packed;
 
 static_assert(sizeof(struct idt_descriptor) == 16);
@@ -146,13 +146,13 @@ static_assert(sizeof(struct idt_fatptr) == 10);
 */
 # define NEW_IDT_INTERRUPT_GATE_ENTRY(offset, ...)                  \
     (struct idt_descriptor) {                                       \
-        .offset_low = (((uintptr)(offset)) & 0xFFFF),           \
-        .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),   \
-        .offset_high = ((((uintptr)(offset)) >> 32) & 0xFFFFFFFF),\
-        .type = IDT_INTERRUPT_GATE,                             \
-        ._reserved0 = 0,                                        \
-        ._reserved1 = 0,                                        \
-        __VA_ARGS__                                             \
+        .offset_low = (((uintptr)(offset)) & 0xFFFF),               \
+        .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),       \
+        .offset_high = ((((uintptr)(offset)) >> 32) & 0xFFFFFFFF),  \
+        .type = IDT_INTERRUPT_GATE,                                 \
+        ._reserved0 = 0,                                            \
+        ._reserved1 = 0,                                            \
+        __VA_ARGS__                                                 \
     }
 
 /*
@@ -175,4 +175,3 @@ static_assert(sizeof(struct idt_fatptr) == 10);
 void    setup_idt(void);
 
 #endif /* !_ARCH_X86_64_INTERRUPT_H_ */
-

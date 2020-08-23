@@ -18,6 +18,7 @@
 # include <stdint.h>
 # include <stdbool.h>
 # include <poseidon/status.h>
+# include <poseidon/kconfig.h>
 
 /*
 ** A useful set of macros that act like keywords that are not available
@@ -35,6 +36,7 @@
 # define __unused           __attribute__((unused))
 # define __packed           __attribute__((packed))
 # define __weak             __attribute__((weak))
+# define __weakref(x)       __attribute__((weakref(x)))
 # define __alias(x)         __attribute__((alias(x)))
 # define __aligned(x)       __attribute__((aligned(x)))
 # define __section(s)       __attribute__((section(s)))
@@ -58,7 +60,6 @@ typedef int16_t             int16;
 typedef int32_t             int32;
 typedef int64_t             int64;
 typedef intptr_t            intptr;
-typedef intptr_t            ssize_t;
 
 typedef uint8_t             uint8;
 typedef uint16_t            uint16;
@@ -72,9 +73,10 @@ typedef uintptr_t           uintptr;
 /* Print a message and halt the computer. */
 void    panic(char const *fmt, ...) __noreturn;
 
+/* Panic saying the current function isn't implemented */
 # define unimplemented()                            \
     panic(                                          \
-        "%s() was called but is not implemented (in %s at line %u).", \
+        "The function %s() was called but is not implemented (%s, line %u).", \
         __func__,                                   \
         __FILE__,                                   \
         __LINE__                                    \
@@ -117,6 +119,15 @@ void    panic(char const *fmt, ...) __noreturn;
     }                                                               \
     while (0)
 
+/* Assertions that are only effective in debug mode */
+# if DEBUG
+#  define debug_assert(expr)        assert(expr)
+#  define debug_assert_ok(expr)     assert_ok(expr)
+# else
+#  define debug_assert(expr)
+#  define debug_assert_ok(expr)
+# endif /* DEBUG */
+
 /*
 ** Put the following data in the ".data.boot" section, which will be freed
 ** at the end of kernel initialisation.
@@ -150,39 +161,17 @@ void    panic(char const *fmt, ...) __noreturn;
 # define STRINGIFY(a)       XSTRINGIFY(a)
 
 /*
-** Use the pre-processor to forms a C identifier that is the concatenation of the
-** target architecture's name, an underscore (`_`) and the given parameter,
-**
-** Eg:
-**      // Form the identifier `x86_64_test` (if the target architecture is
-**      // x86_64).
-**      `ARCH_IDENTIFIER(test)`
-**
-** Requires that `poseidon/kconfig.h` is included.
-*/
-# define ARCH_IDENTIFIER(_identifier)   CONCAT(ARCH, CONCAT(_, _identifier))
-
-/*
-** Define the attached function as an alias to its arch-dependent counterpart.
-**
-** The given argument is the function's name.
-**
-** Eg:
-**      `void my_func(int x) __arch_alias(my_func);`
-**
-** Calling `my_func()` will instead call `x86_64_my_fuc()` (if the target
-** architecture is x86_64).
-**
-** Requires that `poseidon/kconfig.h` is included.
-*/
-# define __arch_alias(_func) __alias(STRINGIFY(ARCH_IDENTIFIER(_func)))
-
-/*
 ** Round up `x` to be `y`-aligned.
 **
-** Note that `y` must be a power of two and the return value has the same
-** type than `x`.
+** `y` must be a power of two and the return value has the same type than `x`.
 */
 # define ALIGN(x, y)        ((typeof(x))(((uintptr)(x) + ((y) - 1)) & ~((y) - 1)))
+
+/*
+** Round down `x` to be `y`-aligned.
+**
+** `y` must be a power of two and the return value has the same type than `x`.
+*/
+# define ROUND_DOWN(x, y)	((typeof(x))((uintptr)(x) & ~((y) - 1)))
 
 #endif /* !_POSEIDON_POSEIDON_H_ */

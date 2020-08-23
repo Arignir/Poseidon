@@ -19,6 +19,7 @@
 */
 
 .section .multiboot
+.align 8
 mb_header_start:
     .long MULTIBOOT2_HEADER_MAGIC               // magic number
     .long 0                                     // architecture (x86 PM)

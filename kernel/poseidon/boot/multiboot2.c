@@ -7,15 +7,35 @@
 **
 \******************************************************************************/
 
+#include <poseidon/status.h>
+#include <poseidon/poseidon.h>
 #include <poseidon/boot/init_hook.h>
 #include <poseidon/boot/multiboot2.h>
 #include <poseidon/memory.h>
+#include <poseidon/memory/kheap.h>
 
 /*
 ** The multiboot structure, filled by the bootloader.
 ** This variable is set early in the boot process.
 */
+physaddr_t mb_tag_pa = PHYS_NULL;
+
+/*
+** Size of the multiboot structure, filled by the bootloader.
+** This variable is set early in the boot process.
+*/
+uint32 mb_tag_len = 0;
+
+/*
+** A virtual address that points to `mb_tag_pa` after setup.
+*/
 struct multiboot_tag const *mb_tag = NULL;
+
+/*
+** The aligned pointer returned by `kheap_alloc_device()`,
+** aligned to a page boundary, so that it can be freed at a later stage.
+*/
+virtaddr_t aligned_mb_tag = NULL;
 
 /*
 ** Pointers to the most common multiboot tags.
@@ -30,20 +50,50 @@ struct multiboot_tag_mmap const *mb_mmap = NULL;
 struct multiboot_tag_framebuffer const *mb_fb = NULL;
 
 /*
-** Parse the multiboot structure and save pointers to the most common tags.
+** Map the multiboot structure, and parse it to save pointers to the most
+** useful tags.
 */
-static
 status_t
 multiboot_load(void)
 {
     struct multiboot_tag const *tag;
+    physaddr_t aligned_tag_pa;
+    size_t aligned_tag_len;
 
-    tag = mb_tag;
+    assert(mb_tag_pa != PHYS_NULL);
+    assert(mb_tag_len > 0);
 
-    if (!mb_tag) {
-        return (OK);
+    /*
+    ** Round down to a page boundary `mb_tag_pa` and calculate on how many
+    ** pages the multiboot tags spread on.
+    */
+    aligned_tag_pa = ROUND_DOWN(mb_tag_pa, PAGE_SIZE);
+    aligned_tag_len = ALIGN(mb_tag_pa + mb_tag_len, PAGE_SIZE) - aligned_tag_pa;
+
+    /*
+    ** Map the multiboot structure to virtual memory.
+    */
+    aligned_mb_tag = kheap_alloc_device(
+        aligned_tag_pa,
+        aligned_tag_len
+    );
+
+    if (!aligned_mb_tag) {
+        return (ERR_OUT_OF_MEMORY);
     }
 
+    /*
+    ** Add to `aligned_mb_tag` the offset between the frame boundary and
+    ** `mb_tag_pa`.
+    ** Therefore, `mb_tag` has the same offset than `mb_tag_pa`.
+    */
+    mb_tag = (struct multiboot_tag const *)((uchar *)aligned_mb_tag + mb_tag_pa - aligned_tag_pa);
+
+    /*
+    ** We can now iterate on each tag and retrieve any wanted information.
+    */
+
+    tag = mb_tag;
     while (tag->type != MULTIBOOT_TAG_TYPE_END)
     {
         switch (tag->type)
@@ -73,6 +123,3 @@ multiboot_load(void)
     }
     return (OK);
 }
-
-REGISTER_INIT_HOOK(multiboot2_load, &multiboot_load, INIT_LEVEL_MULTIBOOT);
-

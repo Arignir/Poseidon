@@ -19,7 +19,8 @@ export TARGET_TRIPLET	?= x86_64-elf
 
 # Define a set of arguments for QEMU to emulate this platform.
 export QEMU		?= qemu-system-x86_64
-export QEMU_ARGS	?= -cpu Broadwell -m 512 -serial stdio
+export QEMU_ARGS	?= -m 512M -serial stdio
 
 # Include the x86_64-specific make rules.
-include	$(PROJECT_DIR)/kernel/arch/x86_64/Arch.mk
+include	$(PROJECT_DIR)/kernel/arch/$(ARCH)/Arch.mk
+

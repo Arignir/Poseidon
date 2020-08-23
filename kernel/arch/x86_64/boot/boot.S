@@ -101,9 +101,12 @@ ensure_multiboot2:
     cmp $MULTIBOOT2_BOOTLOADER_MAGIC, %eax
     jne .no_multiboot2
 
-    .extern mb_tag
+    .extern mb_tag_pa
+    .extern mb_tag_size
+    movl (%ebx), %ecx
+    movl %ecx, mb_tag_len           // Save the multiboot2 segment length for later use
     add $8, %ebx
-    movl %ebx, mb_tag               // Save the multiboot2 pointer for later use.
+    movl %ebx, mb_tag_pa            // Save the multiboot2 segment pointer for later use.
 
     ret
 
@@ -168,8 +171,8 @@ detect_ia_32e:
 /*
 ** Set up paging without enabling it
 **
-** This function sets up a 4-level paging using 512 2MB pages, therefore
-** mapping the first GB of virtual memory on its physical counterpart.
+** This function sets up a 4-level paging using 512 4KB pages, therefore
+** mapping at most the first 2MB of virtual memory on its physical counterpart.
 */
 setup_paging:
     mov $boot_pdpt, %eax
@@ -180,17 +183,32 @@ setup_paging:
     or $0b000000000011, %eax        // Present + Writable
     mov %eax, (boot_pdpt)
 
-    // Iterate over all 512 entries of the PD, and map them using 2MB pages.
+    mov $boot_pt, %eax
+    or $0b000000000011, %eax        // Present + Writable
+    mov %eax, (boot_pd)
+
+    // Iterate over all 512 entries of the PT, and map them using 4KB pages.
     mov $0, %ecx
-.map_pd:
-    mov $(4096 * 512), %eax         // 2MB
+.map_pt:
+    mov $4096, %eax                 // 4KB Page
     mul %ecx                        // eax *= ecx
-    or $0b000010000011, %eax        // Present + Writable + 2MB Page
-    mov %eax, boot_pd(,%ecx,8)      // Map the entry
+
+    cmp $kernel_end, %eax            // Stop if we have mapped the whole kernel
+    jge .map_pt_end
+
+    or $0b000000000011, %eax        // Present + Writable
+    mov %eax, boot_pt(,%ecx,8)      // Map the entry
 
     inc %ecx
     cmp $512, %ecx
-    jne .map_pd
+    jne .map_pt
+
+.map_pt_end:
+
+    // Setup recursive mapping
+    mov $boot_pml4, %eax
+    or $0b000000000011, %eax        // Present + Writable
+    mov %eax, (boot_pml4 + 511*8)
 
     ret
 
@@ -285,6 +303,13 @@ boot_pdpt:
 boot_pd:
     .skip 512 * 8
 
+/*
+** Boot PT, used to transition into long mode, before paging is properly initialized
+*/
+.align 4096
+boot_pt:
+    .skip 512 * 8
+
 .section .rodata
 
 /*
@@ -296,46 +321,3 @@ boot_panic_no_cpuid:
     .string "The CPUID instruction isn't available."
 boot_panic_no_ia_32e:
     .string "The CPU doesn't support 64-bit instructions."
-
-/*
-** A 64-bit GDT used during boot-time.
-**
-** It is replaced for a dynamic GDT by the Bootstrap processor
-** in the middle of the boot process.
-**
-** TODO FIXME XXX: Replace this with a C structure, using strong typing
-** and self-explanatory fields.
-*/
-//.align 16
-//boot_gdt64:
-//
-//    // Null descriptor
-//    .word 0                        // Limit (low)
-//    .word 0                        // Base (low)
-//    .byte 0                        // Base (middle)
-//    .byte 0                        // Access
-//    .byte 0                        // Granularity
-//    .byte 0                        // Base (high)
-//
-//    // Kernel code descriptor
-//    .word 0                        // Limit (low)
-//    .word 0                        // Base (low)
-//    .byte 0                        // Base (middle)
-//    .byte 0b10011010                // Access (exec/read)
-//    .byte 0b10101111                // Granularity, 64-bit flag, limit (high)
-//    .byte 0                        // Base (high)
-//
-//    // Kernel data descriptor
-//    .word 0                        // Limit (low)
-//    .word 0                        // Base (low)
-//    .byte 0                        // Base (middle)
-//    .byte 0b10010010                // Access (read/write)
-//    .byte 0b00000000                // Granularity
-//    .byte 0                        // Base (high)
-//
-//    // The GDT Fat Pointer
-//boot_gdt64.fatptr:
-//    .word boot_gdt64.fatptr - boot_gdt64 - 1       // Size
-//    .quad boot_gdt64               // Address
-//
-//

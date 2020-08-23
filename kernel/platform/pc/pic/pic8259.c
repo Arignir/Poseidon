@@ -18,8 +18,8 @@
 */
 
 #include <poseidon/boot/init_hook.h>
+#include <arch/x86_64/api/io.h>
 #include <arch/x86_64/interrupt.h>
-#include <poseidon/io.h>
 
 /*
 ** Define two ports: the master and slave PIC.
@@ -28,7 +28,7 @@ NEW_IO_PORT(master, 0x20);
 NEW_IO_PORT(slave, 0xA0);
 
 /*
-** Define two offsets: one to send commands, and the other to send data.
+** Define two offsets: one to send commands and one to send data.
 */
 #define CMD    0x0
 #define DATA   0x1
@@ -49,14 +49,14 @@ static ushort pic_mask = 0;
 void
 pic8259_irq_mask(uchar irq)
 {
-    assert(irq <= 0xF);
+    debug_assert(irq <= 0xF);
 
     // Send an OCW1
     pic_mask |= (1 << irq);
     if (irq <= 0x7) {
-        io_out8_offset(master, DATA, pic_mask & 0xFF);
+        io_port_out8_offset(master, DATA, pic_mask & 0xFF);
     } else {
-        io_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+        io_port_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
     }
 }
 
@@ -70,7 +70,7 @@ pic8259_irq_mask(uchar irq)
 void
 pic8259_irq_unmask(uchar irq)
 {
-    assert(irq <= 0xF);
+    debug_assert(irq <= 0xF);
 
     // Unmask the IRQ
     pic_mask &= ~(1 << irq);
@@ -79,14 +79,14 @@ pic8259_irq_unmask(uchar irq)
     // then unmask the slave
     if (irq >= 0x8 && (pic_mask & (1 << 2))) {
         pic_mask &= ~(1 << 2);
-        io_out8_offset(master, DATA, pic_mask & 0xFF);
+        io_port_out8_offset(master, DATA, pic_mask & 0xFF);
     }
 
     // Send the OCW1 to the corresponding PIC
     if (irq <= 0x7) {
-        io_out8_offset(master, DATA, pic_mask & 0xFF);
+        io_port_out8_offset(master, DATA, pic_mask & 0xFF);
     } else {
-        io_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+        io_port_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
     }
 }
 
@@ -105,8 +105,8 @@ pic8259_set_irq_mask(ushort mask)
     // Send an OCW1
     pic_mask = mask;
 
-    io_out8_offset(master, DATA, pic_mask & 0xFF);
-    io_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+    io_port_out8_offset(master, DATA, pic_mask & 0xFF);
+    io_port_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
 }
 
 /*
@@ -116,7 +116,7 @@ void
 pic8259_master_eoi(void)
 {
     // Send an OCW2 with EOI = 1.
-    io_out8_offset(master, CMD, 0b00100000);
+    io_port_out8_offset(master, CMD, 0b00100000);
 }
 
 /*
@@ -126,7 +126,7 @@ void
 pic8259_slave_eoi(void)
 {
     // Send an OCW2 with EOI = 1.
-    io_out8_offset(slave, CMD, 0b00100000);
+    io_port_out8_offset(slave, CMD, 0b00100000);
 }
 
 /*
@@ -172,11 +172,11 @@ pic8259_init(void)
     */
     uchar icw1 = 0b00010001; // Turn IC4 and mandatory bit D4 on.
 
-    io_out8_offset(master, CMD, icw1);
-    io_delay();
+    io_port_out8_offset(master, CMD, icw1);
+    io_port_wait();
 
-    io_out8_offset(slave, CMD, icw1);
-    io_delay();
+    io_port_out8_offset(slave, CMD, icw1);
+    io_port_wait();
 
     /*
     ** The second one (ICW2) is as follow:
@@ -189,11 +189,11 @@ pic8259_init(void)
     uchar icw2_master = INT_IRQ0; // Remap the interrupts to 0x20-0x27
     uchar icw2_slave = INT_IRQ8; // Remap the interrupts to 0x28-0x2F
 
-    io_out8_offset(master, DATA, icw2_master);
-    io_delay();
+    io_port_out8_offset(master, DATA, icw2_master);
+    io_port_wait();
 
-    io_out8_offset(slave, DATA, icw2_slave);
-    io_delay();
+    io_port_out8_offset(slave, DATA, icw2_slave);
+    io_port_wait();
 
     /*
     ** The third one (ICW3) is used only if ICW1.SNGL = 0.
@@ -215,11 +215,11 @@ pic8259_init(void)
     uchar icw3_master = 0b00000100;
     uchar icw3_slave = 0b00000010;
 
-    io_out8_offset(master, DATA, icw3_master);
-    io_delay();
+    io_port_out8_offset(master, DATA, icw3_master);
+    io_port_wait();
 
-    io_out8_offset(slave, DATA, icw3_slave);
-    io_delay();
+    io_port_out8_offset(slave, DATA, icw3_slave);
+    io_port_wait();
 
     /*
     ** The forth one (ICW4) is used only if ICW1.IC4 = 1.
@@ -239,11 +239,11 @@ pic8259_init(void)
     */
     uchar icw4 = 0b00000001;
 
-    io_out8_offset(master, DATA, icw4);
-    io_delay();
+    io_port_out8_offset(master, DATA, icw4);
+    io_port_wait();
 
-    io_out8_offset(slave, DATA, icw4);
-    io_delay();
+    io_port_out8_offset(slave, DATA, icw4);
+    io_port_wait();
 
     // Unmask all IRQs
     pic8259_set_irq_mask(0);

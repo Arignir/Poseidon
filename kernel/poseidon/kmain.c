@@ -18,6 +18,7 @@
 */
 
 #include <poseidon/boot/init_hook.h>
+#include <poseidon/memory/pmm.h>
 #include <lib/log.h>
 
 /*
@@ -31,18 +32,27 @@ void
 kmain(void)
 {
     struct init_hook const *hook;
+    status_t s;
+
+    logln("Poseidon is initializing...");
 
     /* Trigger all init hooks, panic if one failed. */
     hook = find_next_init_hook(NULL, __INIT_LEVEL_EARLIEST);
     while (hook != NULL) {
-        if (hook->hook() != OK) {
+        s = hook->hook();
+        if (s != OK) {
             panic(
-                "the init hook \"%s\" failed to complete successfully.",
-                hook->name
+                "init hook \"%s\" failed: %s",
+                hook->name,
+                status_str[s]
             );
         }
         hook = find_next_init_hook(hook, hook->level);
     }
 
+    logln("Poseidon finished its initialization.");
+
     /* Start init here (WIP) */
 }
+
+REGISTER_PMM_RESERVED_AREA(kernel, kernel_start, kernel_end);
