@@ -11,7 +11,7 @@
 # define _POSEIDON_MEMORY_KHEAP_H_
 
 # include <poseidon/poseidon.h>
-# include <poseidon/memory.h>
+# include <poseidon/memory/memory.h>
 
 /*
 ** Each allocation made with `kheap_alloc()` belongs to a block. Each block is

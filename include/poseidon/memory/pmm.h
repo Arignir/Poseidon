@@ -10,7 +10,7 @@
 #ifndef _POSEIDON_MEMORY_PMM_H_
 # define _POSEIDON_MEMORY_PMM_H_
 
-# include <poseidon/memory.h>
+# include <poseidon/memory/memory.h>
 
 /*
 ** A region of available physical memory.

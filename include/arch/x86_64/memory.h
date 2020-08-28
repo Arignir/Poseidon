@@ -15,7 +15,7 @@
 # define _ARCH_X86_64_MEMORY_H_
 
 # include <poseidon/poseidon.h>
-# include <poseidon/memory.h>
+# include <poseidon/memory/memory.h>
 
 /*
 ** An entry in the 4-level PML4

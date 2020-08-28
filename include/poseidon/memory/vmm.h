@@ -15,7 +15,7 @@
 # define _POSEIDON_MEMORY_VMM_H_
 
 # include <poseidon/poseidon.h>
-# include <poseidon/memory.h>
+# include <poseidon/memory/memory.h>
 
 /*
 ** Arch-indepentant flags for mmap

@@ -29,7 +29,7 @@
 
 #include <poseidon/boot/multiboot2.h>
 #include <poseidon/boot/init_hook.h>
-#include <poseidon/memory.h>
+#include <poseidon/memory/memory.h>
 #include <poseidon/memory/pmm.h>
 #include <poseidon/memory/kheap.h>
 #include <poseidon/status.h>
