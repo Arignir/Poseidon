@@ -78,8 +78,8 @@ halt(void)
 __weak
 void
 register_interrupt_handler(
-    uint vector,
-    interrupt_handler_t handler
+    uint vector __unused,
+    interrupt_handler_t handler __unused
 ) {
     unimplemented();
 }
@@ -90,7 +90,7 @@ register_interrupt_handler(
 __weak
 void
 unregister_interrupt_handler(
-    uint vector
+    uint vector __unused
 ) {
     unimplemented();
 }

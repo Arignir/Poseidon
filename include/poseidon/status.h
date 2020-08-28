@@ -24,9 +24,9 @@
 **
 ** Feel free to complete it according your needs.
 */
-enum                status
+enum status
 {
-    OK          = 0,
+    OK = 0,
 
     /* Internal errors */
     ERR_INTERNAL,           // Internal / unspecified error. Keep this one for extrem cases.
