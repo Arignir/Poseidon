@@ -11,11 +11,11 @@
 ** Architecture-independent API to manipulate, allocate and free memory.
 **
 ** This file defines the most important and high-level functions to manipulate
-** memory. More low-level ones can be found in `poseidon/memory/`.
+** memory.
 */
 
-#ifndef _POSEIDON_MEMORY_H_
-# define _POSEIDON_MEMORY_H_
+#ifndef _POSEIDON_MEMORY_MEMORY_H_
+# define _POSEIDON_MEMORY_MEMORY_H_
 
 # include <poseidon/poseidon.h>
 
@@ -68,4 +68,4 @@ extern uint8 kernel_start[];                    // Beginning of the kernel (virt
 extern uint8 kernel_end[];                      // End of the kernel (virtual)
 extern uint8 kernel_heap_start[];               // Beginning of the kernel's heap (virtual)
 
-#endif /* !_POSEIDON_MEMORY_H_ */
+#endif /* !_POSEIDON_MEMORY_MEMORY_H_ */

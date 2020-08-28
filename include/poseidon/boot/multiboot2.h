@@ -79,7 +79,7 @@
 
 #ifndef __ASSEMBLER__
 
-#include <poseidon/memory.h>
+#include <poseidon/memory/memory.h>
 
 extern struct multiboot_tag_string const *mb_cmdline;
 extern struct multiboot_tag_string const *mb_bootloader;

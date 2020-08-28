@@ -27,7 +27,7 @@
 # define _POSEIDON_IO_H_
 
 # include <poseidon/poseidon.h>
-# include <poseidon/memory.h>
+# include <poseidon/memory/memory.h>
 
 /*
 ** Strong typing the address of a memory-mapped io port.

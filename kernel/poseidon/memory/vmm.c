@@ -12,9 +12,9 @@
 */
 
 #include <poseidon/boot/init_hook.h>
+#include <poseidon/memory/memory.h>
 #include <poseidon/memory/vmm.h>
 #include <poseidon/memory/pmm.h>
-#include <poseidon/memory.h>
 
 /*
 ** Map a range of contiguous virtual pages to free, random, physical frames.
