@@ -16,7 +16,7 @@
 ** Some architectures may complement this implementation with extra functions.
 **
 ** The PC platform also implements port-based IO, described in
-** `arch/x86_64/api/io.h`.
+** `arch/x86_64/io.h`.
 **
 ** This module also implements an extra, generic, api that automatically
 ** redirects the requests to the platform's preffered IO technique's

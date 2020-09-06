@@ -18,7 +18,7 @@
 */
 
 #include <poseidon/boot/init_hook.h>
-#include <arch/x86_64/api/io.h>
+#include <arch/x86_64/io.h>
 #include <arch/x86_64/interrupt.h>
 
 /*

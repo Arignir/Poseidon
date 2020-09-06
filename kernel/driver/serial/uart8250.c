@@ -24,7 +24,7 @@
 #ifdef KCONFIG_PLATFORM_PC
 # define USE_UART8250
 
-# include <arch/target/api/io.h>
+# include <arch/target/io.h>
 
 NEW_IO_PORT(io_uart8250, 0x3F8);
 

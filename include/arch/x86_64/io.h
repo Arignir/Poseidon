@@ -17,8 +17,8 @@
 ** in `poseidon/io.h`.
 */
 
-#ifndef _ARCH_X86_64_API_IO_H_
-# define _ARCH_X86_64_API_IO_H_
+#ifndef _ARCH_X86_64_IO_H_
+# define _ARCH_X86_64_IO_H_
 
 # include <poseidon/poseidon.h>
 
@@ -119,4 +119,4 @@ io_port_wait(void)
     );
 }
 
-#endif /* !_ARCH_X86_64_API_IO_H_ */
+#endif /* !_ARCH_X86_64_IO_H_ */
