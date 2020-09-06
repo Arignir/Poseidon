@@ -10,6 +10,7 @@
 ldir	:= $(GET_LOCAL_DIR)
 
 objs-y	+= $(addprefix $(ldir), \
+		atomic.o \
 		interrupt.o \
 		kmain.o \
 		panic.o \
