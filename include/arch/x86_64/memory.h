@@ -140,7 +140,7 @@ static_assert(sizeof(struct pte) == sizeof(uintptr));
 */
 struct pml4
 {
-	struct pml4e entries[512];
+    struct pml4e entries[512];
 };
 
 
@@ -149,7 +149,7 @@ struct pml4
 */
 struct pdpt
 {
-	struct pdpte entries[512];
+    struct pdpte entries[512];
 };
 
 static_assert(sizeof(struct pdpt) == PAGE_SIZE);
@@ -159,7 +159,7 @@ static_assert(sizeof(struct pdpt) == PAGE_SIZE);
 */
 struct page_directory
 {
-	struct pde entries[512];
+    struct pde entries[512];
 };
 
 static_assert(sizeof(struct page_directory) == PAGE_SIZE);
@@ -169,7 +169,7 @@ static_assert(sizeof(struct page_directory) == PAGE_SIZE);
 */
 struct page_table
 {
-	struct pte entries[512];
+    struct pte entries[512];
 };
 
 static_assert(sizeof(struct page_table) == PAGE_SIZE);
