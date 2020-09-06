@@ -9,10 +9,6 @@
 
 ldir	:= $(GET_LOCAL_DIR)
 
-objs-y	+= $(addprefix $(ldir), \
-		atomic.o \
-	)
-
 include	\
 	$(ldir)boot/Makefile \
 	$(ldir)interrupt/Makefile \
