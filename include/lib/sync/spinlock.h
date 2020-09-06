@@ -7,8 +7,8 @@
 **
 \******************************************************************************/
 
-#ifndef _LIB_LOCK_SPINLOCK_H_
-# define _LIB_LOCK_SPINLOCK_H_
+#ifndef _LIB_SYNC_SPINSYNC_H_
+# define _LIB_SYNC_SPINSYNC_H_
 
 # include <poseidon/poseidon.h>
 # include <poseidon/atomic.h>
@@ -59,4 +59,4 @@ spinlock_release(
     atomic_exchange(&sl->lock, 0);
 }
 
-#endif /* !_LIB_LOCK_SPINLOCK_H_ */
+#endif /* !_LIB_SYNC_SPINSYNC_H_ */
