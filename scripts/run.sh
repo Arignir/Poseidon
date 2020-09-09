@@ -21,48 +21,51 @@ function print_usage {
     printf "\t-m <MB>               Memory (in MB) (Default: 512MB)\n"
     printf "\t-s <SMP>              Number of cores (Default: 1)\n"
     printf "\t-h                    Print this help menu\n"
-    exit 1
 }
 
-env > /tmp/jaj
+function main() {
 
-# Check this script has ben launched the proper way.
-if [[ -z "${QEMU}" ]]; then
-    echo "Please use `make run` instead of using this script directly" > /dev/stder
-    exit 1
-fi
+    # Check this script has ben launched the proper way.
+    if [[ -z "${QEMU}" ]]; then
+        printf "Please use `make run` instead of using this script directly.\n" >&2
+        exit 1
+    fi
 
-declare qemu="$QEMU"
-declare qemu_args="$QEMU_ARGS ${QEMU_EXTRA_ARGS+}"
+    local qemu="${QEMU}"
+    local qemu_args="${QEMU_ARGS} ${QEMU_EXTRA_ARGS+}"
 
-while getopts dgtkhm:s: FLAG; do
-    case $FLAG in
-        d) qemu_args+=" -d int,cpu_reset,guest_errors,unimp --no-reboot";;
-        g) qemu_args+=" -s -S";;
-        k) qemu_args+=" --enable-kvm";;
-        t) qemu_args=$(echo "$qemu_args" | sed s/serial/monitor/g);;
-        m) qemu_args+=" -m $OPTARG";;
-        s) qemu_args+=" -smp $OPTARG";;
-        h) print_usage;;
-        \?)
-            printf "Unknown option\n"
-            print_usage
-    esac
-done
+    while getopts dgtkhm:s: FLAG; do
+        case ${FLAG} in
+            d) qemu_args+=" -d int,cpu_reset,guest_errors,unimp --no-reboot";;
+            g) qemu_args+=" -s -S";;
+            k) qemu_args+=" --enable-kvm";;
+            t) qemu_args=$(printf "${qemu_args}\n" | sed s/serial/monitor/g);;
+            m) qemu_args+=" -m ${OPTARG}";;
+            s) qemu_args+=" -smp ${OPTARG}";;
+            h) print_usage;;
+            \?)
+                printf "Unknown option\n"
+                print_usage
+        esac
+    done
 
-shift $(($OPTIND - 1))
+    shift $((${OPTIND} - 1))
 
-if [[ $# -ne 1 ]]; then
-    print_usage
-fi
+    if [[ "$#" -ne 1 ]]; then
+        print_usage
+        exit 1
+    fi
 
-declare iso=$1
-qemu_args+=" -cdrom $iso"
+    local iso=${1}
+    qemu_args+=" -cdrom $iso"
 
-if ! which "$qemu" &> /dev/null; then
-    printf "  ERROR\t $qemu not found. You must install qemu first.\n"
-    exit 1
-fi
+    if ! which "${qemu}" &> /dev/null; then
+        printf "  ERROR\t ${qemu} not found. You must install qemu first.\n"
+        exit 1
+    fi
 
-printf "  qemu\t $(basename $iso)\n"
-$qemu $qemu_args
+    printf "  qemu\t $(basename $iso)\n"
+    "${qemu}" ${qemu_args}
+}
+
+main "$@"

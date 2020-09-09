@@ -11,74 +11,64 @@
 
 set -e -u
 
-declare binutils_version="2.33.1"
-declare gcc_version="9.2.0"
+declare binutils_version="2.35"
+declare gcc_version="10.2.0"
 
 function print_usage {
-    printf "Usage: $0 [OPTIONS] <cross_dir> <target_triplet>\n"
-    printf "\n"
-    printf "\t-h                    Print this help menu\n"
-    exit 1
+    printf "Usage: $0 <sysroot_dir> <target_triplet>\n"
 }
 
 function die {
-    printf "$1\n"
+    local msg="${1}"
+
+    printf "${msg}\n" >&2
     exit 1
 }
 
 function main() {
-    while getopts h FLAG; do
-        case $FLAG in
-            h) print_usage;;
-            \?)
-                printf "Unknown option\n"
-                print_usage
-        esac
-    done
-
-    shift $(($OPTIND - 1))
-
-    if [[ $# -ne 2 ]]; then
+    if [[ "$#" -ne 2 ]]; then
         print_usage
+        exit 1
     fi
 
-    declare cross_dir="$1"
-    declare target_triplet="$2"
+    local sysroot_dir="$(realpath "${1}")"
+    local target_triplet="${2}"
 
-    # Create the target directory
-    rm -rf -- "$cross_dir" && mkdir -p -- "$cross_dir"
-
-    # Create the installation directory
-    mkdir -p -- "$cross_dir/sysroot"
-    declare install_dir=$(realpath -- "$cross_dir/sysroot")
+    # Create the sysroot directory
+    rm -rf -- "${sysroot_dir}"
+    mkdir -p -- "${sysroot_dir}"
 
     # Set some environment variables
-    export PATH="$install_dir/bin:$PATH"
-    export MAKEFLAGS="$(echo -- "$MAKEFLAGS" | grep -o -- "-j[0-9]")"  # Only keep -jX
+    export PATH="${sysroot_dir}/bin:${PATH}"
+    export MAKEFLAGS="$(printf -- "${MAKEFLAGS}\n" | grep -o -P -- "-j[0-9]+")"  # Only keep -jX
 
     # Change to the target directory
-    pushd "$cross_dir" > /dev/null
+    pushd "${sysroot_dir}" > /dev/null
+
+        # Create the usr/ and include/ directories
+        ln -s . usr
+        mkdir -p include/
 
         # Download and extract binutils
 
-        printf "  WGET\t binutils-$binutils_version.tar.xz\n"
-        wget "https://ftp.gnu.org/gnu/binutils/binutils-$binutils_version.tar.xz" -O binutils.tar.xz &> /dev/null
+        printf "  WGET\t binutils-${binutils_version}.tar.xz\n"
+        wget "https://ftp.gnu.org/gnu/binutils/binutils-${binutils_version}.tar.xz" -O binutils.tar.xz &> /dev/null
 
-        printf "  TAR\t binutils-$binutils_version.tar.xz\n"
+        printf "  TAR\t binutils-${binutils_version}.tar.xz\n"
         tar xf binutils.tar.xz
 
-        printf "  MV\t binutils-$binutils_version -> binutils\n"
+        printf "  MV\t binutils-${binutils_version} -> binutils\n"
         mv binutils-* binutils
 
         # Download and extract gcc
 
-        printf "  WGET\t gcc-$gcc_version.tar.xz\n"
-        wget "https://ftp.gnu.org/gnu/gcc/gcc-$gcc_version/gcc-$gcc_version.tar.xz" -O gcc.tar.xz &> /dev/null
+        printf "  WGET\t gcc-${gcc_version}.tar.xz\n"
+        wget "https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.xz" -O gcc.tar.xz &> /dev/null
 
-        printf "  TAR\t gcc-$gcc_version.tar.xz\n"
+        printf "  TAR\t gcc-${gcc_version}.tar.xz\n"
         tar xf gcc.tar.xz
 
-        printf "  MV\t gcc-$gcc_version\n"
+        printf "  MV\t gcc-${gcc_version}\n"
         mv gcc-* gcc
 
         # Build binutils
@@ -86,54 +76,58 @@ function main() {
         printf "  MKDIR\t binutils/build\n"
         mkdir binutils/build
 
-        printf "  MAKE\t binutils $binutils_version\n"
-        pushd "binutils/build" > /dev/null
+        printf "  MAKE\t binutils ${binutils_version}\n"
+        pushd binutils/build > /dev/null
             ../configure \
-                --prefix="$install_dir" \
-                --with-sysroot \
+                --target="${target_triplet}" \
+                --prefix="${sysroot_dir}" \
                 --disable-nls \
                 --disable-werror \
-                --target="$target_triplet" \
             &> configure.log ||
-                die "Configuration failed. See $cross_dir/binutils/configure.log for more information."
+                die "Configuration failed. See ${sysroot_dir}/binutils/configure.log for more information."
             make &> build.log ||
-                die "Build failed. See $cross_dir/binutils/build.log for more information."
+                die "Build failed. See ${sysroot_dir}/binutils/build.log for more information."
             make install &> install.log ||
-                die "Install failed. See $cross_dir/binutils/install.log for more information."
+                die "Install failed. See ${sysroot_dir}/binutils/install.log for more information."
         popd > /dev/null
 
-        printf "  RM\t binutils-$binutils_version.tar.xz\n"
+        printf "  RM\t binutils-${binutils_version}.tar.xz\n"
         rm -rf binutils.tar.xz
+        rm -rf binutils
 
         # Build gcc
 
         printf "  MKDIR\t gcc/build\n"
         mkdir gcc/build
 
-        printf "  MAKE\t gcc $gcc_version\n"
-        pushd "gcc/build" > /dev/null
+        printf "  MAKE\t gcc ${gcc_version}\n"
+        pushd gcc/build > /dev/null
             ../configure \
-                --prefix="$install_dir" \
+                --target="${target_triplet}" \
+                --prefix="${sysroot_dir}" \
                 --disable-nls \
                 --enable-languages=c \
                 --without-headers \
-                --target="$target_triplet" \
             &> configure.log ||
-                die "Configuration failed. See $cross_dir/gcc/configure.log for more information."
+                die "Configuration failed. See ${sysroot_dir}/gcc/build/configure.log for more information."
             make all-gcc &> build.log ||
-                die "Build failed. See $cross_dir/gcc/build.log for more information."
+                die "Build failed. See ${sysroot_dir}/gcc/build/build.log for more information."
             make all-target-libgcc &>> build.log ||
-                die "Build failed. See $cross_dir/gcc/build.log for more information."
+                die "Build failed. See ${sysroot_dir}/gcc/build/build.log for more information."
             make install-gcc &> install.log ||
-                die "Install failed. See $cross_dir/gcc/install.log for more information."
+                die "Install failed. See ${sysroot_dir}/gcc/build/install.log for more information."
             make install-target-libgcc &>> install.log ||
-                die "Install failed. See $cross_dir/gcc/install.log for more information."
+                die "Install failed. See ${sysroot_dir}/gcc/build/install.log for more information."
         popd > /dev/null
 
-        printf "  RM\t gcc-$gcc_version.tar.xz\n"
+        printf "  RM\t gcc-${gcc_version}.tar.xz\n"
         rm -rf gcc.tar.xz
+        rm -rf gcc
+
+        # Remove info/man
+        rm -rf "${sysroot_dir}/share" "${sysroot_dir}/usr/share"
 
     popd > /dev/null
 }
 
-main $@
+main "$@"
