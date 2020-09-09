@@ -13,7 +13,7 @@ export PROJECT_DIR	:= $(realpath $(shell pwd)/../)
 include $(PROJECT_DIR)/scripts/make/version.mk
 include $(PROJECT_DIR)/scripts/make/verbose.mk
 include $(PROJECT_DIR)/scripts/make/platform.mk
-include $(PROJECT_DIR)/scripts/make/target.mk
+include $(PROJECT_DIR)/scripts/make/profile.mk
 include $(PROJECT_DIR)/scripts/make/localdir.mk
 
 # Target

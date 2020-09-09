@@ -14,7 +14,7 @@ export PROJECT_DIR	:= $(shell pwd)
 include $(PROJECT_DIR)/scripts/make/version.mk
 include $(PROJECT_DIR)/scripts/make/verbose.mk
 include $(PROJECT_DIR)/scripts/make/platform.mk
-include $(PROJECT_DIR)/scripts/make/target.mk
+include $(PROJECT_DIR)/scripts/make/profile.mk
 
 # Targets made by other scripts or Makefiles
 export ISO		:= $(TARGET_DIR)/$(NAME).iso
@@ -96,7 +96,7 @@ re: clean
 	$(Q)printf "\n"
 	$(Q)printf "\t- make help        Show this help\n"
 	$(Q)printf "\n"
-	$(Q)printf "\t- make target=     Indicate which target profile to use (\"debug\" or \"release\")\n"
+	$(Q)printf "\t- make profile=    Indicate which target profile to use (\"debug\" or \"release\")\n"
 	$(Q)printf "\t- make platform=   Indicate which platform to target (Default is \"pc\")\n"
 	$(Q)printf "\n"
 	$(Q)printf "\t- make all         Build all targets (cross-compiler, kernel and iso)\n"
