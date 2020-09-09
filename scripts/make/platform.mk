@@ -7,7 +7,7 @@
 ##
 ################################################################################
 
-# Target platform (default to pc)
+# Target platform (default value is pc)
 platform		?= pc
 export PLATFORM		?= $(platform)
 
@@ -28,8 +28,8 @@ include	$(PROJECT_DIR)/kernel/platform/$(PLATFORM)/Platform.mk
 export CROSS_DIR	?= $(PROJECT_DIR)/target/cross-$(TARGET_TRIPLET)/
 
 # Build compiler
-BUILD_CC		:= $(CROSS_DIR)/sysroot/bin/$(TARGET_TRIPLET)-gcc
-BUILD_AS		:= $(CROSS_DIR)/sysroot/bin/$(TARGET_TRIPLET)-as
+BUILD_CC		:= $(CROSS_DIR)/bin/$(TARGET_TRIPLET)-gcc
+BUILD_AS		:= $(CROSS_DIR)/bin/$(TARGET_TRIPLET)-as
 
 # Host compiler
 HOST_CC			:= $(HOST_TRIPLET)-cc

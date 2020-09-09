@@ -21,8 +21,8 @@ function print_usage() {
 }
 
 function main() {
-    declare boot_args=""
-    declare iso="poseidon.iso"
+    local boot_args=""
+    local iso="poseidon.iso"
 
     while getopts hb:o: FLAG; do
         case $FLAG in
@@ -44,11 +44,11 @@ function main() {
         print_usage
     fi
 
-    declare kernel_path=$1
-    declare kernel_name=$(basename $kernel_path)
+    local kernel_path=$1
+    local kernel_name=$(basename $kernel_path)
 
-    declare temp=$(mktemp -d)
-    declare grub_output=$(mktemp)
+    local temp=$(mktemp -d)
+    local grub_output=$(mktemp)
 
     mkdir -p -- "$temp/boot/grub"
     cp -- "$kernel_path" "$temp/boot/$kernel_name"
@@ -63,7 +63,7 @@ EOF
 
     printf "  GRUB\t $(basename $iso)\n"
 
-    declare grub="grub-mkrescue"
+    local grub="grub-mkrescue"
     if which "grub2-mkrescue" &> /dev/null; then
         grub="grub2-mkrescue"
     fi
@@ -77,4 +77,4 @@ EOF
     rm -rf "$temp"
 }
 
-main $@
+main "$@"
