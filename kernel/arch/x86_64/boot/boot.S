@@ -61,7 +61,7 @@ start:
                                     // the CPU in a 32-bit compatiblity mode.
 
     .extern boot_gdt_fatptr
-    lgdt (boot_gdt_fatptr)        // Load the 64-bit GDT
+    lgdt (boot_gdt_fatptr)          // Load the 64-bit GDT
 
     // Transition to 64-bit by reloading the code segment register
     // with the new 64-bit code segment selector
@@ -316,8 +316,8 @@ boot_pt:
 ** Error messages displayed on boot, before any drivers are available
 */
 boot_panic_no_multiboot2:
-    .string "The kernel didn't boot using a multiboot2-compliant bootloader."
+    .string "Error: the kernel didn't boot using a multiboot2-compliant bootloader."
 boot_panic_no_cpuid:
-    .string "The CPUID instruction isn't available."
+    .string "Error: the CPUID instruction isn't available."
 boot_panic_no_ia_32e:
-    .string "The CPU doesn't support 64-bit instructions."
+    .string "Error: the CPU doesn't support 64-bit instructions."

@@ -11,6 +11,7 @@ ldir	:= $(GET_LOCAL_DIR)
 
 objs-y	+= $(addprefix $(ldir), \
 		format.o \
+		hexdump.o \
 		log.o \
 		string.o \
 	)
