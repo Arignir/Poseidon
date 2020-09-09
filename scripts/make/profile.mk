@@ -8,28 +8,28 @@
 ################################################################################
 
 # Target
-export target		?= release
-export TARGET		?= $(target)
+export profile		?= release
+export PROFILE		?= $(profile)
 
-ifeq ($(filter $(TARGET),release debug),)
-$(error Variable "target" must have the value "release" or "debug")
+ifeq ($(filter $(PROFILE),release debug),)
+$(error Variable "profile" must have the value "release" or "debug")
 endif
 
 # Create output directory
-export TARGET_DIR		:= $(PROJECT_DIR)/target/$(TARGET)
+export TARGET_DIR		:= $(PROJECT_DIR)/target/$(PROFILE)
 ifneq ($(shell mkdir -p "$(TARGET_DIR)" && cd "$(TARGET_DIR)" && pwd), $(TARGET_DIR))
-$(error Couldn't create target directory "$(TARGET_DIR)")
+$(error Couldn't create directory "$(TARGET_DIR)")
 endif
 
-# Add new CFLAGS when building the "release" target.
-ifeq ($(TARGET), release)
+# Add new CFLAGS when building the "release" profile.
+ifeq ($(PROFILE), release)
 CFLAGS	+= \
 	-O2 \
 	-DRELEASE
 endif
 
 # Add new CFLAGS when building the "debug" target.
-ifeq ($(TARGET), debug)
+ifeq ($(PROFILE), debug)
 CFLAGS	+= \
 	-g3 \
 	-DDEBUG

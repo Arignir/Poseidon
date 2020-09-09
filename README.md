@@ -15,14 +15,14 @@ To build the iso, run:
 make iso
 ```
 
-The Makefile will first build the cross-compiler. This step might take a while but will only be done once.
+The Makefile will first build the cross-compiler. This necessary step will probably take a while but will only be done once, the first time. Don't worry.
 
-By default, the kernel is built using the `release` target (optimisation flags on).
-The target can be switched to `debug` (debug flags on) by appending `target=debug` at the end of the previous commands.
+By default, the kernel is built using the `release` profile (optimisation flags on).
+The profile can be switched to `debug` (debug flags on) by appending `profile=debug` at the end of any `make` commands.
 
 Eg:
 ```
-make iso target=debug
+make iso profile=debug
 ```
 
 The iso, kernel and cross-compiler will be located in the `target/` directory.
