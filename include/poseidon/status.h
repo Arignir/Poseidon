@@ -51,6 +51,9 @@ enum status
     ERR_TARGET_BUSY,        // The target of the operation is busy
     ERR_NO_MORE_ID,         // There is no more ID available
 
+    /* Permission errrors */
+    ERR_PERMISSION_DENIED,  // The operation isn't allowed
+
     /* Memory-related errors */
     ERR_ALREADY_MAPPED,     // The given virtual address is already mapped
     ERR_NOT_MAPPED,         // The given virtual address is not mapped
@@ -63,29 +66,31 @@ typedef enum status status_t;
 static char const * const status_str[] = {
     [OK] = "OK",
 
-    [ERR_INTERNAL]          = "ERR_INTERNAL",
-    [ERR_NOT_IMPLEMENTED]   = "ERR_NOT_IMPLEMENTED",
-    [ERR_NOT_SUPPORTED]     = "ERR_NOT_SUPPORTED",
-    [ERR_OUT_OF_MEMORY]     = "ERR_OUT_OF_MEMORY",
-    [ERR_INTERRUPTED]       = "ERR_INTERRUPTED",
+    [ERR_INTERNAL]              = "ERR_INTERNAL",
+    [ERR_NOT_IMPLEMENTED]       = "ERR_NOT_IMPLEMENTED",
+    [ERR_NOT_SUPPORTED]         = "ERR_NOT_SUPPORTED",
+    [ERR_OUT_OF_MEMORY]         = "ERR_OUT_OF_MEMORY",
+    [ERR_INTERRUPTED]           = "ERR_INTERRUPTED",
 
-    [ERR_INVALID_ARGS]      = "ERR_INVALID_ARGS",
-    [ERR_OUT_OF_RANGE]      = "ERR_OUT_OF_RANGE",
-    [ERR_BAD_HANDLER]       = "ERR_BAD_HANDLER",
+    [ERR_INVALID_ARGS]          = "ERR_INVALID_ARGS",
+    [ERR_OUT_OF_RANGE]          = "ERR_OUT_OF_RANGE",
+    [ERR_BAD_HANDLER]           = "ERR_BAD_HANDLER",
 
-    [ERR_BAD_STATE]         = "ERR_BAD_STATE",
-    [ERR_TIMED_OUT]         = "ERR_TIMED_OUT",
-    [ERR_CANCELED]          = "ERR_CANCELED",
-    [ERR_NOT_FOUND]         = "ERR_NOT_FOUND",
-    [ERR_ALREADY_EXIST]     = "ERR_ALREADY_EXIST",
-    [ERR_ACCESS_DENIED]     = "ERR_ACCESS_DENIED",
-    [ERR_TARGET_BUSY]       = "ERR_TARGET_BUSY",
-    [ERR_NO_MORE_ID]        = "ERR_NO_MORE_ID",
+    [ERR_BAD_STATE]             = "ERR_BAD_STATE",
+    [ERR_TIMED_OUT]             = "ERR_TIMED_OUT",
+    [ERR_CANCELED]              = "ERR_CANCELED",
+    [ERR_NOT_FOUND]             = "ERR_NOT_FOUND",
+    [ERR_ALREADY_EXIST]         = "ERR_ALREADY_EXIST",
+    [ERR_ACCESS_DENIED]         = "ERR_ACCESS_DENIED",
+    [ERR_TARGET_BUSY]           = "ERR_TARGET_BUSY",
+    [ERR_NO_MORE_ID]            = "ERR_NO_MORE_ID",
 
-    [ERR_ALREADY_MAPPED]    = "ERR_ALREADY_MAPPED",
-    [ERR_NOT_MAPPED]        = "ERR_NOT_MAPPED",
-    [ERR_CANT_MAP]          = "ERR_CANT_MAP",
-    [ERR_BAD_MEMORY]        = "ERR_BAD_MEMORY",
+    [ERR_PERMISSION_DENIED]     = "ERR_PERMISSION_DENIED",
+
+    [ERR_ALREADY_MAPPED]        = "ERR_ALREADY_MAPPED",
+    [ERR_NOT_MAPPED]            = "ERR_NOT_MAPPED",
+    [ERR_CANT_MAP]              = "ERR_CANT_MAP",
+    [ERR_BAD_MEMORY]            = "ERR_BAD_MEMORY",
 };
 
 #endif /* !_POSEIDON_STATUS_H_ */
