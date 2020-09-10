@@ -182,6 +182,7 @@ vmm_unmap(
 ** Test if the given buffer is mapped and belongs to user-space.
 **
 ** `OK` is returned if it is both mapped and belongs to user-space.
+** Otherwise, `ERR_PERMISSION_DENIED` is returned.
 */
 status_t
 vmm_validate_user_buffer(
@@ -191,12 +192,12 @@ vmm_validate_user_buffer(
     uchar const *buff_start;
     uchar const *buff_end;
 
-    buff_start = (uchar const *)ROUND_DOWN((uintptr)buffer, PAGE_SIZE);
-    buff_end = (uchar const *)ROUND_DOWN((uintptr)buffer + len, PAGE_SIZE);
+    buff_start = ROUND_DOWN(buffer, PAGE_SIZE);
+    buff_end = ROUND_DOWN((uchar const *)buffer + len, PAGE_SIZE);
 
     do {
         if (!vmm_is_mapped_user(buff_start)) {
-            return (ERR_BAD_MEMORY);
+            return (ERR_PERMISSION_DENIED);
         }
         buff_start += PAGE_SIZE;
     } while (buff_start <= buff_end);
@@ -208,7 +209,9 @@ vmm_validate_user_buffer(
 ** Calculate the length of the given string while also ensuring it is mapped and
 ** belongs to userspace.
 **
-** True is returned if it is both mapped and belongs to user-space.
+** `OK` is returned if it is both mapped and belongs to user-space.
+** Otherwise, `ERR_PERMISSION_DENIED` is returned.
+**
 ** The length of `str` is stored in `len` unless `len` is NULL.
 */
 status_t
@@ -216,17 +219,17 @@ vmm_validate_user_str(
     char const *str,
     size_t *len
 ) {
-    char *str_align;
+    char const *str_align;
     char const *str_start;
 
     str_start = str;
-    str_align = (void *)ROUND_DOWN((uintptr)str, PAGE_SIZE);
+    str_align = ROUND_DOWN(str, PAGE_SIZE);
 
     /* Iterate page by page and then char by char */
 
     while (true) {
         if (!vmm_is_mapped_user(str_align)) {
-            return (ERR_BAD_MEMORY);
+            return (ERR_PERMISSION_DENIED);
         }
 
         while (str < str_align + PAGE_SIZE) {

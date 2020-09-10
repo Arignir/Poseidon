@@ -172,6 +172,6 @@ void    panic(char const *fmt, ...) __noreturn;
 **
 ** `y` must be a power of two and the return value has the same type than `x`.
 */
-# define ROUND_DOWN(x, y)	((typeof(x))((uintptr)(x) & ~((y) - 1)))
+# define ROUND_DOWN(x, y)   ((typeof(x))((uintptr)(x) & ~((y) - 1)))
 
 #endif /* !_POSEIDON_POSEIDON_H_ */
