@@ -20,14 +20,15 @@
 /*
 ** Arch-indepentant flags for mmap
 **
-** NOTE: The read-only portion of MMAP_RDEXEC is on a best-effort basis.
-** Some old architectures do not support the W^X pattern.
+** NOTE: Those flags are on a best-effort basis.
+** For example, some old architectures do not support the NX bit.
 */
-# define MMAP_KERNEL        0b00000000      // Page belongs to kernel space
-# define MMAP_USER          0b00000001      // Page belongs to user space
-# define MMAP_RDONLY        0b00000010      // Page is only readable
-# define MMAP_RDEXEC        0b00000100      // Page is executable, read-only
-# define MMAP_RDWR          0b00001000      // Page is readable and writable
+# define MMAP_KERNEL        0b00000000      // Page belongs to kernel space. Contradicts `MMAP_USER`.
+# define MMAP_USER          0b00000001      // Page belongs to user space. Contradicts `MMAP_KERNEL`.
+# define MMAP_RDONLY        0b00000000      // Page is only readable. Contradicts `MMAP_RDWR`.
+# define MMAP_RDWR          0b00000010      // Page is readable and writable. Contradicts `MMAP_RDONLY`.
+# define MMAP_EXEC          0b00000100      // Page is executable.
+                                            // Can be used with both `MMAP_RDONLY` and `MMAP_RDWR`.
 
 /* The integer type matching the above flags. */
 typedef uint mmap_flags_t;

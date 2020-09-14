@@ -27,7 +27,6 @@ static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)]
         [7] = "mce",
         [8] = "cx8",
         [9] = "apic",
-        [10] = NULL,
         [11] = "sep",
         [12] = "mtrr",
         [13] = "pge",
@@ -37,7 +36,6 @@ static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)]
         [17] = "pse36",
         [18] = "psn",
         [19] = "clflush",
-        [20] = NULL,
         [21] = "ds",
         [22] = "acpi",
         [23] = "mmx",
@@ -47,7 +45,6 @@ static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)]
         [27] = "ss",
         [28] = "htt",
         [29] = "tm",
-        [30] = NULL,
         [31] = "bpe",
     },
     // ECX when CPUID.EAX=0x1
@@ -68,7 +65,6 @@ static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)]
         [13] = "cmpxchg16b",
         [14] = "xtpr",
         [15] = "pdcm",
-        [16] = NULL,
         [17] = "pcid",
         [18] = "dca",
         [19] = "sse4_1",
@@ -83,7 +79,6 @@ static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)]
         [28] = "avx",
         [29] = "f16c",
         [30] = "rdrand",
-        [31] = NULL,
     },
     // EBX when CPUID.EAX=0x7 and ECX=0
     [2] = {
@@ -103,57 +98,36 @@ static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)]
         [13] = "fpu_cs_ds_depr",
         [14] = "mpx",
         [15] = "rdt_a",
-        [16] = NULL,
-        [17] = NULL,
         [18] = "rdseed",
         [19] = "adx",
         [20] = "smap",
-        [21] = NULL,
-        [22] = NULL,
         [23] = "clflushopt",
         [24] = "clwb",
         [25] = "intel_pt",
-        [26] = NULL,
-        [27] = NULL,
-        [28] = NULL,
         [29] = "sha",
-        [30] = NULL,
-        [31] = NULL,
     },
-    // EBX when CPUID.EAX=0x7 and ECX=0
+    // ECX when CPUID.EAX=0x7 and ECX=0
     [3] = {
         [0] = "prefetchwt1",
-        [1] = NULL,
         [2] = "umip",
         [3] = "pku",
         [4] = "ospke",
-        [5] = NULL,
-        [6] = NULL,
-        [7] = NULL,
-        [8] = NULL,
-        [9] = NULL,
-        [10] = NULL,
-        [11] = NULL,
-        [12] = NULL,
-        [13] = NULL,
-        [14] = NULL,
-        [15] = NULL,
-        [16] = NULL,
-        [17] = NULL, //
-        [18] = NULL, //
-        [19] = NULL, // The value of MAWAU isn't a flag.
-        [20] = NULL, //
-        [21] = NULL, //
         [22] = "rdpid",
-        [23] = NULL,
-        [24] = NULL,
-        [25] = NULL,
-        [26] = NULL,
-        [27] = NULL,
-        [28] = NULL,
-        [29] = NULL,
         [30] = "sgx_lc",
-        [31] = NULL,
+    },
+    // ECX when CPUID.EAX=0x80000001
+    [4] = {
+        [0] = "lahf_lm",
+        [5] = "lzcnt",
+        [8] = "3dnowprefetch",
+    },
+    // EDX when CPUID.EAX=0x80000001
+    [5] = {
+        [11] = "syscall",
+        [20] = "nx",
+        [26] = "pdpe1gb",
+        [27] = "rdtscp",
+        [29] = "lm",
     },
 };
 
@@ -164,8 +138,10 @@ load_cpuid_features(void)
 
     uint32 *vendor_id = (uint32 *)cpu_features.vendor_id;
 
-    // Load the vendor string, using the CPUID instruction with EAX=0,
-    // into EBX, EDX and ECX.
+    /*
+    ** Load the vendor string, using the CPUID instruction with EAX=0,
+    ** into EBX, EDX and ECX.
+    */
     asm volatile(
         "cpuid"
         :
@@ -241,7 +217,6 @@ load_cpuid_features(void)
             : "a"(0x7), "c"(0x0)
             : "edx"
         );
-
     }
 
     // Load the maximum input value for extended function CPUID information.
@@ -251,6 +226,23 @@ load_cpuid_features(void)
         : "a"(0x80000000)
         : "ebx", "ecx", "edx"
     );
+
+    /*
+    ** Load CPUID.EAX=0x80000001,
+    ** This returns:
+    **   * An extended list of some features the CPU support in ECX
+    **   * An extended list of some features the CPU support in EDX
+    */
+    if (cpu_features.max_extended_cpuid >= 0x80000001) {
+        asm volatile(
+            "cpuid"
+            :
+                "=c"(cpu_features.features.value_8xx1_ecx),
+                "=d"(cpu_features.features.value_8xx1_edx)
+            : "a"(0x80000001)
+            : "ebx"
+        );
+    }
 
     // Load the brand information string, using multiple CPUID calls.
     if (cpu_features.max_extended_cpuid >= 0x80000004) {

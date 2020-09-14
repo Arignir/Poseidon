@@ -15,6 +15,7 @@
 #include <poseidon/memory/pmm.h>
 #include <arch/x86_64/interrupt.h>
 #include <arch/x86_64/cpuid.h>
+#include <arch/x86_64/msr.h>
 #include <lib/log.h>
 
 /*
@@ -31,6 +32,11 @@ setup_cpu(void)
 
     logln("Dumping CPUID:");
     dump_cpuid();
+
+    // Enable NX
+    if (cpu_features.features.nx) {
+        msr_or(MSR_IA32_EFER, 1 << 11);   // Execute Disable Bit Enable
+    }
 
     return (OK);
 }

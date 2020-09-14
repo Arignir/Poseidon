@@ -174,19 +174,43 @@ struct cpuid {
             size_t : 7;
             size_t sgx_lc: 1;           // SGX Launch Configuration
             size_t : 1;
+
+            // ECX when CPUID.EAX=0x80000001
+            size_t lahf_lm: 1;          // LAHF/SAHF available in 64-bit mode.
+            size_t : 4;
+            size_t lzcnt: 1;            // LZCNT instruction (count the number of leading zero bits)
+            size_t : 2;
+            size_t prefetchw: 1;        // Prefetchw instruction
+            size_t : 23;
+
+            // EDX when CPUID.EAX=0x80000001
+            size_t : 11;
+            size_t syscall: 1;          // SYSCALL/SYSRET instructions
+            size_t : 8;
+            size_t nx: 1;               // Execute Disable Bit Available
+            size_t : 5;
+            size_t pdpe1gb: 1;          // 1GB pages
+            size_t rdtscp: 1;           // RDTSCP and IA32_TSC_AUX
+            size_t : 1;
+            size_t lm: 1;               // Long mode is available
+            size_t : 2;
         } __packed;
+
         struct {
             uint32 value_1_edx;     // The value of EDX when CPUID.EAX=0x1
             uint32 value_1_ecx;     // The value of ECX when CPUID.EAX=0x1
             uint32 value_7_0_ebx;   // The value of EBX when CPUID.EAX=0x7 and ECX=0
             uint32 value_7_0_ecx;   // The value of ECX when CPUID.EAX=0x7 and ECX=0
+
+            uint32 value_8xx1_ecx;  // The value of ECX when CPUID.EAX=0x80000001
+            uint32 value_8xx1_edx;  // The value of EDX when CPUID.EAX=0x80000001
         } __packed;
-        uint32 raw[4];
+        uint32 raw[6];
     } __packed features;
 };
 
 static_assert(sizeof(((struct cpuid *)NULL)->version) == sizeof(uint32));
-static_assert(sizeof(((struct cpuid *)NULL)->features) == 4 * sizeof(uint32));
+static_assert(sizeof(((struct cpuid *)NULL)->features) == 6 * sizeof(uint32));
 
 extern struct cpuid cpu_features;
 

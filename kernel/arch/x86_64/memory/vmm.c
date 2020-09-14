@@ -22,7 +22,7 @@
 /*
 ** Return the address of the current PML4.
 **
-** This function takes advantages of recursive mapping.
+** This function takes advantage of recursive mapping.
 */
 static inline
 struct pml4 *
@@ -34,7 +34,7 @@ get_pml4(void)
 /*
 ** Return the address of the page-directory-pointer-table mapping the address `val`.
 **
-** This takes advantages of recursive mapping.
+** This takes advantage of recursive mapping.
 */
 static inline
 struct pdpt *
@@ -47,7 +47,7 @@ get_pdpt_of(
 /*
 ** Return the address of the page-directory mapping the address `val`.
 **
-** This takes advantages of recursive mapping.
+** This takes advantage of recursive mapping.
 */
 static inline
 struct page_directory *
@@ -60,7 +60,7 @@ get_pd_of(
 /*
 ** Return the address of the page table mapping the address `val`.
 **
-** This takes advantages of recursive mapping.
+** This takes advantage of recursive mapping.
 */
 static inline
 struct page_table *
@@ -154,7 +154,7 @@ vmm_is_mapped_user(
 **   * The virtual address needs to be page-aligned.
 **   * The physical address needs to be page-aligned.
 **   * Any PML4E, PDPTE or PDE added mid-way will have the most flexible permissions
-**     (User+RDWR), giving the requested permissions only to the final page table
+**     (URWX), giving the requested permissions only to the final page table
 **     entry.
 */
 status_t
@@ -238,7 +238,11 @@ vmm_map_frame(
     pte->present = true;
     pte->rw = (bool)(flags & MMAP_RDWR);
     pte->user = (bool)(flags & MMAP_USER);
-    // TODO: Set the `xd` flag if MMAP_RDEXEC and if `IA32_EFER.NXE = 1`
+
+    // If NX is available
+    if (cpu_features.features.nx) {
+        pte->xd = !(bool)(flags & MMAP_EXEC);
+    }
 
     tlb_invalidate_page(va);
 
