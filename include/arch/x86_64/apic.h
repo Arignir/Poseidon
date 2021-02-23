@@ -82,12 +82,14 @@ enum apic_timer_mode
     APIC_TIMER_PERIODIC     = 1 << 17,
 };
 
+struct cpu;
+struct iframe;
+
 void    apic_init(void);
 void    apic_eoi(void);
 void    apic_map(physaddr_t pa);
 uint32  apic_get_id(void);
-
-struct iframe;
+status_t apic_start_ap(struct cpu *ap, uintptr addr);
 
 void    apic_timer_ihandler(void);
 void    apic_error_ihandler(void);

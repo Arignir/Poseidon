@@ -23,6 +23,10 @@ export ELF		:= $(TARGET_DIR)/kernel/$(NAME).elf
 # Do not print "Entering directory ..."
 MAKEFLAGS		+= --no-print-directory
 
+# Number of cores to emulate (QEMU)
+export SMP		?= 1
+
+
 .PHONY:	all
 all:	iso
 
@@ -55,27 +59,23 @@ $(ISO):	$(ELF)
 
 .PHONY:	run
 run:	iso
-	$(Q)./scripts/run.sh "$(ISO)"
+	$(Q)./scripts/run.sh -s $(SMP) "$(ISO)"
 
 .PHONY: monitor
 monitor: iso
-	$(Q)./scripts/run.sh -t "$(ISO)"
+	$(Q)./scripts/run.sh -s $(SMP) -t "$(ISO)"
 
 .PHONY: debug
 debug: iso
-	$(Q)./scripts/run.sh -d "$(ISO)"
+	$(Q)./scripts/run.sh -s $(SMP) -d "$(ISO)"
 
 .PHONY: gdb
 gdb: iso
-	$(Q)./scripts/run.sh -g "$(ISO)"
+	$(Q)./scripts/run.sh -s $(SMP) -g "$(ISO)"
 
 .PHONY: kvm
 kvm: iso
-	$(Q)./scripts/run.sh -k "$(ISO)"
-
-.PHONY: kvm_monitor
-kvm_monitor: iso
-	$(Q)./scripts/run.sh -t "$(ISO)"
+	$(Q)./scripts/run.sh -s $(SMP) -k "$(ISO)"
 
 .PHONY: clean
 clean:

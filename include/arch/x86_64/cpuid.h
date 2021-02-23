@@ -211,9 +211,7 @@ struct cpuid {
 static_assert(sizeof(((struct cpuid *)NULL)->version) == sizeof(uint32));
 static_assert(sizeof(((struct cpuid *)NULL)->features) == 6 * sizeof(uint32));
 
-extern struct cpuid cpu_features;
-
-void        cpuid_load(void);
-void        cpuid_dump(void);
+void        cpuid_load(struct cpuid *);
+void        cpuid_dump(struct cpuid *);
 
 #endif /* !_ARCH_X86_64_CPUID_H_ */

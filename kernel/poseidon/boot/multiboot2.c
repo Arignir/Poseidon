@@ -98,21 +98,21 @@ multiboot_load(void)
     {
         switch (tag->type)
         {
-        case MULTIBOOT_TAG_TYPE_CMDLINE:
-            mb_cmdline = (struct multiboot_tag_string const *)tag;
-            break;
-        case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
-            mb_bootloader = (struct multiboot_tag_string const *)tag;
-            break;
-        case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-            mb_meminfo = (struct multiboot_tag_basic_meminfo const *)tag;
-            break;
-        case MULTIBOOT_TAG_TYPE_MMAP:
-            mb_mmap = (struct multiboot_tag_mmap const *)tag;
-            break;
-        case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
-            mb_fb = (struct multiboot_tag_framebuffer const *)tag;
-            break;
+            case MULTIBOOT_TAG_TYPE_CMDLINE:
+                mb_cmdline = (struct multiboot_tag_string const *)tag;
+                break;
+            case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
+                mb_bootloader = (struct multiboot_tag_string const *)tag;
+                break;
+            case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
+                mb_meminfo = (struct multiboot_tag_basic_meminfo const *)tag;
+                break;
+            case MULTIBOOT_TAG_TYPE_MMAP:
+                mb_mmap = (struct multiboot_tag_mmap const *)tag;
+                break;
+            case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
+                mb_fb = (struct multiboot_tag_framebuffer const *)tag;
+                break;
         }
 
         // Each tag is aligned on the next 8-byte boundary.

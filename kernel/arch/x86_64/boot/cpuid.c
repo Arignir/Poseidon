@@ -12,9 +12,7 @@
 #include <lib/string.h>
 #include <lib/log.h>
 
-struct cpuid cpu_features;
-
-static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)][32] = {
+static char const * const features_name[ARRAY_LENGTH(((struct cpuid *)NULL)->features.raw)][32] = {
     // EDX when CPUID.EAX=0x1
     [0] = {
         [0] = "fpu",
@@ -131,12 +129,19 @@ static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)]
     },
 };
 
+/*
+** Use the `cpuid` instructio to discover the features available to the currently
+** running CPU.
+**
+** Results are stored in `features`.
+*/
 void
-cpuid_load(void)
-{
-    memset(&cpu_features, 0, sizeof(cpu_features));
+cpuid_load(
+    struct cpuid *cpuid
+) {
+    memset(cpuid, 0, sizeof(*cpuid));
 
-    uint32 *vendor_id = (uint32 *)cpu_features.vendor_id;
+    uint32 *vendor_id = (uint32 *)cpuid->vendor_id;
 
     /*
     ** Load the vendor string, using the CPUID instruction with EAX=0,
@@ -145,7 +150,7 @@ cpuid_load(void)
     asm volatile(
         "cpuid"
         :
-            "=a"(cpu_features.max_cpuid),
+            "=a"(cpuid->max_cpuid),
             "=b"(*vendor_id),
             "=d"(*(vendor_id + 1)),
             "=c"(*(vendor_id + 2))
@@ -161,16 +166,16 @@ cpuid_load(void)
     **   * A list of some features the CPU support in ECX
     **   * A list of some features the CPU support in EDX
     */
-    if (cpu_features.max_cpuid >= 0x1) {
+    if (cpuid->max_cpuid >= 0x1) {
         uint32 ebx;
 
         asm volatile(
             "cpuid"
             :
-                "=a"(cpu_features.version.raw),
+                "=a"(cpuid->version.raw),
                 "=b"(ebx),
-                "=c"(cpu_features.features.value_1_ecx),
-                "=d"(cpu_features.features.value_1_edx)
+                "=c"(cpuid->features.value_1_ecx),
+                "=d"(cpuid->features.value_1_edx)
             : "a"(0x1)
             :
         );
@@ -179,14 +184,14 @@ cpuid_load(void)
         ** Calculate the display model and family ID, according to the Intel
         ** specification.
         */
-        cpu_features.display_family = cpu_features.version.family_id;
-        if (cpu_features.version.family_id == 0xF) {
-            cpu_features.display_family += cpu_features.version.extended_family_id;
+        cpuid->display_family = cpuid->version.family_id;
+        if (cpuid->version.family_id == 0xF) {
+            cpuid->display_family += cpuid->version.extended_family_id;
         }
 
-        cpu_features.display_model = cpu_features.version.model_id;
-        if (cpu_features.version.family_id == 0x6 || cpu_features.version.family_id == 0xF) {
-            cpu_features.display_model += (cpu_features.version.extended_model_id << 4);
+        cpuid->display_model = cpuid->version.model_id;
+        if (cpuid->version.family_id == 0x6 || cpuid->version.family_id == 0xF) {
+            cpuid->display_model += (cpuid->version.extended_model_id << 4);
         }
 
         /*
@@ -196,10 +201,10 @@ cpuid_load(void)
         ** cannot really be unified under a common name.
         */
 
-        cpu_features.brand_idx = ebx & 0xF;
-        cpu_features.clflush_size = ((ebx >> 8) & 0xF) * 8;
-        cpu_features.max_logical_cpu = (ebx >> 16) & 0xF;
-        cpu_features.initial_apic_id = (ebx >> 24) & 0xF;
+        cpuid->brand_idx = ebx & 0xF;
+        cpuid->clflush_size = ((ebx >> 8) & 0xF) * 8;
+        cpuid->max_logical_cpu = (ebx >> 16) & 0xF;
+        cpuid->initial_apic_id = (ebx >> 24) & 0xF;
     }
 
     /*
@@ -208,12 +213,12 @@ cpuid_load(void)
     **   * A list of some features the CPU support in EBX
     **   * A list of some features the CPU support in ECX
     */
-    if (cpu_features.max_cpuid >= 0x7) {
+    if (cpuid->max_cpuid >= 0x7) {
         asm volatile(
             "cpuid"
             :
-                "=b"(cpu_features.features.value_7_0_ebx),
-                "=c"(cpu_features.features.value_7_0_ecx)
+                "=b"(cpuid->features.value_7_0_ebx),
+                "=c"(cpuid->features.value_7_0_ecx)
             : "a"(0x7), "c"(0x0)
             : "edx"
         );
@@ -222,7 +227,7 @@ cpuid_load(void)
     // Load the maximum input value for extended function CPUID information.
     asm volatile(
         "cpuid"
-        : "=a"(cpu_features.max_extended_cpuid)
+        : "=a"(cpuid->max_extended_cpuid)
         : "a"(0x80000000)
         : "ebx", "ecx", "edx"
     );
@@ -233,20 +238,20 @@ cpuid_load(void)
     **   * An extended list of some features the CPU support in ECX
     **   * An extended list of some features the CPU support in EDX
     */
-    if (cpu_features.max_extended_cpuid >= 0x80000001) {
+    if (cpuid->max_extended_cpuid >= 0x80000001) {
         asm volatile(
             "cpuid"
             :
-                "=c"(cpu_features.features.value_8xx1_ecx),
-                "=d"(cpu_features.features.value_8xx1_edx)
+                "=c"(cpuid->features.value_8xx1_ecx),
+                "=d"(cpuid->features.value_8xx1_edx)
             : "a"(0x80000001)
             : "ebx"
         );
     }
 
     // Load the brand information string, using multiple CPUID calls.
-    if (cpu_features.max_extended_cpuid >= 0x80000004) {
-        uint32 *brand = (uint32 *)cpu_features.brand;
+    if (cpuid->max_extended_cpuid >= 0x80000004) {
+        uint32 *brand = (uint32 *)cpuid->brand;
 
         for (uint i = 0; i < 3; ++i) {
             asm volatile(
@@ -263,7 +268,7 @@ cpuid_load(void)
     }
 
     // Find the maximum physical address number
-    if (cpu_features.max_extended_cpuid >= 0x80000008) {
+    if (cpuid->max_extended_cpuid >= 0x80000008) {
         uint8 eax[4];
         asm volatile(
             "cpuid"
@@ -272,19 +277,19 @@ cpuid_load(void)
             : "a"(0x80000008)
             : "ebx", "ecx", "edx"
         );
-        cpu_features.maxphyaddr = eax[0];
-        cpu_features.maxvirtaddr = eax[1];
+        cpuid->maxphyaddr = eax[0];
+        cpuid->maxvirtaddr = eax[1];
     } else {
         /*
         ** The intel spec gives default values if CPUID function 0x80000008
         ** isn't supported.
         */
-        if (cpu_features.features.pae) {
-            cpu_features.maxphyaddr = 48;
+        if (cpuid->features.pae) {
+            cpuid->maxphyaddr = 48;
         } else {
-            cpu_features.maxphyaddr = 32;
+            cpuid->maxphyaddr = 32;
         }
-        cpu_features.maxvirtaddr = 32;
+        cpuid->maxvirtaddr = 32;
     }
 }
 
@@ -293,26 +298,27 @@ cpuid_load(void)
 ** user-readable fashion.
 */
 void
-cpuid_dump(void)
-{
-    logln("vendor_id        | %s", cpu_features.vendor_id);
-    logln("family           | %i", cpu_features.display_family);
-    logln("model            | %i", cpu_features.display_model);
-    logln("model name       | %s", cpu_features.brand);
-    logln("stepping         | %i", cpu_features.version.stepping_id);
-    logln("clflush size     | %i", cpu_features.clflush_size);
+cpuid_dump(
+    struct cpuid *cpuid
+) {
+    logln("vendor_id        | %s", cpuid->vendor_id);
+    logln("family           | %i", cpuid->display_family);
+    logln("model            | %i", cpuid->display_model);
+    logln("model name       | %s", cpuid->brand);
+    logln("stepping         | %i", cpuid->version.stepping_id);
+    logln("clflush size     | %i", cpuid->clflush_size);
     logln(
         "address size     | %i bits physical, %i bits virtual",
-        cpu_features.maxphyaddr,
-        cpu_features.maxvirtaddr
+        cpuid->maxphyaddr,
+        cpuid->maxvirtaddr
     );
 
     log("flag             |");
-    for (uint i = 0; i < ARRAY_LENGTH(cpu_features.features.raw); ++i) {
+    for (uint i = 0; i < ARRAY_LENGTH(cpuid->features.raw); ++i) {
         for (uint j = 0; j < 32; ++j) {
             char const *feature_name = features_name[i][j];
             if (feature_name) { // feature_name is NULL for reserved bytes
-                if ((cpu_features.features.raw[i] >> j & 0x1)) {
+                if ((cpuid->features.raw[i] >> j & 0x1)) {
                     log(" %s", feature_name);
                 }
             }

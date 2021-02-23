@@ -36,6 +36,7 @@ kmain(void)
     status_t s;
 
     logln("Poseidon is initializing...");
+    logln("");
 
     /* Trigger all init hooks, panic if one failed. */
     hook = find_next_init_hook(NULL, __INIT_LEVEL_EARLIEST);
@@ -51,6 +52,7 @@ kmain(void)
         hook = find_next_init_hook(hook, hook->level);
     }
 
+    logln("");
     logln("Poseidon finished its initialization!");
 
     enable_interrupts();
