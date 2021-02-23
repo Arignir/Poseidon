@@ -21,6 +21,9 @@
 ** targeted architecture.
 */
 
+/* Enable Symmetric MultiProcessing */
+# define KCONFIG_SMP                            1
+
 /* Use a multiboot-compliant bootloader to set-up graphic mode. */
 # define KCONFIG_MULTIBOOT_FRAMEBUFFER          0
 

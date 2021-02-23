@@ -10,7 +10,9 @@
 ldir	:= $(GET_LOCAL_DIR)
 
 objs-y	+= $(addprefix $(ldir), \
+		apic.o \
 		handler_bootstrap.o \
 		idt.o \
 		interrupt.o \
+		ioapic.o \
 	)

@@ -17,7 +17,6 @@
 **   https://pdos.csail.mit.edu/6.828/2008/readings/hardware/8259A.pdf
 */
 
-#include <poseidon/boot/init_hook.h>
 #include <arch/x86_64/io.h>
 #include <arch/x86_64/interrupt.h>
 
@@ -106,6 +105,7 @@ pic8259_set_irq_mask(ushort mask)
     pic_mask = mask;
 
     io_port_out8_offset(master, DATA, pic_mask & 0xFF);
+    io_port_wait();
     io_port_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
 }
 
@@ -117,6 +117,7 @@ pic8259_master_eoi(void)
 {
     // Send an OCW2 with EOI = 1.
     io_port_out8_offset(master, CMD, 0b00100000);
+    io_port_wait();
 }
 
 /*
@@ -130,7 +131,10 @@ pic8259_slave_eoi(void)
 }
 
 /*
-** Initialize the PIC.
+** Initialize the obsolete 8259A PIC and entierely mask it.
+**
+** We also remap the IRQs in case of a suprious interrupt, which can
+** still be fired even if the PIC is entierely masked.
 **
 ** This function does not use the init hook system because it is required at
 ** a very specific moment.
@@ -146,7 +150,7 @@ pic8259_init(void)
     ** etc. They are 8 bits long.
     **
     ** The following few chunks of documentation explain the ICW for both
-    ** the MCS-80/85 and i386 architecture, but we are only interested in
+    ** the MCS-80/85 and i386 architecture, but we are only interested in the
     ** i386 side of it.
     **
     ** On i386, A5-A10 and ADI are ignored and the Interrupt Vector Address
@@ -237,7 +241,7 @@ pic8259_init(void)
     **     0 = MCS-80
     **     1 = 8086
     */
-    uchar icw4 = 0b00000001;
+    uchar icw4 = 0b00000011; // Automatic EOI, 8086 mode, non-buffered.
 
     io_port_out8_offset(master, DATA, icw4);
     io_port_wait();
@@ -245,10 +249,8 @@ pic8259_init(void)
     io_port_out8_offset(slave, DATA, icw4);
     io_port_wait();
 
-    // Unmask all IRQs
-    pic8259_set_irq_mask(0);
+    // Mask all IRQs
+    pic8259_set_irq_mask(0xFFFF);
 
     return (OK);
 }
-
-REGISTER_INIT_HOOK(pic8259, &pic8259_init, INIT_LEVEL_ARCH);

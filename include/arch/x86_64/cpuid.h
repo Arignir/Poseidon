@@ -7,7 +7,6 @@
 **
 \******************************************************************************/
 
-
 #ifndef _ARCH_X86_64_CPUID_H_
 # define _ARCH_X86_64_CPUID_H_
 
@@ -214,8 +213,7 @@ static_assert(sizeof(((struct cpuid *)NULL)->features) == 6 * sizeof(uint32));
 
 extern struct cpuid cpu_features;
 
-bool        detect_cpuid(void);
-void        load_cpuid_features(void);
-void        dump_cpuid(void);
+void        cpuid_load(void);
+void        cpuid_dump(void);
 
 #endif /* !_ARCH_X86_64_CPUID_H_ */

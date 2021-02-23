@@ -39,7 +39,7 @@ function main() {
             d) qemu_args+=" -d int,cpu_reset,guest_errors,unimp --no-reboot";;
             g) qemu_args+=" -s -S";;
             k) qemu_args+=" --enable-kvm";;
-            t) qemu_args=$(printf "${qemu_args}\n" | sed s/serial/monitor/g);;
+            t) qemu_args=$(printf -- "${qemu_args}\n" | sed s/serial/monitor/g);;
             m) qemu_args+=" -m ${OPTARG}";;
             s) qemu_args+=" -smp ${OPTARG}";;
             h) print_usage;;

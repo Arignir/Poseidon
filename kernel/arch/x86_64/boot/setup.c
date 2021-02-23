@@ -13,25 +13,33 @@
 
 #include <poseidon/boot/init_hook.h>
 #include <poseidon/memory/pmm.h>
+#include <platform/pc/pic/pic8259.h>
 #include <arch/x86_64/interrupt.h>
 #include <arch/x86_64/cpuid.h>
+#include <arch/x86_64/ioapic.h>
+#include <arch/x86_64/apic.h>
 #include <arch/x86_64/msr.h>
 #include <lib/log.h>
 
 /*
-** Continue the initialisation of the CPU.
+** Continue the early initialisation of the CPU.
 */
 __boot_text
 static
 status_t
-setup_cpu(void)
+early_setup(void)
 {
     setup_idt();
 
-    load_cpuid_features();
+    cpuid_load();
 
     logln("Dumping CPUID:");
-    dump_cpuid();
+    cpuid_dump();
+
+    // Test if the APIC is supported & availalbe
+    if (!cpu_features.features.apic) {
+        panic("Your CPU doesn't contain an APIC");
+    }
 
     // Enable NX
     if (cpu_features.features.nx) {
@@ -41,7 +49,28 @@ setup_cpu(void)
     return (OK);
 }
 
-REGISTER_INIT_HOOK(setup_cpu, &setup_cpu, INIT_LEVEL_ARCH_EARLY);
+REGISTER_INIT_HOOK(early_setup, &early_setup, INIT_LEVEL_ARCH_EARLY);
+
+/*
+** Continue the initialisation of the CPU.
+*/
+__boot_text
+static
+status_t
+setup(void)
+{
+
+    ioapic_map(IOAPIC_BASE_ADDR);
+    apic_map(APIC_BASE_ADDR);
+
+    pic8259_init();
+    ioapic_init();
+    apic_init();
+
+    return (OK);
+}
+
+REGISTER_INIT_HOOK(setup, &setup, INIT_LEVEL_ARCH);
 
 /*
 ** On PC, the first mega-byte of physical memory is usually used by hardware,

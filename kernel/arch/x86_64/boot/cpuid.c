@@ -132,7 +132,7 @@ static char const * const features_name[ARRAY_LENGTH(cpu_features.features.raw)]
 };
 
 void
-load_cpuid_features(void)
+cpuid_load(void)
 {
     memset(&cpu_features, 0, sizeof(cpu_features));
 
@@ -289,11 +289,11 @@ load_cpuid_features(void)
 }
 
 /*
-** Dump the findings of the `load_cpuid_features()` to the console in a
+** Dump the findings of the `cpuid_load()` to the console in a
 ** user-readable fashion.
 */
 void
-dump_cpuid(void)
+cpuid_dump(void)
 {
     logln("vendor_id        | %s", cpu_features.vendor_id);
     logln("family           | %i", cpu_features.display_family);
