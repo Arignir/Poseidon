@@ -36,9 +36,9 @@ enum status
     ERR_INTERRUPTED,        // Operation got interrupted
 
     /* Parameters errors */
-    ERR_INVALID_ARGS,       // Invaid arguments
+    ERR_INVALID_ARGS,       // Invalid arguments
     ERR_OUT_OF_RANGE,       // One of the argument was outside the valid range for this operation
-    ERR_BAD_HANDLER,        // The operation is missing a handler or callback to call
+    ERR_BAD_HANDLER,        // The operation is missing a valid handler or callback to call
 
     /* State errors */
     ERR_BAD_STATE,          //  Operation couldn't complete because it's current state wouldn't allow the operation to complete
@@ -57,7 +57,6 @@ enum status
     /* Memory-related errors */
     ERR_ALREADY_MAPPED,     // The given virtual address is already mapped
     ERR_NOT_MAPPED,         // The given virtual address is not mapped
-    ERR_CANT_MAP,           // The mapping can't be done (reasons may be arch-dependant)
     ERR_BAD_MEMORY,         // The given virtual buffer is unmapped or currupted
 };
 
@@ -89,7 +88,6 @@ static char const * const status_str[] = {
 
     [ERR_ALREADY_MAPPED]        = "ERR_ALREADY_MAPPED",
     [ERR_NOT_MAPPED]            = "ERR_NOT_MAPPED",
-    [ERR_CANT_MAP]              = "ERR_CANT_MAP",
     [ERR_BAD_MEMORY]            = "ERR_BAD_MEMORY",
 };
 

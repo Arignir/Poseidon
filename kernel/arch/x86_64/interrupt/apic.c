@@ -10,13 +10,27 @@
 #include <arch/x86_64/apic.h>
 #include <arch/x86_64/interrupt.h>
 #include <arch/x86_64/msr.h>
+#include <arch/x86_64/io.h>
+#include <arch/x86_64/rdtsc.h>
 #include <poseidon/poseidon.h>
 #include <poseidon/interrupt.h>
 #include <poseidon/memory/pmm.h>
 #include <poseidon/memory/kheap.h>
+#include <poseidon/status.h>
+#include <poseidon/cpu/cpu.h>
+#include <poseidon/io.h>
 #include <lib/log.h>
 
+# define APIC_INIT_CLOCK_WAIT	300000000ull
+
+NEW_IO_PORT(cmos, 0x70);
+NEW_IO_PORT(cmos_ret, 0x71);
+
 static volatile uchar *apic = NULL;
+
+/* Variable to transmit the AP's new stack when starting up */
+__section(".boot_memory")
+virtaddr_t ap_boot_stack;
 
 /*
 ** Write to a local APIC register
@@ -80,6 +94,52 @@ apic_eoi(void)
 }
 
 /*
+** Send the given IPI to the given local APIC.
+*/
+void
+apic_send_ipi(
+    uint32 dest,
+    uint32 flags
+) {
+    apic_write(APIC_ICR_HIGH, dest << 24u);
+    apic_write(APIC_ICR_LOW, flags);
+}
+
+/*
+** Poll the delivery status bit untill the latest IPI is acknowledged
+** by the destination core, or it timesout.
+**
+** FIXME: We should use fine-grained timeout
+*/
+bool
+apic_ipi_acked(void)
+{
+    size_t timeout;
+    uint32 reg;
+
+    timeout = 100;
+    while (--timeout > 0) {
+        reg = apic_read(APIC_ICR_LOW);
+        if (!(reg & APIC_ICR_PENDING)) {
+            return (true);
+        }
+    }
+    return (false);
+}
+
+/*
+** Waits for a couple of cpu clocks
+*/
+static void
+micro_wait(void)
+{
+    uint64 tsc;
+
+    tsc = rdtsc();
+    while (rdtsc() < tsc + APIC_INIT_CLOCK_WAIT);
+}
+
+/*
 ** Initialize the local APIC.
 */
 void
@@ -124,6 +184,63 @@ apic_init(void)
     msr = msr_read(MSR_IA32_APIC_BASE);
     msr |= (1 << 11u);
     msr_write(MSR_IA32_APIC_BASE, msr);
+}
+
+/*
+** Start the AP with the given apic id and make it jump at the given address.
+**
+** The given parameter `ap` must NOT be locked.
+*/
+status_t
+apic_start_ap(
+    struct cpu *ap,
+    uintptr addr
+) {
+    uint32_t apic_id;
+    ushort *wrv;
+
+    assert((addr & 0xFFF00FFF) == 0);
+
+    /* Allocate stack for the new cpu */
+    ap_boot_stack = kheap_alloc_aligned(PAGE_SIZE * KCONFIG_KERNEL_STACK_SIZE);
+    if (ap_boot_stack == NULL) {
+        return (ERR_OUT_OF_MEMORY);
+    }
+
+    spinrwlock_acquire_write(&ap->lock);
+
+    ap->scheduler_stack = ap_boot_stack;
+    ap_boot_stack = (uchar *)ap_boot_stack + 16 * PAGE_SIZE;
+    ap->scheduler_stack_top = ap_boot_stack;
+
+    apic_id = ap->apic_id;
+
+    spinrwlock_release_write(&ap->lock);
+
+    /*
+    ** MP Specification says that we must initialize CMOS shutdown code to
+    ** 0xA and the warm reset vector (DWORD based at 40:67) to point to the
+    ** AP startup code before doing the universal startup algorithm.
+    */
+    io_out8(cmos, 0xF); // Offset 0xF is shutdown code
+    io_out8(cmos_ret, 0x0A);
+
+    /* Warm reset vector is at fixed address 0x40:0x67 */
+    wrv = (ushort *)(0x40 << 4 | 0x67);
+    wrv[1] = 0;
+    wrv[0] = addr >> 4;
+
+    /* Universal Startup Algorithm */
+
+    apic_send_ipi(apic_id, APIC_ICR_INIT);
+    assert(apic_ipi_acked());
+    micro_wait();
+
+    for (int i = 0; i < 2; ++i) {
+        apic_send_ipi(apic_id, APIC_ICR_STARTUP | (addr >> 12));
+        micro_wait();
+    }
+    return (OK);
 }
 
 /*

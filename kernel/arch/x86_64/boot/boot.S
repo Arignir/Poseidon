@@ -60,8 +60,8 @@ start:
     call enable_paging              // Enable long-mode and paging, leaving
                                     // the CPU in a 32-bit compatiblity mode.
 
-    .extern boot_gdt_fatptr
-    lgdt (boot_gdt_fatptr)          // Load the 64-bit GDT
+    .extern gdt_fatptr
+    lgdt (gdt_fatptr)          // Load the 64-bit GDT
 
     // Transition to 64-bit by reloading the code segment register
     // with the new 64-bit code segment selector
@@ -232,7 +232,8 @@ enable_paging:
 
     mov $0xC0000080, %ecx
     rdmsr                           // Read the EFER MSR
-    or $(1 << 8), %eax              // Set the LM-bit
+    or $(1 <<  8), %eax              // Set the LM-bit
+    or $(1 << 11), %eax              // Set the NX-bit
     wrmsr                           // Update the EFER MSR
 
     mov %cr0, %eax
@@ -278,14 +279,17 @@ boot_panic:
 ** Bootstrap processor's kernel stack
 */
 .align 4096
+.global bsp_kernel_stack_bot
 bsp_kernel_stack_bot:
     .skip KCONFIG_KERNEL_STACK_SIZE
+.global bsp_kernel_stack_top
 bsp_kernel_stack_top:
 
 /*
 ** Boot PML4, used to transition into long mode, before paging is properly initialized
 */
 .align 4096
+.global boot_pml4
 boot_pml4:
     .skip 512 * 8
 

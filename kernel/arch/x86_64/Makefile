@@ -11,5 +11,6 @@ ldir	:= $(GET_LOCAL_DIR)
 
 include	\
 	$(ldir)boot/Makefile \
+	$(ldir)cpu/Makefile \
 	$(ldir)interrupt/Makefile \
 	$(ldir)memory/Makefile \

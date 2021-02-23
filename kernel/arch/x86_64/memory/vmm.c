@@ -238,11 +238,7 @@ vmm_map_frame(
     pte->present = true;
     pte->rw = (bool)(flags & MMAP_RDWR);
     pte->user = (bool)(flags & MMAP_USER);
-
-    // If NX is available
-    if (cpu_features.features.nx) {
-        pte->xd = !(bool)(flags & MMAP_EXEC);
-    }
+    pte->xd = !(bool)(flags & MMAP_EXEC);
 
     tlb_invalidate_page(va);
 

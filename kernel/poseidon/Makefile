@@ -17,4 +17,5 @@ objs-y	+= $(addprefix $(ldir), \
 
 include \
 	$(ldir)boot/Makefile \
+	$(ldir)cpu/Makefile \
 	$(ldir)memory/Makefile \

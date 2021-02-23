@@ -39,8 +39,6 @@ static
 status_t
 memory_init(void)
 {
-    logln("Initializing dynamic memory allocator...");
-
     /*
     ** Initialize the physical memory manager using a reserved area of the binary
     ** (called the boot heap) as a free region of physical memory.
@@ -76,7 +74,7 @@ memory_init(void)
         ALIGN(mb_tag_pa + mb_tag_len, PAGE_SIZE)
     );
 
-    logln("Dynamic memory allocator is initialized.");
+    logln("Dynamic memory allocator initialized.");
 
     return (OK);
 }

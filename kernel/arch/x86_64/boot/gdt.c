@@ -20,9 +20,8 @@
 ** We need one TSS per CPU, so the size of the GDT depends on the maximum
 ** number of supported CPUs.
 */
-__boot_rodata
 __aligned(16)
-struct gdt_segment_descriptor const boot_gdt[] = {
+struct gdt_segment_descriptor const gdt[] = {
     /* 0x00: Null segment selector (required by Intel) */
     NEW_NULL_DESCRIPTOR,
 
@@ -102,7 +101,7 @@ struct gdt_segment_descriptor const boot_gdt[] = {
 */
 __boot_rodata
 __aligned(16)
-struct gdt_fatptr const boot_gdt_fatptr = {
-    .limit = sizeof(boot_gdt) - 1,
-    .base = boot_gdt,
+struct gdt_fatptr const gdt_fatptr = {
+    .limit = sizeof(gdt) - 1,
+    .base = gdt,
 };
