@@ -39,7 +39,7 @@ static
 status_t
 memory_init(void)
 {
-    log("Initializing dynamic memory allocator...");
+    logln("Initializing dynamic memory allocator...");
 
     /*
     ** Initialize the physical memory manager using a reserved area of the binary
@@ -76,7 +76,7 @@ memory_init(void)
         ALIGN(mb_tag_pa + mb_tag_len, PAGE_SIZE)
     );
 
-    logln(" Done!");
+    logln("Dynamic memory allocator is initialized.");
 
     return (OK);
 }

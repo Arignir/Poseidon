@@ -44,6 +44,7 @@ enum interrupt_vector
     INT_SECURITY_EXCEPTION      = 0x1E,
 
     INT_MAX_RESERVED_BY_INTEL   = 0x1F,
+
     INT_IRQ0                    = 0x20,
 
     INT_PIT                     = 0x20,

@@ -19,6 +19,7 @@
 
 #include <poseidon/boot/init_hook.h>
 #include <poseidon/memory/pmm.h>
+#include <poseidon/interrupt.h>
 #include <lib/log.h>
 
 /*
@@ -50,7 +51,13 @@ kmain(void)
         hook = find_next_init_hook(hook, hook->level);
     }
 
-    logln("Poseidon finished its initialization.");
+    logln("Poseidon finished its initialization!");
+
+    enable_interrupts();
+
+    while (42) {
+        halt();
+    }
 
     /* Start init here (WIP) */
 }

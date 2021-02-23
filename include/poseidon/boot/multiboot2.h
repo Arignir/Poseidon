@@ -81,6 +81,20 @@
 
 #include <poseidon/memory/memory.h>
 
+#define MULTIBOOT_MEMORY_AVAILABLE		1
+#define MULTIBOOT_MEMORY_RESERVED		2
+#define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE       3
+#define MULTIBOOT_MEMORY_NVS                    4
+#define MULTIBOOT_MEMORY_BADRAM                 5
+
+static char const * const multiboot_memory_str[] = {
+  [MULTIBOOT_MEMORY_AVAILABLE] = "AVAILABLE",
+  [MULTIBOOT_MEMORY_RESERVED] = "RESERVED",
+  [MULTIBOOT_MEMORY_ACPI_RECLAIMABLE] = "ACPI_RECLAIMABLE",
+  [MULTIBOOT_MEMORY_NVS] = "NVS",
+  [MULTIBOOT_MEMORY_BADRAM] = "BADRAM"
+};
+
 extern struct multiboot_tag_string const *mb_cmdline;
 extern struct multiboot_tag_string const *mb_bootloader;
 extern struct multiboot_tag_basic_meminfo const *mb_meminfo;
@@ -182,11 +196,6 @@ struct multiboot_mmap_entry
 {
   multiboot_uint64_t addr;
   multiboot_uint64_t len;
-#define MULTIBOOT_MEMORY_AVAILABLE		1
-#define MULTIBOOT_MEMORY_RESERVED		2
-#define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE       3
-#define MULTIBOOT_MEMORY_NVS                    4
-#define MULTIBOOT_MEMORY_BADRAM                 5
   multiboot_uint32_t type;
   multiboot_uint32_t zero;
 } __packed;

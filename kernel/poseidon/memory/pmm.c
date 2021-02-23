@@ -24,6 +24,7 @@
 #include <poseidon/memory/kheap.h>
 #include <poseidon/memory/pmm.h>
 #include <lib/string.h>
+#include <lib/log.h>
 
 /*
 ** The arena used early during the boot process, before the PMM can fully be initialized.
@@ -312,12 +313,23 @@ pmm_init(void)
         return (ERR_OUT_OF_MEMORY);
     }
 
+    logln("Memory regions:");
+
     i = 0;
     j = 0;
     while (i < mmap_len) {
         struct multiboot_mmap_entry const *entry;
 
         entry = mb_mmap->entries + i;
+
+        logln(
+            "    %i | 0x%p-0x%p | %s",
+            i,
+            entry->addr,
+            entry->addr + entry->len,
+            multiboot_memory_str[entry->type]
+        );
+
         if (entry->type == MULTIBOOT_MEMORY_AVAILABLE) {
             struct pmm_arena *arena;
 

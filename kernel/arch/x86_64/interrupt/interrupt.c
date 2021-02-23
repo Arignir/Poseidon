@@ -101,14 +101,6 @@ common_int_handler(
                     iframe->int_vector
                 );
             }
-
-            // Reset master/slave PIC if it's in the IRQ range
-            if (iframe->int_vector >= INT_IRQ0 && iframe->int_vector <= INT_IRQ15) {
-                if (iframe->int_vector >= INT_IRQ8) {
-                    pic8259_slave_eoi();
-                }
-                pic8259_master_eoi();
-            }
             break;
     }
 }

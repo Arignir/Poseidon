@@ -251,7 +251,8 @@ format:
             goto format;
         case 'p':
             flags |= PRINTF_SIZE_T;
-            flags |= PRINTF_SHOW_BASE;
+            flags |= PRINTF_LEAD_ZEROS;
+            formatw = sizeof(size_t) * 2 + 2;
             base = 16;
             goto print_unsigned;
         case 'd':

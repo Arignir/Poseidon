@@ -19,7 +19,8 @@
 */
 enum msr_list
 {
-    MSR_IA32_EFER = 0xC0000080,
+    MSR_IA32_APIC_BASE      = 0x1B,
+    MSR_IA32_EFER           = 0xC0000080,
 };
 
 struct msr_ia32_efer
@@ -32,7 +33,8 @@ struct msr_ia32_efer
             size_t : 1;
             size_t ia_32e_active: 1;    // IA-32e mode active
             size_t nx: 1;               // Execute Disable bit enable
-            size_t : 52;
+            size_t : 4;
+            size_t : 16;
         };
         uint64 raw;
     };
