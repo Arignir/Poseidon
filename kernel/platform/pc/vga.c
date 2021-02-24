@@ -199,6 +199,9 @@ vga_putsn(
     return (old_n);
 }
 
+/*
+** Wrap `vga_putsn` to make it logger-compliant.
+*/
 static
 void
 vga_log(
@@ -217,13 +220,18 @@ vga_log(
 status_t
 vga_init(void)
 {
+    // Clear the screen
     vga_set_color(VGA_BLACK, VGA_WHITE);
     vga_clear();
+
+    // Print welcome message
     vga_puts("VGA Enabled:");
     for (int i = 0; i <= 0xF; ++i) {
         vga_set_color(i, i);
         vga_putchar(' ');
     }
+
+    // Prepare the next messages
     vga_set_color(VGA_BLACK, VGA_WHITE);
     vga_putchar('\n');
 
