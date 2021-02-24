@@ -178,7 +178,7 @@ smp_start_aps(void)
         if (cpu == current)
             continue;
 
-        log("Starting cpu n°%zu...", cpu - cpus);
+        log("Starting AP processor %zu ...", cpu - cpus);
 
         if (!apic_start_ap(cpu, TRAMPOLINE_START)) {
             while (42) {

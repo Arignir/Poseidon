@@ -10,5 +10,7 @@
 
 ldir	:= $(GET_LOCAL_DIR)
 
-include \
-	$(ldir)pic/Makefile \
+objs-y	+= $(addprefix $(ldir), \
+		pic8259.o \
+		vga.o \
+	)

@@ -55,7 +55,7 @@ kmain(void)
     logln("");
     logln("Poseidon finished its initialization!");
 
-    enable_interrupts();
+    //enable_interrupts();
 
     while (42) {
         halt();

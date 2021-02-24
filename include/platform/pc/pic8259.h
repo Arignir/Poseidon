@@ -7,8 +7,8 @@
 **
 \******************************************************************************/
 
-#ifndef _PLATFORM_PC_PIC_PIC8259_H_
-# define _PLATFORM_PC_PIC_PIC8259_H_
+#ifndef _PLATFORM_PC_PIC8259_H_
+# define _PLATFORM_PC_PIC8259_H_
 
 # include <poseidon/poseidon.h>
 
@@ -19,5 +19,5 @@ void    pic8259_master_eoi(void);
 void    pic8259_slave_eoi(void);
 void    pic8259_init(void);
 
-#endif /* !_PLATFORM_PC_PIC_PIC8259_H_ */
+#endif /* !_PLATFORM_PC_PIC8259_H_ */
 
