@@ -10,7 +10,7 @@
 #include <arch/x86_64/interrupt.h>
 #include <lib/log.h>
 #include <poseidon/interrupt.h>
-#include <platform/pc/pic/pic8259.h>
+#include <platform/pc/pic8259.h>
 
 static interrupt_handler_t irq_handlers[INT_NB - INT_IRQ0];
 

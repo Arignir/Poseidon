@@ -14,7 +14,7 @@
 #include <poseidon/boot/init_hook.h>
 #include <poseidon/memory/pmm.h>
 #include <poseidon/cpu/cpu.h>
-#include <platform/pc/pic/pic8259.h>
+#include <platform/pc/pic8259.h>
 #include <arch/x86_64/interrupt.h>
 #include <arch/x86_64/cpuid.h>
 #include <arch/x86_64/ioapic.h>

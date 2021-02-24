@@ -35,6 +35,8 @@ enum init_level
     /* An init hook should *not* suscribe to `__INIT_LEVEL_EARLIEST` */
     __INIT_LEVEL_EARLIEST       = 000,
 
+    INIT_LEVEL_BOOT_LOGGER      = 001,
+
     INIT_LEVEL_ARCH_EARLY       = 101,
     INIT_LEVEL_PLATFORM_EARLY   = 201,
     INIT_LEVEL_DRIVER_EARLY     = 301,
