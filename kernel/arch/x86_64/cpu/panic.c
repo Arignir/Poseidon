@@ -8,6 +8,9 @@
 \******************************************************************************/
 
 #include <poseidon/interrupt.h>
+#include <poseidon/cpu/cpu.h>
+#include <arch/x86_64/apic.h>
+#include <arch/x86_64/interrupt.h>
 #include <lib/log.h>
 #include <stdarg.h>
 
@@ -15,12 +18,7 @@
 ** Print an error message and halt the computer.
 **
 ** This function never returns.
-**
-** It may be overwritten by arch-specific code to provide
-** more detailed panic messages with, for example,
-** registers or a dump of the stack.
 */
-__weak
 void
 panic(
     char const *fmt,
@@ -28,7 +26,16 @@ panic(
 ) {
     va_list va;
 
+    /* Disable interruptions */
     disable_interrupts();
+
+    /* Send an IPI to stop all other cores. */
+    apic_send_ipi(
+        0,
+        INT_PANIC | APIC_ICR_FIXED | APIC_ICR_BROADCAST | APIC_ICR_LEVEL
+    );
+
+    apic_ipi_acked();
 
     va_start(va, fmt);
 

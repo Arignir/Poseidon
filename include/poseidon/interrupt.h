@@ -24,12 +24,14 @@
 ** therefore such handlers need to respect some very specific conditions and
 ** limitation.
 */
-typedef void (*interrupt_handler_t)(void);
+typedef void (*interrupt_handler_t)();
 
 bool        interrupts_enabled(void);
 void        enable_interrupts(void);
 void        disable_interrupts(void);
 void        set_interrupts_state(bool state);
+void        push_interrupts_state(bool *save);
+void        pop_interrupts_state(bool const *save);
 void        halt(void);
 void        register_interrupt_handler(uint vector, interrupt_handler_t handler);
 void        unregister_interrupt_handler(uint);

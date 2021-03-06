@@ -155,7 +155,8 @@ static_assert(sizeof(struct gdt_segment_descriptor) == 8);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_fatptr {
+struct gdt_fatptr
+{
     uint16 limit;
     struct gdt_segment_descriptor const *base;
 } __packed;

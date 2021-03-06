@@ -19,3 +19,5 @@ include \
 	$(ldir)boot/Makefile \
 	$(ldir)cpu/Makefile \
 	$(ldir)memory/Makefile \
+	$(ldir)scheduler/Makefile \
+	$(ldir)thread/Makefile \

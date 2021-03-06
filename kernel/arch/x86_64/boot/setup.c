@@ -14,12 +14,14 @@
 #include <poseidon/boot/init_hook.h>
 #include <poseidon/memory/pmm.h>
 #include <poseidon/cpu/cpu.h>
+#include <poseidon/scheduler/scheduler.h>
 #include <platform/pc/pic8259.h>
 #include <arch/x86_64/interrupt.h>
 #include <arch/x86_64/cpuid.h>
 #include <arch/x86_64/ioapic.h>
 #include <arch/x86_64/apic.h>
 #include <arch/x86_64/msr.h>
+#include <arch/x86_64/cpu.h>
 #include <arch/x86_64/smp.h>
 #include <lib/log.h>
 
@@ -31,13 +33,13 @@ static void    common_setup(void);
 __boot_text
 static
 status_t
-early_setup(void)
+bsp_early_setup(void)
 {
     struct cpu *bsp;
 
     bsp = current_cpu_acquire_write();
 
-    setup_idt();
+    idt_setup();
 
     cpuid_load(&bsp->cpuid);
 
@@ -54,7 +56,7 @@ early_setup(void)
     return (OK);
 }
 
-REGISTER_INIT_HOOK(early_setup, &early_setup, INIT_LEVEL_ARCH_EARLY);
+REGISTER_INIT_HOOK(bsp_early_setup, &bsp_early_setup, INIT_LEVEL_ARCH_EARLY);
 
 /*
 ** Continue the initialisation of the bootstrap CPU.
@@ -62,7 +64,7 @@ REGISTER_INIT_HOOK(early_setup, &early_setup, INIT_LEVEL_ARCH_EARLY);
 __boot_text
 static
 status_t
-setup(void)
+bsp_setup(void)
 {
     bool smp_enabled;
 
@@ -81,24 +83,25 @@ setup(void)
         cpus[0].apic_id = apic_get_id();
     }
 
-    cpu_remap_bsp();
-
-    logln("Number of cpus: %u", ncpu);
-
     pic8259_init();
     ioapic_init();
     apic_init();
 
+    cpu_remap_bsp();
+
+    common_setup();
+
 #if KCONFIG_SMP
+    logln("Number of cpus: %u", ncpu);
+
     smp_start_aps();    // Start other processors
 #endif /* KCONFIG_SMP */
 
-    common_setup();
 
     return (OK);
 }
 
-REGISTER_INIT_HOOK(setup, &setup, INIT_LEVEL_ARCH);
+REGISTER_INIT_HOOK(bsp_setup, &bsp_setup, INIT_LEVEL_ARCH);
 
 /*
 ** Continue the early initialisation of the other CPUs.
@@ -116,6 +119,8 @@ ap_setup(void)
     current_cpu_release_write();
 
     common_setup();
+
+    yield();
 }
 
 /*
@@ -127,6 +132,8 @@ void
 common_setup(void)
 {
     struct cpu *cpu;
+
+    idt_load();
 
     cpu = current_cpu_acquire_write();
     cpu->started = true;

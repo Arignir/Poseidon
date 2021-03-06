@@ -61,7 +61,7 @@ enum apic_reg
 # define APIC_ICR_ASSERT        (1 << 14)
 # define APIC_ICR_EDGE          (0 << 15)
 # define APIC_ICR_LEVEL         (1 << 15)
-# define APIC_ICR_BROADCAST     (0x80000)
+# define APIC_ICR_BROADCAST     (0b11 << 18)
 # define APIC_ICR_DELIVERED     (0x1000)
 
 enum apic_timer_speed
@@ -90,8 +90,12 @@ void    apic_eoi(void);
 void    apic_map(physaddr_t pa);
 uint32  apic_get_id(void);
 status_t apic_start_ap(struct cpu *ap, uintptr addr);
+void    apic_send_ipi(uint32 apic_id, uint32 flags);
+bool    apic_ipi_acked(void);
 
 void    apic_timer_ihandler(void);
+void    apic_panic_ihandler(void);
+void    apic_tlb_ihandler(void);
 void    apic_error_ihandler(void);
 void    apic_spurious_ihandler(void);
 

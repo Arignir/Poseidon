@@ -17,7 +17,8 @@
 **
 ** This structure is not exhaustive, feel free to complete it.
 */
-struct cpuid {
+struct cpuid
+{
     uint32 max_cpuid;                   // The max. input value for CPUID
     uint32 max_extended_cpuid;          // The max. input value for extended CPUID
 

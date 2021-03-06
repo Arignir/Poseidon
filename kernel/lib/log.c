@@ -12,9 +12,13 @@
 */
 
 #include <poseidon/poseidon.h>
+#include <lib/sync/spinlock.h>
 #include <lib/format.h>
 #include <lib/log.h>
 #include <stdarg.h>
+
+// Ensure logs aren't scrambled because two cores want to log at the same time
+static struct spinlock lock;
 
 extern struct logger const __start_poseidon_logger[] __weak;
 extern struct logger const __stop_poseidon_logger[] __weak;
@@ -47,7 +51,9 @@ log(
     va_list va;
     va_start(va, fmt);
 
+    spinlock_acquire(&lock);
     format(fmt, va, &log_fmt_callback, NULL);
+    spinlock_release(&lock);
 
     va_end(va);
 }
@@ -63,8 +69,10 @@ logln(
     va_list va;
     va_start(va, fmt);
 
+    spinlock_acquire(&lock);
     format(fmt, va, &log_fmt_callback, NULL);
     log_fmt_callback("\n", 1, NULL);
+    spinlock_release(&lock);
 
     va_end(va);
 }
@@ -78,7 +86,9 @@ vlog(
     char const *fmt,
     va_list va
 ) {
+    spinlock_acquire(&lock);
     format(fmt, va, &log_fmt_callback, NULL);
+    spinlock_release(&lock);
 }
 
 /*
@@ -90,6 +100,8 @@ vlogln(
     char const *fmt,
     va_list va
 ) {
+    spinlock_acquire(&lock);
     format(fmt, va, &log_fmt_callback, NULL);
     log_fmt_callback("\n", 1, NULL);
+    spinlock_release(&lock);
 }

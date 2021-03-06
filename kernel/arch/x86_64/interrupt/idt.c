@@ -17,7 +17,7 @@
 
 __aligned(16)
 static
-struct idt_descriptor idt[INT_NB];
+struct idt_descriptor idt[INT_NB] = { 0 };
 
 /*
 ** The fat pointer describing the IDT.
@@ -37,10 +37,12 @@ struct idt_fatptr const idt_fatptr = {
 **
 ** The table is initialized with a handler for all exceptions. Interrupts'
 ** handler can be added using the kernel's API.
+**
+** The IDT isn't loaded (use `idt_load()` to do so).
 */
 __boot_text
 void
-setup_idt(void)
+idt_setup(void)
 {
     extern uchar isr_bootstraps[];
     extern uint64 isr_bootstrap_len;
@@ -56,10 +58,17 @@ setup_idt(void)
             .segment_selector = KERNEL_CODE_SELECTOR,
         );
     }
+}
 
-    // Load the IDT
+/*
+** Load the IDT
+*/
+__boot_text
+void
+idt_load(void)
+{
     asm volatile(
-        "lidt (%%eax)"
+        "lidt (%%rax)"
         :
         : "a"(&idt_fatptr)
         :

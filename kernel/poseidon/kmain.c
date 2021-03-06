@@ -20,7 +20,18 @@
 #include <poseidon/boot/init_hook.h>
 #include <poseidon/memory/pmm.h>
 #include <poseidon/interrupt.h>
+#include <poseidon/thread/thread.h>
+#include <poseidon/scheduler/scheduler.h>
 #include <lib/log.h>
+
+int
+thread_test(void)
+{
+    logln("In thread_test()");
+    while (42) {
+        halt();
+    }
+}
 
 /*
 ** Trigger all init hooks and execute `init`.
@@ -34,6 +45,7 @@ kmain(void)
 {
     struct init_hook const *hook;
     status_t s;
+    tid_t kthread;
 
     logln("Poseidon is initializing...");
     logln("");
@@ -52,16 +64,18 @@ kmain(void)
         hook = find_next_init_hook(hook, hook->level);
     }
 
+    // Create `kthread`.
+    assert_ok(thread_new(thread_test, &kthread));
+
     logln("");
     logln("Poseidon finished its initialization!");
-
-    //enable_interrupts();
-
-    while (42) {
-        halt();
-    }
+    logln("");
 
     /* Start init here (WIP) */
+
+    yield();
+
+    panic("`kmain()` returned from `yield()`.");
 }
 
 REGISTER_PMM_RESERVED_AREA(kernel, kernel_start, kernel_end);

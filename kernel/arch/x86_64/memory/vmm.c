@@ -14,10 +14,15 @@
 */
 
 #include <arch/x86_64/memory.h>
-#include <arch/x86_64/cpuid.h>
+#include <arch/x86_64/apic.h>
+#include <arch/x86_64/interrupt.h>
 #include <poseidon/memory/pmm.h>
 #include <poseidon/memory/vmm.h>
 #include <lib/string.h>
+#include <lib/sync/spinlock.h>
+
+virtaddr_t tlb_shootdown_target;
+static struct spinlock tlb_shootdown_target_lock;
 
 /*
 ** Return the address of the current PML4.
@@ -73,19 +78,34 @@ get_pt_of(
 /*
 ** Invalidate the TLB cache of the given address.
 **
-** This function should be called each time the mapping is modified.
+** This function also sends an IPI to ask the other cores to do the same.
+** It should be called each time the mapping is modified.
 */
-static
 void
 tlb_invalidate_page(
     virtaddr_t va
 ) {
+    /* Invalidate the page */
     asm volatile(
         "invlpg (%%rax)"
         :
         : "a"(va)
         :
     );
+
+    spinlock_acquire(&tlb_shootdown_target_lock);
+
+    tlb_shootdown_target = va;
+
+    /* Send the IPI to the other cores */
+    apic_send_ipi(
+        0,
+        INT_TLB | APIC_ICR_FIXED | APIC_ICR_BROADCAST | APIC_ICR_LEVEL
+    );
+
+    apic_ipi_acked();
+
+    spinlock_release(&tlb_shootdown_target_lock);
 }
 
 /*

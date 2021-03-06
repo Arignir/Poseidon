@@ -63,6 +63,30 @@ set_interrupts_state(
 }
 
 /*
+** Quite similar to `interrupts_enabled()`, this function
+** stores the current interrupt flag in `*save`.
+*/
+__weak
+void
+push_interrupts_state(
+    bool *state
+) {
+    *state = interrupts_enabled();
+}
+
+/*
+** Quite similar to `set_interrupts_state()`, this function
+** sets the interrupt flag to the content of `*save`.
+*/
+__weak
+void
+pop_interrupts_state(
+    bool const *state
+) {
+    set_interrupts_state(*state);
+}
+
+/*
 ** Wait until an interruption is received.
 */
 __weak

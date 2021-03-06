@@ -54,17 +54,9 @@ start_ap:
     or $(1 << 31), %eax             // Enable paging
     mov %eax, %cr0
 
-    mov $ap_boot_stack, %esp // Set-up kernel stack
-
-    // Transition to 64-bit by reloading the code segment register
-    // with the new 64-bit code segment selector
-    pushl $KERNEL_CODE_SELECTOR
-    pushl $start64
-
-    lretl
+    ljmpl  $KERNEL_CODE_SELECTOR, $start64
 
 .code64
-
 start64:
     // Reload all data segment registers with the new 64-bit data segment selector
     mov $KERNEL_DATA_SELECTOR, %ax
@@ -73,6 +65,8 @@ start64:
     mov %ax, %fs
     mov %ax, %gs
     mov %ax, %ss
+
+    mov (ap_boot_stack), %rsp        // Reset kernel stack
 
     .extern ap_setup
     call ap_setup
