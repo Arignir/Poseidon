@@ -49,7 +49,7 @@ struct rflags
             size_t : 10;
             size_t : 32;
         } __packed;
-        uint64 value;
+        uint64 raw;
     } __packed;
 } __packed;
 
@@ -64,7 +64,7 @@ get_rflags(void)
     asm volatile (
         "pushfq;"
         "popq %0;"
-        : "=rm"(rflags.value)
+        : "=rm"(rflags.raw)
         :
         :
     );
@@ -80,7 +80,7 @@ set_rflags(
         "pushq %0;"
         "popfq;"
         :
-        : "g"(rflags.value)
+        : "g"(rflags.raw)
         : "cc"
     );
 }

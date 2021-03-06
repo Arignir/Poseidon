@@ -14,3 +14,5 @@ include	\
 	$(ldir)cpu/Makefile \
 	$(ldir)interrupt/Makefile \
 	$(ldir)memory/Makefile \
+	$(ldir)scheduler/Makefile \
+	$(ldir)thread/Makefile \

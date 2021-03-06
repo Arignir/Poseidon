@@ -8,11 +8,11 @@
 \******************************************************************************/
 
 #include <arch/x86_64/interrupt.h>
-#include <lib/log.h>
 #include <poseidon/interrupt.h>
-#include <platform/pc/pic8259.h>
+#include <poseidon/thread/thread.h>
+#include <lib/log.h>
 
-static interrupt_handler_t irq_handlers[INT_NB - INT_IRQ0];
+static interrupt_handler_t irq_handlers[INT_NB];
 
 /*
 ** Test if interruptions are enabled.
@@ -88,13 +88,17 @@ common_int_handler(
     struct iframe *iframe
 ) {
     switch (iframe->int_vector) {
-        case 0 ... INT_MAX_RESERVED_BY_INTEL:
+        case INT_BREAKPOINT:
+            exception_breakpoint(iframe);
+            break;
+        case INT_DIVISION_BY_ZERO ... INT_NMI:
+        case INT_OVERFLOW ... INT_MAX_RESERVED_BY_INTEL:
             // Panic on unhandled exceptions
             panic("Unhandled exception %#x", iframe->int_vector);
             break;
         case INT_IRQ0 ... INT_NB:
             if (irq_handlers[iframe->int_vector]) {
-                irq_handlers[iframe->int_vector]();
+                irq_handlers[iframe->int_vector](iframe);
             } else {
                 logln(
                     "Unhandled IRQ %#x",

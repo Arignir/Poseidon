@@ -10,6 +10,5 @@
 ldir	:= $(GET_LOCAL_DIR)
 
 objs-y	+= $(addprefix $(ldir), \
-		cpu.o \
-		panic.o \
+		thread.o \
 	)

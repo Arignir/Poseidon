@@ -12,8 +12,11 @@
 #include <arch/x86_64/msr.h>
 #include <arch/x86_64/io.h>
 #include <arch/x86_64/rdtsc.h>
+#include <arch/x86_64/memory.h>
 #include <poseidon/poseidon.h>
 #include <poseidon/interrupt.h>
+#include <poseidon/thread/thread.h>
+#include <poseidon/scheduler/scheduler.h>
 #include <poseidon/memory/pmm.h>
 #include <poseidon/memory/kheap.h>
 #include <poseidon/status.h>
@@ -98,10 +101,10 @@ apic_eoi(void)
 */
 void
 apic_send_ipi(
-    uint32 dest,
+    uint32 apic_id,
     uint32 flags
 ) {
-    apic_write(APIC_ICR_HIGH, dest << 24u);
+    apic_write(APIC_ICR_HIGH, apic_id << 24u);
     apic_write(APIC_ICR_LOW, flags);
 }
 
@@ -169,6 +172,8 @@ apic_init(void)
     register_interrupt_handler(INT_APIC_TIMER, &apic_timer_ihandler);
     register_interrupt_handler(INT_APIC_ERROR, &apic_error_ihandler);
     register_interrupt_handler(INT_APIC_SPURIOUS, &apic_spurious_ihandler);
+    register_interrupt_handler(INT_PANIC, &apic_panic_ihandler);
+    register_interrupt_handler(INT_TLB, &apic_tlb_ihandler);
 
     /* Clear Error Status Register */
     apic_write(APIC_ESR, 0x0);
@@ -201,21 +206,21 @@ apic_start_ap(
 
     assert((addr & 0xFFF00FFF) == 0);
 
+    spin_rwlock_acquire_write(&ap->lock);
+
     /* Allocate stack for the new cpu */
-    ap_boot_stack = kheap_alloc_aligned(PAGE_SIZE * KCONFIG_KERNEL_STACK_SIZE);
-    if (ap_boot_stack == NULL) {
+    ap->scheduler_stack = kheap_alloc_aligned(KCONFIG_KERNEL_STACK_SIZE);
+    ap->scheduler_stack_top = (uchar *)ap->scheduler_stack + KCONFIG_KERNEL_STACK_SIZE;
+
+    if (ap->scheduler_stack == NULL) {
         return (ERR_OUT_OF_MEMORY);
     }
 
-    spinrwlock_acquire_write(&ap->lock);
-
-    ap->scheduler_stack = ap_boot_stack;
-    ap_boot_stack = (uchar *)ap_boot_stack + 16 * PAGE_SIZE;
-    ap->scheduler_stack_top = ap_boot_stack;
+    ap_boot_stack = ap->scheduler_stack_top;
 
     apic_id = ap->apic_id;
 
-    spinrwlock_release_write(&ap->lock);
+    spin_rwlock_release_write(&ap->lock);
 
     /*
     ** MP Specification says that we must initialize CMOS shutdown code to
@@ -249,8 +254,13 @@ apic_start_ap(
 void
 apic_timer_ihandler(void)
 {
-    log(".");
+    bool in_thread;
+
+    in_thread = (current_thread());
     apic_eoi();
+    if (in_thread) {
+        yield();
+    }
 }
 
 /*
@@ -269,4 +279,40 @@ void
 apic_spurious_ihandler(void)
 {
     panic("apic spurious interruption received");
+}
+
+/*
+** Handler for the panic IPI
+**
+** This IPI is fired by a processor when panicking, asking
+** all the others to halt indefinitely.
+*/
+void
+apic_panic_ihandler(void)
+{
+    disable_interrupts();
+    while (42) {
+        halt();
+    }
+}
+
+/*
+** Handler for the tlb shootdown IPI
+**
+** When a core modifies the paging structure and invalidates the TLB it must
+** notify the other cores to invalidate their TLB too.
+**
+** Soooo, some people write some nice and efficient algorithms to handle this shit,
+** but eeeh, we'll go for the quick & dirty way instead :D
+*/
+void
+apic_tlb_ihandler(void)
+{
+    asm volatile(
+        "invlpg (%%rax)"
+        :
+        : "a"(tlb_shootdown_target)
+        :
+    );
+    apic_eoi();
 }

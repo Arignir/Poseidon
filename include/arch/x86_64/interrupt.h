@@ -57,6 +57,8 @@ enum interrupt_vector
     INT_APIC_ERROR              = 0x33,
 
     INT_SYSCALL                 = 0x80,
+    INT_PANIC                   = 0x81,
+    INT_TLB                     = 0x82,
 
     INT_APIC_SPURIOUS           = 0xFF,
 
@@ -81,6 +83,7 @@ struct iframe
     uintptr rbp;
     uintptr rsi;
     uintptr rdi;
+    uintptr r8;
     uintptr r9;
     uintptr r10;
     uintptr r11;
@@ -93,7 +96,11 @@ struct iframe
     uintptr rip;
     uintptr cs;
     struct rflags rflags;
+    uintptr rsp;
+    uintptr ss;
 } __packed;
+
+static_assert(sizeof(struct iframe) == 22 * sizeof(uint64));
 
 /*
 ** The different valid values for the `type` field of
@@ -134,7 +141,8 @@ static_assert(sizeof(struct idt_descriptor) == 16);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct idt_fatptr {
+struct idt_fatptr
+{
     uint16 limit;
     struct idt_descriptor *base;
 } __packed;
@@ -162,17 +170,17 @@ static_assert(sizeof(struct idt_fatptr) == 10);
 */
 # define NEW_IDT_TRAP_GATE_ENTRY(offset, ...)                       \
     (struct idt_descriptor) {                                       \
-        .trap = {                                                   \
-            .offset_low = (((uintptr)(offset)) & 0xFFFF),           \
-            .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),   \
-            .offset_high = ((((uintptr)(offset)) >> 32) & 0xFFFFFFFF),\
-            .type = IDT_TRAP_GATE,                                  \
-            ._reserved0 = 0,                                        \
-            ._reserved1 = 0,                                        \
-            __VA_ARGS__                                             \
-        },                                                          \
+        .offset_low = (((uintptr)(offset)) & 0xFFFF),           \
+        .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),   \
+        .offset_high = ((((uintptr)(offset)) >> 32) & 0xFFFFFFFF),\
+        .type = IDT_TRAP_GATE,                                  \
+        ._reserved0 = 0,                                        \
+        ._reserved1 = 0,                                        \
+        __VA_ARGS__                                             \
     }
 
-void    setup_idt(void);
+void    idt_setup(void);
+void    idt_load(void);
+void    exception_breakpoint(struct iframe *);
 
 #endif /* !_ARCH_X86_64_INTERRUPT_H_ */

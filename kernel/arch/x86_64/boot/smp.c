@@ -178,21 +178,22 @@ smp_start_aps(void)
         if (cpu == current)
             continue;
 
-        log("Starting AP processor %zu ...", cpu - cpus);
+        log("Starting AP processor %zu ...", cpu_get_id(cpu));
 
-        if (!apic_start_ap(cpu, TRAMPOLINE_START)) {
-            while (42) {
-                bool started;
+        assert_ok(apic_start_ap(cpu, TRAMPOLINE_START));
 
-                spinrwlock_acquire_read(&cpu->lock);
-                started = cpu->started;
-                spinrwlock_release_read(&cpu->lock);
+        while (42) {
+            bool started;
 
-                if (started) {
-                    break;
-                }
+            spin_rwlock_acquire_read(&cpu->lock);
+            started = cpu->started;
+            spin_rwlock_release_read(&cpu->lock);
+
+            if (started) {
+                break;
             }
         }
+
         logln(" done!");
     }
 }

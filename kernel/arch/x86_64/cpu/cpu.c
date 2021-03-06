@@ -11,6 +11,23 @@
 #include <poseidon/cpu/cpu.h>
 #include <arch/x86_64/apic.h>
 
+/* The bootstrap processor. Only used at boot time. */
+__section(".boot_memory")
+static struct cpu __bsp = { .thread = NULL };
+
+__section(".boot_memory")
+struct cpu *bsp = &__bsp;
+
+/* Set if the BSP has been remaped to its corresponding entry within the cpu table. */
+bool bsp_remapped = false;
+
+/*
+** Kernel's Bootstrap Processor boot stack.
+** Will be used as the scheduler's stack.
+*/
+extern virtaddr_t bsp_kernel_stack_top[];
+extern virtaddr_t bsp_kernel_stack_bot[];
+
 /*
 ** Return the current cpu actually running this code.
 **
@@ -24,15 +41,18 @@
 struct cpu *
 current_cpu(void)
 {
+    struct cpu *cpu;
     uint32 apic_id;
 
     if (bsp_remapped) {
         apic_id = apic_get_id();
 
-        for (struct cpu *cpu = cpus; cpu < cpus + ncpu; ++cpu) {
+        cpu = cpus;
+        while (cpu < cpus_end) {
             if (cpu->apic_id == apic_id) {
                 return (cpu);
             }
+            ++cpu;
         }
 
         panic("Current cpu has an unknown local APIC id\n");
@@ -40,4 +60,30 @@ current_cpu(void)
     else {
         return (bsp);
     }
+}
+
+/*
+** TODO FIXME: Remove this little hack and actually use cpus[0] to represent the BSP
+*/
+__boot_text
+void
+cpu_remap_bsp(void)
+{
+    struct cpu *cpu;
+
+    assert(!bsp_remapped);
+
+    bsp_remapped = true;
+
+    // Swap the data structure
+    cpu = current_cpu();
+    *cpu = *bsp;
+    bsp = NULL;
+
+    // Set the scheduler stack of the BSP
+    cpu->scheduler_stack = bsp_kernel_stack_bot;
+    cpu->scheduler_stack_top = bsp_kernel_stack_top;
+
+    // Mark the current CPU as the BSP
+    cpu->bsp = true;
 }

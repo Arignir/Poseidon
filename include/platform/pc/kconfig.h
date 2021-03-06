@@ -37,6 +37,9 @@
 /* Kernel stack size, in bytes. */
 # define KCONFIG_KERNEL_STACK_SIZE              (16 * KCONFIG_PAGE_SIZE)
 
+/* Thread stack size, in bytes. */
+# define KCONFIG_THREAD_STACK_SIZE              (32 * KCONFIG_PAGE_SIZE)
+
 /* Size of a pointer, in bits. */
 # define KCONFIG_PTR_BITS                       64u
 

@@ -17,7 +17,7 @@
 /*
 ** A structure representing a read-write lock backed by spinlocks.
 */
-struct spinrwlock
+struct spin_rwlock
 {
     int volatile readcount;
     struct spinlock resource_access;
@@ -25,8 +25,8 @@ struct spinrwlock
     struct spinlock service_queue;
 };
 
-# define SPINRWLOCK_DEFAULT                                 \
-    ((struct spinrwlock) {                                  \
+# define SPIN_RWLOCK_DEFAULT                                \
+    ((struct spin_rwlock) {                                 \
         .readcount = 0,                                     \
         .resource_access = SPINLOCK_DEFAULT,                \
         .readcount_access = SPINLOCK_DEFAULT,               \
@@ -35,16 +35,16 @@ struct spinrwlock
 
 static inline
 void
-spinrwlock_init(
-    struct spinrwlock *rw
+spin_rwlock_init(
+    struct spin_rwlock *rw
 ) {
-    *rw = SPINRWLOCK_DEFAULT;
+    *rw = SPIN_RWLOCK_DEFAULT;
 }
 
 static inline
 void
-spinrwlock_acquire_read(
-    struct spinrwlock *rw
+spin_rwlock_acquire_read(
+    struct spin_rwlock *rw
 ) {
     spinlock_acquire(&rw->service_queue);
     spinlock_acquire(&rw->readcount_access);
@@ -59,8 +59,8 @@ spinrwlock_acquire_read(
 
 static inline
 void
-spinrwlock_release_read(
-    struct spinrwlock *rw
+spin_rwlock_release_read(
+    struct spin_rwlock *rw
 ) {
     spinlock_acquire(&rw->readcount_access);
 
@@ -73,8 +73,8 @@ spinrwlock_release_read(
 
 static inline
 void
-spinrwlock_acquire_write(
-    struct spinrwlock *rw
+spin_rwlock_acquire_write(
+    struct spin_rwlock *rw
 ) {
     spinlock_acquire(&rw->service_queue);
     spinlock_acquire(&rw->resource_access);
@@ -83,8 +83,8 @@ spinrwlock_acquire_write(
 
 static inline
 void
-spinrwlock_release_write(
-    struct spinrwlock *rw
+spin_rwlock_release_write(
+    struct spin_rwlock *rw
 ) {
     spinlock_release(&rw->resource_access);
 }

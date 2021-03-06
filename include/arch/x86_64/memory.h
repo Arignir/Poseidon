@@ -194,4 +194,7 @@ struct virtaddr_layout
 
 static_assert(sizeof(struct virtaddr_layout) == sizeof(void *));
 
+/* Target for TLB shootdowns. */
+extern virtaddr_t tlb_shootdown_target;
+
 #endif /* !_ARCH_X86_64_MEMORY_H_ */
