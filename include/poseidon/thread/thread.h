@@ -14,6 +14,7 @@
 # include <poseidon/poseidon.h>
 # include <poseidon/cpu/cpu.h>
 # include <lib/sync/spinrwlock.h>
+# include <lib/list.h>
 
 typedef uint32 tid_t;
 typedef int (*thread_entry)();
@@ -52,33 +53,41 @@ enum exit_status
 
 struct thread
 {
-    char name[256];
-    enum thread_state state;    // State
-    struct thread *parent;      // Parent thread
+    /*
+    ** The following are considered read-only past the thread's creation.
+    */
 
-    virtaddr_t stack;           // Bottom of the thread's stack
-    virtaddr_t stack_top;       // Top of the thread's stack.
-    virtaddr_t stack_saved;     // Stack saved when a context switch occures
+    tid_t tid;                              // Thread's TID
+    char name[256];                         // Thread's name
+    struct thread *parent;                  // Parent thread
+    thread_entry entry;                     // Entry point
 
-    virtaddr_t kstack;          // Bottom of kernel stack
-    virtaddr_t kstack_top;      // Top of kernel stack
+    /*
+    ** The following is protected by the rwlock within the structure.
+    */
+    struct {
+        virtaddr_t stack;                   // Bottom of the thread's stack
+        virtaddr_t stack_top;               // Top of the thread's stack.
+        virtaddr_t stack_saved;             // Stack saved when a context switch occures
 
-    thread_entry entry;         // Entry point
+        virtaddr_t kstack;                  // Bottom of kernel stack
+        virtaddr_t kstack_top;              // Top of kernel stack
 
-    struct spin_rwlock lock;  // Lock to protect this block
+        enum thread_state state;            // State
+        struct linked_list runnable_threads;// List of runnable threads, used by the scheduler.
+
+        struct spin_rwlock lock;
+    } sched_info;
+
+    struct linked_list threads;     // List of all threads
 };
 
-extern struct thread thread_table[];
-
-status_t    thread_new(thread_entry entry, tid_t *thread_id);
+status_t    thread_new(thread_entry entry, struct thread **thread);
 void        arch_thread_new(struct thread *t);
 
 /*
 ** Return the current thread, aka the thread the CPU was running before an
 ** interruption occured.
-**
-** The returned `thread` structure isn't locked, make sure you have the permissions
-** to do whatever operations you want to do.
 */
 static inline
 struct thread *
@@ -87,74 +96,9 @@ current_thread(void)
     struct cpu *cpu;
     struct thread *t;
 
-    cpu = current_cpu_acquire_read();
+    cpu = current_cpu();
     t = cpu->thread;
-    current_cpu_release_read();
     return (t);
-}
-
-/*
-** Return the current thread (the thread the CPU was running before an
-** interruption occured) with read-only permissions.
-**
-** NOTE: This function assumes the current thread isn't NULL.
-*/
-static inline
-struct thread *
-current_thread_acquire_read(void)
-{
-    struct thread *t;
-
-    t = current_thread();
-    spin_rwlock_acquire_read(&t->lock);
-    return (t);
-}
-
-/*
-** Return the current thread (the thread the CPU was running before an
-** interruption occured) with read-write permissions.
-**
-** NOTE: This function assumes the current thread isn't NULL.
-*/
-static inline
-struct thread *
-current_thread_acquire_write(void)
-{
-    struct thread *t;
-
-    t = current_thread();
-    spin_rwlock_acquire_write(&t->lock);
-    return (t);
-}
-
-/*
-** Release the current thread previously acquired with read-only permissions.
-**
-** NOTE: This function assumes the current thread isn't NULL.
-*/
-static inline
-void
-current_thread_release_read(void)
-{
-    struct thread *t;
-
-    t = current_thread();
-    spin_rwlock_release_read(&t->lock);
-}
-
-/*
-** Release the current thread previously acquired with read-write permissions.
-**
-** NOTE: This function assumes the current thread isn't NULL.
-*/
-static inline
-void
-current_thread_release_write(void)
-{
-    struct thread *t;
-
-    t = current_thread();
-    spin_rwlock_release_write(&t->lock);
 }
 
 #endif /* !_POSEIDON_THREAD_THREAD_H_ */

@@ -18,7 +18,7 @@
 #include <stdarg.h>
 
 // Ensure logs aren't scrambled because two cores want to log at the same time
-static struct spinlock lock;
+static struct spinlock lock = SPINLOCK_DEFAULT;
 
 extern struct logger const __start_poseidon_logger[] __weak;
 extern struct logger const __stop_poseidon_logger[] __weak;

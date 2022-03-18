@@ -27,7 +27,4 @@
 /* Use a multiboot-compliant bootloader to set-up graphic mode. */
 # define KCONFIG_MULTIBOOT_FRAMEBUFFER          0
 
-/* Maximum amount of threads running at the same time on the system. */
-# define KCONFIG_MAX_THREADS                    8
-
 #endif /* !_KCONFIG_POSEIDON_H_ */

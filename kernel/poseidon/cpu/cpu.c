@@ -18,13 +18,3 @@ struct cpu cpus[KCONFIG_MAX_CPUS] = { 0 };
 
 /* The end of `cpus`. Used for iterating over `cpus`. */
 struct cpu const *cpus_end = cpus + KCONFIG_MAX_CPUS;
-
-/*
-** Return the given cpu's index.
-*/
-size_t
-cpu_get_id(
-    struct cpu *cpu
-) {
-    return (cpu - cpus);
-}

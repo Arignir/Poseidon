@@ -206,8 +206,6 @@ apic_start_ap(
 
     assert((addr & 0xFFF00FFF) == 0);
 
-    spin_rwlock_acquire_write(&ap->lock);
-
     /* Allocate stack for the new cpu */
     ap->scheduler_stack = kheap_alloc_aligned(KCONFIG_KERNEL_STACK_SIZE);
     ap->scheduler_stack_top = (uchar *)ap->scheduler_stack + KCONFIG_KERNEL_STACK_SIZE;
@@ -219,8 +217,6 @@ apic_start_ap(
     ap_boot_stack = ap->scheduler_stack_top;
 
     apic_id = ap->apic_id;
-
-    spin_rwlock_release_write(&ap->lock);
 
     /*
     ** MP Specification says that we must initialize CMOS shutdown code to

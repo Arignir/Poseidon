@@ -27,8 +27,8 @@
 int
 thread_test(void)
 {
-    logln("In thread_test()");
     while (42) {
+        log("%i", current_cpu()->cpu_id);
         halt();
     }
 }
@@ -45,7 +45,10 @@ kmain(void)
 {
     struct init_hook const *hook;
     status_t s;
-    tid_t kthread;
+    struct thread *kthread1;
+    struct thread *kthread2;
+    struct thread *kthread3;
+    struct thread *kthread4;
 
     logln("Poseidon is initializing...");
     logln("");
@@ -65,7 +68,10 @@ kmain(void)
     }
 
     // Create `kthread`.
-    assert_ok(thread_new(thread_test, &kthread));
+    assert_ok(thread_new(thread_test, &kthread1));
+    assert_ok(thread_new(thread_test, &kthread2));
+    assert_ok(thread_new(thread_test, &kthread3));
+    assert_ok(thread_new(thread_test, &kthread4));
 
     logln("");
     logln("Poseidon finished its initialization!");

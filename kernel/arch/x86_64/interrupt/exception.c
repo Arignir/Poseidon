@@ -24,7 +24,7 @@ exception_breakpoint(
         "     R8=%p  R9=%p R10=%p R11=%p\n"
         "    R12=%p R13=%p R14=%p R15=%p\n"
         "    RIP=%p RFLAGS=%08zx",
-        (uint32)cpu_get_id(current_cpu()),
+        (uint32)current_cpu()->cpu_id,
         iframe->rax,
         iframe->rbx,
         iframe->rcx,
