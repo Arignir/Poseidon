@@ -174,4 +174,7 @@ void    panic(char const *fmt, ...) __noreturn;
 */
 # define ROUND_DOWN(x, y)   ((typeof(x))((uintptr)(x) & ~((y) - 1)))
 
+# define volatile_read(x)   (*(const volatile typeof(x) *)&(x))
+# define volatile_write(x)  (*(volatile typeof(x) *)&(x) = (val))
+
 #endif /* !_POSEIDON_POSEIDON_H_ */

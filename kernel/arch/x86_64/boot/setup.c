@@ -37,7 +37,7 @@ bsp_early_setup(void)
 {
     struct cpu *bsp;
 
-    bsp = current_cpu_acquire_write();
+    bsp = current_cpu();
 
     idt_setup();
 
@@ -50,8 +50,6 @@ bsp_early_setup(void)
     if (!bsp->cpuid.features.apic) {
         panic("Your CPU doesn't contain an APIC");
     }
-
-    current_cpu_release_write();
 
     return (OK);
 }
@@ -81,6 +79,7 @@ bsp_setup(void)
         ioapic_map(IOAPIC_BASE_ADDR);
         apic_map(APIC_BASE_ADDR);
         cpus[0].apic_id = apic_get_id();
+        cpus[0].cpu_id = 0;
     }
 
     pic8259_init();
@@ -114,9 +113,8 @@ ap_setup(void)
 
     apic_init();
 
-    cpu = current_cpu_acquire_write();
+    cpu = current_cpu();
     cpuid_load(&cpu->cpuid);
-    current_cpu_release_write();
 
     common_setup();
 
@@ -135,9 +133,8 @@ common_setup(void)
 
     idt_load();
 
-    cpu = current_cpu_acquire_write();
+    cpu = current_cpu();
     cpu->started = true;
-    current_cpu_release_write();
 }
 
 /*

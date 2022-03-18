@@ -16,15 +16,14 @@
 /*
 ** A simple spin lock.
 */
-struct spinlock
-{
+struct spinlock {
     uint lock;                          // Is the lock held?
 };
 
-# define SPINLOCK_DEFAULT            \
-    {                    \
-        .lock = 0,            \
-    }
+# define SPINLOCK_DEFAULT               \
+    ((struct spinlock) {                \
+        .lock = 0,                      \
+    })
 
 /*
 ** Init a spinlock
@@ -45,7 +44,7 @@ void
 spinlock_acquire(
     struct spinlock *sl
 ) {
-    while (atomic_exchange(&sl->lock, 1) != 0);
+    while (atomic_exchange(&sl->lock, 1, ATOMIC_ACQUIRE));
 }
 
 /*
@@ -56,7 +55,7 @@ void
 spinlock_release(
     struct spinlock *sl
 ) {
-    atomic_exchange(&sl->lock, 0);
+    atomic_exchange(&sl->lock, 0, ATOMIC_RELEASE);
 }
 
 #endif /* !_LIB_SYNC_SPINSYNC_H_ */

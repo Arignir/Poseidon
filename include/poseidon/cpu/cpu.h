@@ -18,13 +18,18 @@
 
 struct thread;
 
-/* A structure representing a CPU */
+/*
+** A structure representing a CPU
+**
+** The lock policy for this structure is that it's only allowed to be written by the CPU it belongs to.
+** Therefore any read should be considered potentially reads of a partial write.
+*/
 struct cpu
 {
     struct arch_cpu;                // Arch dependant stuff
 
     bool bsp;                       // `true` if the CPU is the boostrap processor (BSP).
-    uint started;                   // `true` if the CPU is started.
+    bool started;                   // `true` if the CPU is started.
 
     void *scheduler_stack;          // Stack for the scheduler. Also the boot stack of the CPU.
     void *scheduler_stack_top;
@@ -32,7 +37,8 @@ struct cpu
     struct thread *thread;          // Current thread executed by the CPU.
                                     // Might be NULL if the cpu is idling or in the scheduler.
 
-    struct spin_rwlock lock;         // Lock to protect this structure
+    size_t cpu_id;                  // ID of the CPU.
+
 };
 
 /* Number of CPUs on the current system. */
@@ -44,70 +50,11 @@ extern struct cpu cpus[KCONFIG_MAX_CPUS];
 /* The end of `cpus`. Used for iterating over `cpus`. */
 extern struct cpu const *cpus_end;
 
-size_t              cpu_get_id(struct cpu *cpu);
-
 /*
 ** Return the current cpu actually running this code.
-**
-** The returned `cpu` structure isn't locked, make sure you have the permissions
-** to do whatever operations you want to do.
 **
 ** NOTE: This function is implemented by the architecture-dependant code.
 */
 struct cpu          *current_cpu(void);
-
-/*
-** Return the current cpu actually running this code, with read-only permissions.
-*/
-static inline
-struct cpu const *
-current_cpu_acquire_read(void)
-{
-    struct cpu *cpu;
-
-    cpu = current_cpu();
-    spin_rwlock_acquire_read(&cpu->lock);
-    return (cpu);
-}
-
-/*
-** Release the read-only access to the current CPU.
-*/
-static inline
-void
-current_cpu_release_read(void)
-{
-    struct cpu *cpu;
-
-    cpu = current_cpu();
-    spin_rwlock_release_read(&cpu->lock);
-}
-
-/*
-** Return the current cpu actually running this code, with read-write permissions.
-*/
-static inline
-struct cpu *
-current_cpu_acquire_write(void)
-{
-    struct cpu *cpu;
-
-    cpu = current_cpu();
-    spin_rwlock_acquire_write(&cpu->lock);
-    return (cpu);
-}
-
-/*
-** Release the read-write access to the current CPU.
-*/
-static inline
-void
-current_cpu_release_write(void)
-{
-    struct cpu *cpu;
-
-    cpu = current_cpu();
-    spin_rwlock_release_write(&cpu->lock);
-}
 
 #endif /* !_POSEIDON_CPU_CPU_H_ */

@@ -12,7 +12,7 @@
 **
 ** This discovery method is really old and not supported any more in real hardware.
 ** We are using it because it's easier to implemant than ACPI and can still be
-** tester through QEMU.
+** tested through QEMU.
 **
 ** References:
 **
@@ -132,7 +132,7 @@ smp_detect(void)
                 proc = (struct mp_proc *)type;
                 if (ncpu < KCONFIG_MAX_CPUS) {
                     cpus[ncpu].apic_id = proc->lapic_id;
-                    ++ncpu;
+                    cpus[ncpu].cpu_id = ncpu++;
                 }
                 type += sizeof(*proc);
                 break;
@@ -178,18 +178,12 @@ smp_start_aps(void)
         if (cpu == current)
             continue;
 
-        log("Starting AP processor %zu ...", cpu_get_id(cpu));
+        log("Starting AP processor %zu ...", cpu->cpu_id);
 
         assert_ok(apic_start_ap(cpu, TRAMPOLINE_START));
 
         while (42) {
-            bool started;
-
-            spin_rwlock_acquire_read(&cpu->lock);
-            started = cpu->started;
-            spin_rwlock_release_read(&cpu->lock);
-
-            if (started) {
+            if (volatile_read(cpu->started)) {
                 break;
             }
         }

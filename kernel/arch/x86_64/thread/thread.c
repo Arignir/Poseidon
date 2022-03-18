@@ -41,6 +41,6 @@ arch_thread_new(
         .rip = (uint64)thread->entry,
     };
 
-    thread->stack_saved = (uchar *)thread->stack_saved - sizeof(stack);
-    *(struct scheduler_stack *)thread->stack_saved = stack;
+    thread->sched_info.stack_saved = (uchar *)thread->sched_info.stack_saved - sizeof(stack);
+    *(struct scheduler_stack *)thread->sched_info.stack_saved = stack;
 }

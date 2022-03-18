@@ -10,15 +10,11 @@
 #ifndef _POSEIDON_SCHEDULER_SCHEDULER_H_
 # define _POSEIDON_SCHEDULER_SCHEDULER_H_
 
+# include <lib/list.h>
 # include <lib/sync/spinlock.h>
 
-struct thread;
-
-struct scheduler
-{
-    struct thread *next;
-    struct spinlock lock;
-};
+extern struct linked_list sched_runnable_threads;
+extern struct spinlock sched_runnable_threads_lock;
 
 void    *reschedule(void *);
 void    yield(void);
