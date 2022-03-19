@@ -14,8 +14,8 @@
 
 /* Functions to ease the calculation of checksums */
 
-uint8   checksum8(void const *s, size_t l);
-uint16  checksum16(void const *s, size_t l);
-uint32  checksum32(void const *s, size_t l);
+uint8 checksum8(void const *s, size_t l);
+uint16 checksum16(void const *s, size_t l);
+uint32 checksum32(void const *s, size_t l);
 
 #endif /* !_LIB_CHECKSUM_H_ */

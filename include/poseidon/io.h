@@ -34,8 +34,7 @@
 **
 ** Note that `address` must be a virtual address.
 */
-struct io_mm
-{
+struct io_mm {
     virtaddr_t address;
 };
 

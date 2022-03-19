@@ -16,8 +16,7 @@
 /*
 ** A structure representing the arch-specific values of a single CPU.
 */
-struct arch_cpu
-{
+struct arch_cpu {
     struct cpuid cpuid;         // CPUID
     uint32 apic_id;             // Local APIC id
 };

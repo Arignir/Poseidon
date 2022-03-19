@@ -15,8 +15,7 @@
 /*
 ** A region of available physical memory.
 */
-struct pmm_arena
-{
+struct pmm_arena {
     physaddr_t start;   // Inclusive
     physaddr_t end;     // Exclusive
     uchar *bitmap;
@@ -30,17 +29,16 @@ struct pmm_arena
     size_t next_frame;  // An index within `bitmap` that is susceptible to contain a free frame (heuristic)
 };
 
-physaddr_t  pmm_alloc_frame(void);
-void        pmm_free_frame(physaddr_t);
-status_t    pmm_init(void);
-void        pmm_early_init(void);
-void        pmm_mark_range_as_allocated(physaddr_t, size_t);
+physaddr_t pmm_alloc_frame(void);
+void pmm_free_frame(physaddr_t);
+status_t pmm_init(void);
+void pmm_early_init(void);
+void pmm_mark_range_as_allocated(physaddr_t, size_t);
 
 /*
 ** A physical memory area marked as reserved for a specific purpose or device.
 */
-struct pmm_reserved_area
-{
+struct pmm_reserved_area {
     char const *name;
     physaddr_t start;
     physaddr_t end;

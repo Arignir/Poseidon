@@ -16,9 +16,9 @@
 extern struct linked_list sched_runnable_threads;
 extern struct spinlock sched_runnable_threads_lock;
 
-void    *reschedule(void *);
-void    yield(void);
+void *reschedule(void *);
+void yield(void);
 
-void    enter_scheduler(void *scheduler_stack);
+void enter_scheduler(void *scheduler_stack);
 
 #endif /* !_POSEIDON_SCHEDULER_SCHEDULER_H_ */

@@ -20,8 +20,7 @@
 /*
 ** Exception/Interruption and their vector.
 */
-enum interrupt_vector
-{
+enum interrupt_vector {
     INT_DIVISION_BY_ZERO        = 0,
     INT_DEBUG,
     INT_NMI,
@@ -74,8 +73,7 @@ enum interrupt_vector
 ** Most of these elemnts are pushed by the interrupt handler, but some of them
 ** are also pushed by the processor automatically when the exception is handled.
 */
-struct iframe
-{
+struct iframe {
     uintptr rax;
     uintptr rcx;
     uintptr rdx;
@@ -106,8 +104,7 @@ static_assert(sizeof(struct iframe) == 22 * sizeof(uint64));
 ** The different valid values for the `type` field of
 ** `struct idt_descriptor`.
 */
-enum idt_gate_descriptor_type
-{
+enum idt_gate_descriptor_type {
     IDT_CALL_GATE           = 12,
     IDT_INTERRUPT_GATE      = 14,
     IDT_TRAP_GATE           = 15,
@@ -118,8 +115,7 @@ enum idt_gate_descriptor_type
 **
 ** The layout of this structure is defined by Intel.
 */
-struct idt_descriptor
-{
+struct idt_descriptor {
     size_t offset_low: 16;
     size_t segment_selector: 16;
     size_t ist: 3;
@@ -141,8 +137,7 @@ static_assert(sizeof(struct idt_descriptor) == 16);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct idt_fatptr
-{
+struct idt_fatptr {
     uint16 limit;
     struct idt_descriptor *base;
 } __packed;
@@ -154,7 +149,7 @@ static_assert(sizeof(struct idt_fatptr) == 10);
 ** The value of other fields can also be appended.
 */
 # define NEW_IDT_INTERRUPT_GATE_ENTRY(offset, ...)                  \
-    (struct idt_descriptor) {                                       \
+    ((struct idt_descriptor) {                                      \
         .offset_low = (((uintptr)(offset)) & 0xFFFF),               \
         .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),       \
         .offset_high = ((((uintptr)(offset)) >> 32) & 0xFFFFFFFF),  \
@@ -162,25 +157,25 @@ static_assert(sizeof(struct idt_fatptr) == 10);
         ._reserved0 = 0,                                            \
         ._reserved1 = 0,                                            \
         __VA_ARGS__                                                 \
-    }
+    })
 
 /*
 ** Create a trap gate entry, using the given address as the entry point.
 ** The value of other fields can also be appended.
 */
 # define NEW_IDT_TRAP_GATE_ENTRY(offset, ...)                       \
-    (struct idt_descriptor) {                                       \
-        .offset_low = (((uintptr)(offset)) & 0xFFFF),           \
-        .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),   \
-        .offset_high = ((((uintptr)(offset)) >> 32) & 0xFFFFFFFF),\
-        .type = IDT_TRAP_GATE,                                  \
-        ._reserved0 = 0,                                        \
-        ._reserved1 = 0,                                        \
-        __VA_ARGS__                                             \
-    }
+    ((struct idt_descriptor) {                                      \
+        .offset_low = (((uintptr)(offset)) & 0xFFFF),               \
+        .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),       \
+        .offset_high = ((((uintptr)(offset)) >> 32) & 0xFFFFFFFF),  \
+        .type = IDT_TRAP_GATE,                                      \
+        ._reserved0 = 0,                                            \
+        ._reserved1 = 0,                                            \
+        __VA_ARGS__                                                 \
+    })
 
-void    idt_setup(void);
-void    idt_load(void);
-void    exception_breakpoint(struct iframe *);
+void idt_setup(void);
+void idt_load(void);
+void exception_breakpoint(struct iframe *);
 
 #endif /* !_ARCH_X86_64_INTERRUPT_H_ */

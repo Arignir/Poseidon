@@ -39,20 +39,20 @@ typedef uint mmap_flags_t;
 /* The integer type matching the above flags. */
 typedef uint munmap_flags_t;
 
-status_t                vmm_map(virtaddr_t, size_t, mmap_flags_t);
-status_t                vmm_map_device(virtaddr_t, physaddr_t, size_t, mmap_flags_t);
-status_t                vmm_remap(virtaddr_t, physaddr_t, size_t, mmap_flags_t, munmap_flags_t);
-void                    vmm_unmap(virtaddr_t, size_t, munmap_flags_t);
-status_t                vmm_validate_user_buffer(void const *, size_t);
-status_t                vmm_validate_user_str(char const *, size_t *);
+status_t vmm_map(virtaddr_t, size_t, mmap_flags_t);
+status_t vmm_map_device(virtaddr_t, physaddr_t, size_t, mmap_flags_t);
+status_t vmm_remap(virtaddr_t, physaddr_t, size_t, mmap_flags_t, munmap_flags_t);
+void vmm_unmap(virtaddr_t, size_t, munmap_flags_t);
+status_t vmm_validate_user_buffer(void const *, size_t);
+status_t vmm_validate_user_str(char const *, size_t *);
 
 /*
 ** The following functions are arch-dependent.
 */
 
-bool                    vmm_is_mapped(virtaddr_const_t va);
-bool                    vmm_is_mapped_user(virtaddr_const_t va);
-status_t                vmm_map_frame(virtaddr_t va, physaddr_t pa, mmap_flags_t flags);
-void                    vmm_unmap_frame(virtaddr_t va, munmap_flags_t flags);
+bool vmm_is_mapped(virtaddr_const_t va);
+bool vmm_is_mapped_user(virtaddr_const_t va);
+status_t vmm_map_frame(virtaddr_t va, physaddr_t pa, mmap_flags_t flags);
+void vmm_unmap_frame(virtaddr_t va, munmap_flags_t flags);
 
 #endif /* !_POSEIDON_MEMORY_VMM_H_ */

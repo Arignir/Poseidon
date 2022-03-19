@@ -23,8 +23,7 @@
 ** Therefore, the next block can easily be deduced: it is at
 ** `(uchar *)block + block->size`.
 */
-struct kheap_block
-{
+struct kheap_block {
     bool used;
     uint32 magic;
     size_t size;
@@ -45,18 +44,17 @@ static_assert(sizeof(struct kheap_block) % sizeof(void *) == 0);
 ** It needs to store the original pointer returned by `kheap_alloc()` before
 ** aligning it to a page boundary.
 */
-struct kheap_aligned_metadata
-{
+struct kheap_aligned_metadata {
     virtaddr_t aligned;
     virtaddr_t original;
 };
 
-status_t            kheap_init(void);
-virtaddr_t          kheap_alloc(size_t);
-virtaddr_t          kheap_alloc_aligned(size_t);
-virtaddr_t          kheap_alloc_device(physaddr_t, size_t);
-virtaddr_t          kheap_realloc(virtaddr_t, size_t);
-virtaddr_t          kheap_alloc_zero(size_t);
-void                kheap_free(virtaddr_t);
+status_t kheap_init(void);
+virtaddr_t kheap_alloc(size_t);
+virtaddr_t kheap_alloc_aligned(size_t);
+virtaddr_t kheap_alloc_device(physaddr_t, size_t);
+virtaddr_t kheap_realloc(virtaddr_t, size_t);
+virtaddr_t kheap_alloc_zero(size_t);
+void kheap_free(virtaddr_t);
 
 #endif /* !_POSEIDON_MEMORY_KHEAP_H_ */

@@ -21,8 +21,7 @@
 **
 ** The layout of this structure is defined by Intel.
 */
-struct rflags
-{
+struct rflags {
     union {
         struct {
             size_t cf: 1;
@@ -90,8 +89,7 @@ set_rflags(
 **
 ** The layout of this structure is defined by Intel.
 */
-struct cr3
-{
+struct cr3 {
     union {
         struct {
             size_t : 3;

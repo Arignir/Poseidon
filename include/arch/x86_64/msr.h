@@ -17,14 +17,12 @@
 **
 ** Feel free to complete this list as you need.
 */
-enum msr_list
-{
+enum msr_list {
     MSR_IA32_APIC_BASE      = 0x1B,
     MSR_IA32_EFER           = 0xC0000080,
 };
 
-struct msr_ia32_efer
-{
+struct msr_ia32_efer {
     union {
         struct {
             size_t syscall: 1;          // SYSCALL enable
