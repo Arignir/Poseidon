@@ -132,7 +132,8 @@ smp_detect(void)
                 proc = (struct mp_proc *)type;
                 if (ncpu < KCONFIG_MAX_CPUS) {
                     cpus[ncpu].apic_id = proc->lapic_id;
-                    cpus[ncpu].cpu_id = ncpu++;
+                    cpus[ncpu].cpu_id = ncpu;
+                    ncpu++;
                 }
                 type += sizeof(*proc);
                 break;
