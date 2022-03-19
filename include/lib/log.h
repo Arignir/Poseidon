@@ -13,15 +13,14 @@
 # include <poseidon/poseidon.h>
 # include <stdarg.h>
 
-void    log(char const *, ...);
-void    logln(char const *, ...);
-void    vlog(char const *, va_list);
-void    vlogln(char const *, va_list);
+void log(char const *, ...);
+void logln(char const *, ...);
+void vlog(char const *, va_list);
+void vlogln(char const *, va_list);
 
 typedef void(*putsn_hook)(char const *buffer, size_t len);
 
-struct logger
-{
+struct logger {
     char const *name;
     putsn_hook print;
 };

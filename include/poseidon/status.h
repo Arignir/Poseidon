@@ -24,8 +24,7 @@
 **
 ** Feel free to complete it according your needs.
 */
-enum status
-{
+enum status {
     OK = 0,
 
     /* Internal errors */

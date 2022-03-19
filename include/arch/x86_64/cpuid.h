@@ -17,8 +17,7 @@
 **
 ** This structure is not exhaustive, feel free to complete it.
 */
-struct cpuid
-{
+struct cpuid {
     uint32 max_cpuid;                   // The max. input value for CPUID
     uint32 max_extended_cpuid;          // The max. input value for extended CPUID
 
@@ -64,7 +63,7 @@ struct cpuid
 
     // Feature flags
     union {
-        struct  {
+        struct {
             // EDX when CPUID.EAX=0x1
             size_t fpu: 1;              // x87-FPU on Chip
             size_t vme: 1;              // Virtual-8086 Mode Enhancement
@@ -212,7 +211,7 @@ struct cpuid
 static_assert(sizeof(((struct cpuid *)NULL)->version) == sizeof(uint32));
 static_assert(sizeof(((struct cpuid *)NULL)->features) == 6 * sizeof(uint32));
 
-void        cpuid_load(struct cpuid *);
-void        cpuid_dump(struct cpuid *);
+void cpuid_load(struct cpuid *);
+void cpuid_dump(struct cpuid *);
 
 #endif /* !_ARCH_X86_64_CPUID_H_ */

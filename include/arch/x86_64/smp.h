@@ -28,8 +28,7 @@
 ** MP Floating Pointer Structure
 ** Always starts with the "_MP_" signature.
 */
-struct mp
-{
+struct mp {
     uchar const signature[4];           // _MP_
     uint32 const conf_physaddr;         // Physical address of the MP configuration table
     uchar const length;                 // Length of the table / 16. Should be 1
@@ -46,8 +45,7 @@ static_assert(sizeof(struct mp) == 16);
 ** MP Configuration Table
 ** Contains, among others, the physical address of the local APIC.
 */
-struct mp_conf
-{
+struct mp_conf {
     uchar const signature[4];           // PCMP
     ushort const length;                // Table length
     uchar const spec_rev;               // Revision of the MP spec
@@ -68,8 +66,7 @@ static_assert(sizeof(struct mp_conf) == 4 * 11);
 /*
 ** A processor entry within the MP Configuration Table
 */
-struct mp_proc
-{
+struct mp_proc {
     uchar const type;                   // Entry Type (0)
     uchar const lapic_id;               // Local APIC ID
     uchar const lapic_version;          // Local APIC version number
@@ -84,8 +81,7 @@ static_assert(sizeof(struct mp_proc) == 20);
 /*
 ** A bus entry within the MP Configuration Table
 */
-struct mp_bus
-{
+struct mp_bus {
     uchar const type;                   // Entry type (1)
     uchar const id;                     // Bus Id
     uchar const signature[6];           // String that identifies the bus type
@@ -96,8 +92,7 @@ static_assert(sizeof(struct mp_bus) == 8);
 /*
 ** An I/O APIC entry within the MP Configuration Table
 */
-struct mp_ioapic
-{
+struct mp_ioapic {
     uchar const type;                   // Entry type (2)
     uchar const id;                     // I/O APIC Id
     uchar const version;                // I/O APIC Version number
@@ -110,8 +105,7 @@ static_assert(sizeof(struct mp_ioapic) == 8);
 /*
 ** An I/O Interrupt entry within the MP Configuration Table
 */
-struct mp_ioint
-{
+struct mp_ioint {
     uchar const type;                   // Entry type (3)
     uchar const int_type;               // Interrupt type
     ushort const flags;                 // I/O Interrupt Flags
@@ -126,8 +120,7 @@ static_assert(sizeof(struct mp_ioint) == 8);
 /*
 ** A Local Interrupt entry within the MP Configuration Table
 */
-struct mp_lint
-{
+struct mp_lint {
     uchar const type;                   // Entry type (3)
     uchar const int_type;               // Interrupt type
     ushort const flags;                 // Local Interrupt Flags
@@ -144,8 +137,7 @@ static_assert(sizeof(struct mp_lint) == 8);
 ** entries can be. It is possible that some entries contains other type code.
 ** If it's the case, they should be ignore.
 */
-enum MP_ENTRY_TYPE
-{
+enum MP_ENTRY_TYPE {
     MP_PROCESSOR                        = 0x0,
     MP_BUS                              = 0x1,
     MP_IO_APIC                          = 0x2,
@@ -153,7 +145,7 @@ enum MP_ENTRY_TYPE
     MP_LOCAL_INTERRUPT                  = 0x4,
 };
 
-status_t    smp_detect(void);
-void        smp_start_aps(void);
+status_t smp_detect(void);
+void smp_start_aps(void);
 
 #endif /* !_ARCH_X86_SMP_H_ */

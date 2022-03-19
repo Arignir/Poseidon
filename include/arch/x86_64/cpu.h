@@ -19,6 +19,6 @@ extern struct cpu *bsp;
 /* Set if the BSP has been remapped to its corresponding entry within the cpu table. */
 extern bool bsp_remapped;
 
-void    cpu_remap_bsp(void);
+void cpu_remap_bsp(void);
 
 #endif /* !_ARCH_X86_64_CPU_H_ */

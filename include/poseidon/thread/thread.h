@@ -22,8 +22,7 @@ typedef int (*thread_entry)();
 /*
 ** An enum of all states a thread can be in.
 */
-enum thread_state
-{
+enum thread_state {
     NONE = 0,
     RUNNABLE,
     RUNNING,
@@ -33,8 +32,7 @@ enum thread_state
 /*
 ** Strings to print each thread state
 */
-static char const *thread_state_str[] =
-{
+static char const *thread_state_str[] = {
     [NONE]              = "NONE",
     [RUNNABLE]          = "RUNNABLE",
     [RUNNING]           = "RUNNING",
@@ -44,15 +42,13 @@ static char const *thread_state_str[] =
 /*
 ** Exit status a process can exit with.
 */
-enum exit_status
-{
+enum exit_status {
     EXIT_SUCCESS        = 0,
     EXIT_FAILURE        = 1,
     EXIT_PAGEFAULT      = 139,
 };
 
-struct thread
-{
+struct thread {
     /*
     ** The following are considered read-only past the thread's creation.
     */
@@ -82,8 +78,8 @@ struct thread
     struct linked_list threads;     // List of all threads
 };
 
-status_t    thread_new(thread_entry entry, struct thread **thread);
-void        arch_thread_new(struct thread *t);
+status_t thread_new(thread_entry entry, struct thread **thread);
+void arch_thread_new(struct thread *t);
 
 /*
 ** Return the current thread, aka the thread the CPU was running before an

@@ -12,13 +12,12 @@
 
 # include <poseidon/memory/memory.h>
 
-# define APIC_BASE_ADDR             0xFEE00000
+# define APIC_BASE_ADDR             ((physaddr_t)(0xFEE00000))
 
 /*
 ** Local APIC registers offset
 */
-enum apic_reg
-{
+enum apic_reg {
     APIC_ID                 = 0x020, // ID
     APIC_VERSION            = 0x030, // Version
     APIC_TPR                = 0x080, // Task Priority Register
@@ -64,8 +63,7 @@ enum apic_reg
 # define APIC_ICR_BROADCAST     (0b11 << 18)
 # define APIC_ICR_DELIVERED     (0x1000)
 
-enum apic_timer_speed
-{
+enum apic_timer_speed {
     APIC_TIMER_X1           = 0b1011,
     APIC_TIMER_X2           = 0b0000,
     APIC_TIMER_X4           = 0b0001,
@@ -76,8 +74,7 @@ enum apic_timer_speed
     APIC_TIMER_X128         = 0b1010,
 };
 
-enum apic_timer_mode
-{
+enum apic_timer_mode {
     APIC_TIMER_ONESHOT      = 0 << 17,
     APIC_TIMER_PERIODIC     = 1 << 17,
 };
@@ -85,18 +82,18 @@ enum apic_timer_mode
 struct cpu;
 struct iframe;
 
-void    apic_init(void);
-void    apic_eoi(void);
-void    apic_map(physaddr_t pa);
-uint32  apic_get_id(void);
+void apic_init(void);
+void apic_eoi(void);
+void apic_map(physaddr_t pa);
+uint32 apic_get_id(void);
 status_t apic_start_ap(struct cpu *ap, uintptr addr);
-void    apic_send_ipi(uint32 apic_id, uint32 flags);
-bool    apic_ipi_acked(void);
+void apic_send_ipi(uint32 apic_id, uint32 flags);
+bool apic_ipi_acked(void);
 
-void    apic_timer_ihandler(void);
-void    apic_panic_ihandler(void);
-void    apic_tlb_ihandler(void);
-void    apic_error_ihandler(void);
-void    apic_spurious_ihandler(void);
+void apic_timer_ihandler(void);
+void apic_panic_ihandler(void);
+void apic_tlb_ihandler(void);
+void apic_error_ihandler(void);
+void apic_spurious_ihandler(void);
 
 #endif /* !_ARCH_X86_64_APIC_H_ */

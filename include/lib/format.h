@@ -18,6 +18,6 @@
 */
 typedef int(*printf_output_func)(char const *, size_t, void *);
 
-int     format(char const *fmt, va_list va, printf_output_func out, void *params);
+int format(char const *fmt, va_list va, printf_output_func out, void *params);
 
 #endif /* !_LIB_FORMAT_H_ */

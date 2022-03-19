@@ -23,8 +23,7 @@
 ** A descriptor of a code segment.
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_code_segment_descriptor
-{
+struct gdt_code_segment_descriptor {
     size_t limit_low: 16;
     size_t base_low: 16;
     size_t base_mid: 8;
@@ -55,8 +54,7 @@ static_assert(sizeof(struct gdt_code_segment_descriptor) == 8);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_data_segment_descriptor
-{
+struct gdt_data_segment_descriptor {
     size_t limit_low: 16;
     size_t base_low: 16;
     size_t base_mid: 8;
@@ -87,8 +85,7 @@ static_assert(sizeof(struct gdt_data_segment_descriptor) == 8);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_system_segment_descriptor
-{
+struct gdt_system_segment_descriptor {
     size_t limit_low: 16;
     size_t base_low: 16;
     size_t base_mid: 8;
@@ -113,8 +110,7 @@ static_assert(sizeof(struct gdt_system_segment_descriptor) == 8);
 ** The different valid values for the `type` field of
 ** `struct gdt_system_segment_descriptor`.
 */
-enum gdt_system_segment_descriptor_type
-{
+enum gdt_system_segment_descriptor_type {
     GDT_TSS_AVAILABLE_16        = 1,
     GDT_LDT                     = 2,
     GDT_TSS_BUSY_16             = 3,
@@ -138,8 +134,7 @@ enum gdt_system_segment_descriptor_type
 ** A segment descriptor of the GDT.
 ** Encapsulates the previous structures into a uniform one.
 */
-struct gdt_segment_descriptor
-{
+struct gdt_segment_descriptor {
     union {
         struct gdt_code_segment_descriptor code;
         struct gdt_data_segment_descriptor data;
@@ -155,8 +150,7 @@ static_assert(sizeof(struct gdt_segment_descriptor) == 8);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_fatptr
-{
+struct gdt_fatptr {
     uint16 limit;
     struct gdt_segment_descriptor const *base;
 } __packed;
@@ -167,15 +161,15 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
 ** Create a null descriptor, with all bits set to 0.
 */
 # define NEW_NULL_DESCRIPTOR                        \
-    (struct gdt_segment_descriptor) {               \
+    ((struct gdt_segment_descriptor) {              \
         .raw = 0                                    \
-    }
+    })
 /*
 ** Create a code segment descriptor, using the given base and limit.
 ** The value of the other fields can also be appended.
 */
 # define NEW_GDT_CODE_ENTRY(base, limit, ...)               \
-    (struct gdt_segment_descriptor) {                       \
+    ((struct gdt_segment_descriptor) {                      \
         .code = {                                           \
             .limit_low = ((limit) & 0xFFFF),                \
             .base_low = ((base) & 0xFFFF),                  \
@@ -186,14 +180,14 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
             ._reserved1 = 1,                                \
             __VA_ARGS__                                     \
         },                                                  \
-    }
+    })
 
 /*
 ** Create a data segment descriptor, using the given base and limit.
 ** The value of the other fields can also be appended.
 */
 # define NEW_GDT_DATA_ENTRY(base, limit, ...)               \
-    (struct gdt_segment_descriptor) {                       \
+    ((struct gdt_segment_descriptor) {                      \
         .data = {                                           \
             .limit_low = ((limit) & 0xFFFF),                \
             .base_low = ((base) & 0xFFFF),                  \
@@ -204,14 +198,14 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
             ._reserved1 = 1,                                \
             __VA_ARGS__                                     \
         },                                                  \
-    }
+    })
 
 /*
 ** Create a system segment descriptor, using the given base and limit.
 ** The value of the other fields can also be appended.
 */
 # define NEW_GDT_SYSTEM_ENTRY(base, limit, ...)             \
-    (struct gdt_segment_descriptor) {                       \
+    ((struct gdt_segment_descriptor) {                      \
         .system = {                                         \
             .limit_low = ((limit) & 0xFFFF),                \
             .base_low = ((base) & 0xFFFF),                  \
@@ -222,6 +216,6 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
             ._reserved1 = 0,                                \
             __VA_ARGS__                                     \
         },                                                  \
-    }
+    })
 
 #endif /* !_ARCH_X86_64_GDT_H_ */

@@ -71,7 +71,7 @@ typedef uintptr_t           uintptr;
 # define ARRAY_LENGTH(x)    (sizeof(x) / sizeof(x[0]))
 
 /* Print a message and halt the computer. */
-void    panic(char const *fmt, ...) __noreturn;
+void panic(char const *fmt, ...) __noreturn;
 
 /* Panic saying the current function isn't implemented */
 # define unimplemented()                            \

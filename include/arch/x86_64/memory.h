@@ -20,12 +20,9 @@
 /*
 ** An entry in the 4-level PML4
 */
-struct pml4e
-{
-    union
-    {
-        struct
-        {
+struct pml4e {
+    union {
+        struct {
             size_t present: 1;          // Present in memory
             size_t rw: 1;               // 0 => Readonly / 1 => Readwrite
             size_t user: 1;             // 0 => Kernel page / 1 => User
@@ -48,12 +45,9 @@ static_assert(sizeof(struct pml4e) == sizeof(uintptr));
 /*
 ** An entry in a page-directory-pointer-table.
 */
-struct pdpte
-{
-    union
-    {
-        struct
-        {
+struct pdpte {
+    union {
+        struct {
             size_t present: 1;          // Present in memory
             size_t rw: 1;               // 0 => Readonly / 1 => Readwrite
             size_t user: 1;             // 0 => Kernel page / 1 => User
@@ -78,12 +72,9 @@ static_assert(sizeof(struct pdpte) == sizeof(uintptr));
 /*
 ** An entry in a page-directory.
 */
-struct pde
-{
-    union
-    {
-        struct
-        {
+struct pde {
+    union {
+        struct {
             size_t present: 1;          // Present in memory
             size_t rw: 1;               // 0 => Readonly / 1 => Readwrite
             size_t user: 1;             // 0 => Kernel page / 1 => User
@@ -108,12 +99,9 @@ static_assert(sizeof(struct pde) == sizeof(uintptr));
 /*
 ** An entry in a page-table.
 */
-struct pte
-{
-    union
-    {
-        struct
-        {
+struct pte {
+    union {
+        struct {
             size_t present: 1;          // Present in memory
             size_t rw: 1;               // 0 => Readonly / 1 => Readwrite
             size_t user: 1;             // 0 => Kernel page / 1 => User
@@ -138,8 +126,7 @@ static_assert(sizeof(struct pte) == sizeof(uintptr));
 /*
 ** A PML4, composed of 512 entries.
 */
-struct pml4
-{
+struct pml4 {
     struct pml4e entries[512];
 };
 
@@ -147,8 +134,7 @@ struct pml4
 /*
 ** A page-directory-pointer-table, composed of 512 entries.
 */
-struct pdpt
-{
+struct pdpt {
     struct pdpte entries[512];
 };
 
@@ -157,8 +143,7 @@ static_assert(sizeof(struct pdpt) == PAGE_SIZE);
 /*
 ** A page directory, composed of 512 entries.
 */
-struct page_directory
-{
+struct page_directory {
     struct pde entries[512];
 };
 
@@ -167,8 +152,7 @@ static_assert(sizeof(struct page_directory) == PAGE_SIZE);
 /*
 ** A page directory, composed of 512 entries.
 */
-struct page_table
-{
+struct page_table {
     struct pte entries[512];
 };
 
@@ -177,8 +161,7 @@ static_assert(sizeof(struct page_table) == PAGE_SIZE);
 /*
 ** A virtual address as defined by Intel.
 */
-struct virtaddr_layout
-{
+struct virtaddr_layout {
     union {
         struct {
             size_t offset : 12;

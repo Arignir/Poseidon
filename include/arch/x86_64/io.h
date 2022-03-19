@@ -25,8 +25,7 @@
 /*
 ** Strong typing the port number.
 */
-struct io_port
-{
+struct io_port {
     uint16 port;
 };
 

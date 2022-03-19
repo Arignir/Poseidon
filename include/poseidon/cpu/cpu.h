@@ -24,8 +24,7 @@ struct thread;
 ** The lock policy for this structure is that it's only allowed to be written by the CPU it belongs to.
 ** Therefore any read should be considered potentially reads of a partial write.
 */
-struct cpu
-{
+struct cpu {
     struct arch_cpu;                // Arch dependant stuff
 
     bool bsp;                       // `true` if the CPU is the boostrap processor (BSP).
@@ -55,6 +54,6 @@ extern struct cpu const *cpus_end;
 **
 ** NOTE: This function is implemented by the architecture-dependant code.
 */
-struct cpu          *current_cpu(void);
+struct cpu *current_cpu(void);
 
 #endif /* !_POSEIDON_CPU_CPU_H_ */

@@ -15,8 +15,7 @@
 /*
 ** All colors the vga screen can handle
 */
-enum vga_color
-{
+enum vga_color {
     VGA_BLACK               = 0,
     VGA_BLUE                = 1,
     VGA_GREEN               = 2,
@@ -35,18 +34,17 @@ enum vga_color
     VGA_WHITE               = 15
 };
 
-struct vga
-{
+struct vga {
     uint16 attrib;
     uint16 *buffer;
     uint cursor_x;
     uint cursor_y;
 };
 
-void    vga_set_color(enum vga_color bg, enum vga_color fg);
-void    vga_clear(void);
-int     vga_putchar(int);
-int     vga_puts(char const *str);
-int     vga_putsn(char const *str, size_t n);
+void vga_set_color(enum vga_color bg, enum vga_color fg);
+void vga_clear(void);
+int vga_putchar(int);
+int vga_puts(char const *str);
+int vga_putsn(char const *str, size_t n);
 
 #endif /* !_PLATFORM_PC_VGA_H_ */

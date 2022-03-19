@@ -30,8 +30,7 @@
 /*
 ** The different init levels that an init hook can suscribe to.
 */
-enum init_level
-{
+enum init_level {
     /* An init hook should *not* suscribe to `__INIT_LEVEL_EARLIEST` */
     __INIT_LEVEL_EARLIEST       = 000,
 
@@ -56,8 +55,7 @@ enum init_level
 */
 typedef status_t (*init_hook_funcptr)(void);
 
-struct init_hook
-{
+struct init_hook {
     char const *name;
     enum init_level level;
     init_hook_funcptr hook;
