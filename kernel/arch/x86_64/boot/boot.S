@@ -61,7 +61,7 @@ start:
                                     // the CPU in a 32-bit compatiblity mode.
 
     .extern gdt_fatptr
-    lgdt (gdt_fatptr)          // Load the 64-bit GDT
+    lgdt (gdt_fatptr)               // Load the 64-bit GDT
 
     // Transition to 64-bit by reloading the code segment register
     // with the new 64-bit code segment selector
@@ -262,7 +262,7 @@ boot_panic:
     cmpb $0, %bl                    // Test if it is the end of the string
     je .endloop
 
-    movw %bx, (%eax)                 // Print the char
+    movw %bx, (%eax)                // Print the char
     add $2, %eax
 
     inc %edi                        // Increment the string pointer and start again
