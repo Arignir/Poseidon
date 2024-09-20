@@ -14,7 +14,7 @@
 #include "lib/string.h"
 #include "lib/log.h"
 
-NEW_IO_PORT(vga_index, 0x3D4);
+NEW_IO_PORT(vga_ctrl, 0x3D4);
 NEW_IO_PORT(vga_data, 0x3D5);
 
 static uint const VGA_WIDTH = 80u;
@@ -49,9 +49,9 @@ move_cursor(void)
 
     tmp = vga.cursor_y * VGA_WIDTH + vga.cursor_x;
 
-    io_out8(vga_index, 14);
+    io_out8(vga_ctrl, 14);
     io_out8(vga_data, tmp >> 8);
-    io_out8(vga_index, 15);
+    io_out8(vga_ctrl, 15);
     io_out8(vga_data, tmp);
 }
 
