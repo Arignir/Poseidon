@@ -18,8 +18,8 @@ static struct cpu __bsp = { .thread = NULL };
 __section(".boot_memory")
 struct cpu *bsp = &__bsp;
 
-/* Set if the BSP has been remaped to its corresponding entry within the cpu table. */
-bool bsp_remapped = false;
+// Set if the BSP has been remaped to its corresponding entry within the cpu table.
+static bool bsp_remapped = false;
 
 /*
 ** Kernel's Bootstrap Processor boot stack.

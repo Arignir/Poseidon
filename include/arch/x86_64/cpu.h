@@ -9,13 +9,4 @@
 
 #pragma once
 
-#include "poseidon/poseidon.h"
-#include "poseidon/cpu/cpu.h"
-
-/* The bootstrap processor. Used only at boot time. */
-extern struct cpu *bsp;
-
-/* Set if the BSP has been remapped to its corresponding entry within the cpu table. */
-extern bool bsp_remapped;
-
 void cpu_remap_bsp(void);

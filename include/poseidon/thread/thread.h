@@ -16,7 +16,11 @@
 #include "lib/list.h"
 
 typedef uint32 tid_t;
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-prototypes"
 typedef int (*thread_entry)();
+#pragma GCC diagnostic pop
 
 /*
 ** An enum of all states a thread can be in.
@@ -31,6 +35,7 @@ enum thread_state {
 /*
 ** Strings to print each states.
 */
+__unused
 static char const *thread_state_str[] = {
     [NONE]              = "NONE",
     [RUNNABLE]          = "RUNNABLE",

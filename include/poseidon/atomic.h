@@ -35,20 +35,20 @@
 ** These builtins atomically fetch the previous value and set `*ptr` to the
 ** result of the operation suggested by their name.
 */
-#define atomic_fetch_add(ptr, value, memorder)          __atomic_fetch_add(ptr, value)
-#define atomic_fetch_sub(ptr, value, memorder)          __atomic_fetch_sub(ptr, value)
-#define atomic_fetch_or(ptr, value, memorder)           __atomic_fetch_or(ptr, value)
-#define atomic_fetch_and(ptr, value, memorder)          __atomic_fetch_and(ptr, value)
-#define atomic_fetch_xor(ptr, value, memorder)          __atomic_fetch_xor(ptr, value)
-#define atomic_fetch_nand(ptr, value, memorder)         __atomic_fetch_nand(ptr, value)
+#define atomic_fetch_add(ptr, value, memorder)          __atomic_fetch_add(ptr, value, memorder)
+#define atomic_fetch_sub(ptr, value, memorder)          __atomic_fetch_sub(ptr, value, memorder)
+#define atomic_fetch_or(ptr, value, memorder)           __atomic_fetch_or(ptr, value, memorder)
+#define atomic_fetch_and(ptr, value, memorder)          __atomic_fetch_and(ptr, value, memorder)
+#define atomic_fetch_xor(ptr, value, memorder)          __atomic_fetch_xor(ptr, value, memorder)
+#define atomic_fetch_nand(ptr, value, memorder)         __atomic_fetch_nand(ptr, value, memorder)
 
 /*
 ** These builtins atomically fetch the new value of `*ptr` after it is set to
 ** the result of the operation suggested by their name.
 */
-#define atomic_add_fetch(ptr, value)                    __atomic_add_fetch(ptr, value)
-#define atomic_sub_fetch(ptr, value)                    __atomic_sub_fetch(ptr, value)
-#define atomic_or_fetch(ptr, value)                     __atomic_or_fetch(ptr, value)
-#define atomic_and_fetch(ptr, value)                    __atomic_and_fetch(ptr, value)
-#define atomic_xor_fetch(ptr, value)                    __atomic_xor_fetch(ptr, value)
-#define atomic_nand_fetch(ptr, value)                   __atomic_nand_fetch(ptr, value)
+#define atomic_add_fetch(ptr, value, memorder)          __atomic_add_fetch(ptr, value, memorder)
+#define atomic_sub_fetch(ptr, value, memorder)          __atomic_sub_fetch(ptr, value, memorder)
+#define atomic_or_fetch(ptr, value, memorder)           __atomic_or_fetch(ptr, value, memorder)
+#define atomic_and_fetch(ptr, value, memorder)          __atomic_and_fetch(ptr, value, memorder)
+#define atomic_xor_fetch(ptr, value, memorder)          __atomic_xor_fetch(ptr, value, memorder)
+#define atomic_nand_fetch(ptr, value, memorder)         __atomic_nand_fetch(ptr, value, memorder)

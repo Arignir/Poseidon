@@ -94,8 +94,12 @@ io_mm_in8_offset(
     struct io_mm port,
     ushort offset
 ) {
-    port.address += offset;
-    return io_in8(port);
+    char *new_addr;
+
+    new_addr = (char *)port.address + offset;
+    port.address = new_addr;
+
+    return io_mm_in8(port);
 }
 
 /*

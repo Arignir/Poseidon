@@ -42,7 +42,7 @@ CFLAGS	+= \
 	-fno-omit-frame-pointer \
 	-fno-stack-protector \
 	-std=gnu11 \
-	-isystem $(PROJECT_DIR)/include \
+	-I $(PROJECT_DIR)/include \
 	-DKCONFIG_ARCH_$(ARCH) \
 	-DKCONFIG_PLATFORM_$(PLATFORM) \
 

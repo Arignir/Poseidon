@@ -74,4 +74,4 @@ struct init_hook {
         .hook = (h),                                                    \
     }
 
-struct init_hook const  *find_next_init_hook();
+struct init_hook const  *find_next_init_hook(struct init_hook const *last, enum init_level level);

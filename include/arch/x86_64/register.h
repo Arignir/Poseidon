@@ -120,6 +120,7 @@ get_cr3(void)
 }
 
 static inline
+void
 set_cr3(
     struct cr3 cr3
 ) {

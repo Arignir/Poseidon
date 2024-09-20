@@ -120,4 +120,4 @@ list_move_tail(
     })
 
 #define list_for_each(cursor, head)                                         \
-    for (cursor = (head)->next; cursor != (head); cursor = cursor ->next)   \
+    for (cursor = (head)->next; cursor != (head); cursor = cursor ->next)
