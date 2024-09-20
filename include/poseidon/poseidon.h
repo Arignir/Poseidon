@@ -23,26 +23,8 @@
 ** A useful set of macros that act like keywords that are not available
 ** otherwise in C11.
 */
-#define inline              __inline
-#define asm                 __asm__
-#define restrict            __restrict
-#define __always_inline     __attribute__((always_inline))
-#define __pure              __attribute__((pure))
-#define __const             __attribute__((const))
-#define __cold              __attribute__((cold))
-#define __hot               __attribute__((hot))
-#define __used              __attribute__((used))
-#define __unused            __attribute__((unused))
-#define __packed            __attribute__((packed))
-#define __weak              __attribute__((weak))
-#define __weakref(x)        __attribute__((weakref(x)))
-#define __alias(x)          __attribute__((alias(x)))
-#define __aligned(x)        __attribute__((aligned(x)))
-#define __section(s)        __attribute__((section(s)))
-#define __noreturn          __attribute__((noreturn))
 #define likely(x)           __builtin_expect((x), 1)
 #define unlikely(x)         __builtin_expect((x), 0)
-#define __optimize(x)       __attribute__((optimize(x)))
 
 // Defines some shortcuts types.
 typedef unsigned char       uchar;
@@ -70,7 +52,7 @@ typedef uintptr_t           uintptr;
 #define ARRAY_LENGTH(x)     (sizeof(x) / sizeof(x[0]))
 
 /* Print a message and halt the computer. */
-void panic(char const *fmt, ...) __noreturn;
+[[gnu::noreturn]] void panic(char const *fmt, ...);
 
 // Panic saying the current function isn't implemented
 #define unimplemented()                             \
@@ -128,22 +110,22 @@ void panic(char const *fmt, ...) __noreturn;
 #endif /* DEBUG */
 
 /*
-** Put the following data in the ".data.boot" section, which will be freed
-** at the end of kernel initialisation.
+** Function attribute to put the function in the boot text section,
+** which will be freed at the end of kernel initialisation.
 */
-#define __boot_data         __section(".data.boot")
+#define boot_text               gnu::section(".text.boot")
 
 /*
-** Put the following constant data in the ".rodata.boot" section, which will
-** be freed at the end of kernel initialisation.
+** Function attribute to put the function in the boot data section,
+** which will be freed at the end of kernel initialisation.
 */
-#define __boot_rodata       __section(".rodata.boot")
+#define boot_data               gnu::section(".data.boot")
 
 /*
-** Put the following data in the ".text.boot" section, which will be freed
-** at the end of kernel initialisation.
+** Function attribute to put the function in the boot rodata section,
+** which will be freed at the end of kernel initialisation.
 */
-#define __boot_text         __section(".text.boot")
+#define boot_rodata             gnu::section(".rodata.boot")
 
 /*
 ** Pre-processor trick to concat a macro with an other macro or static text.

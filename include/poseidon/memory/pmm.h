@@ -49,7 +49,9 @@ struct pmm_reserved_area {
 ** A macro to easily create a new reserved physical memory area.
 */
 #define REGISTER_PMM_RESERVED_AREA(n, s, e)                             \
-    __aligned(sizeof(void *)) __used __section("pmm_reserved_area")     \
+    [[gnu::aligned(sizeof(void *))]]                                    \
+    [[gnu::used]]                                                       \
+    [[gnu::section("pmm_reserved_area")]]                               \
     static struct pmm_reserved_area const _pmm_reserved_area_##n = {    \
         .name = #n,                                                     \
         .start = (physaddr_t)(s),                                       \

@@ -20,7 +20,7 @@
 /*
 ** Test if interruptions are enabled.
 */
-__weak
+[[gnu::weak]]
 bool
 interrupts_enabled(void)
 {
@@ -30,7 +30,7 @@ interrupts_enabled(void)
 /*
 ** Enable interruptions.
 */
-__weak
+[[gnu::weak]]
 void
 enable_interrupts(void)
 {
@@ -40,7 +40,7 @@ enable_interrupts(void)
 /*
 ** Disable interruptions.
 */
-__weak
+[[gnu::weak]]
 void
 disable_interrupts(void)
 {
@@ -50,7 +50,7 @@ disable_interrupts(void)
 /*
 ** Set wether interruptions are enabled or not.
 */
-__weak
+[[gnu::weak]]
 void
 set_interrupts_state(
     bool state
@@ -66,7 +66,7 @@ set_interrupts_state(
 ** Quite similar to `interrupts_enabled()`, this function
 ** stores the current interrupt flag in `*save`.
 */
-__weak
+[[gnu::weak]]
 void
 push_interrupts_state(
     bool *state
@@ -78,7 +78,7 @@ push_interrupts_state(
 ** Quite similar to `set_interrupts_state()`, this function
 ** sets the interrupt flag to the content of `*save`.
 */
-__weak
+[[gnu::weak]]
 void
 pop_interrupts_state(
     bool const *state
@@ -89,7 +89,7 @@ pop_interrupts_state(
 /*
 ** Wait until an interruption is received.
 */
-__weak
+[[gnu::weak]]
 void
 halt(void)
 {
@@ -99,11 +99,11 @@ halt(void)
 /*
 ** Register an interrupt handler for the given vector.
 */
-__weak
+[[gnu::weak]]
 void
 register_interrupt_handler(
-    uint vector __unused,
-    interrupt_handler_t handler __unused
+    uint vector [[maybe_unused]],
+    interrupt_handler_t handler [[maybe_unused]]
 ) {
     unimplemented();
 }
@@ -111,10 +111,10 @@ register_interrupt_handler(
 /*
 ** Unregister an interrupt handler for the given vector.
 */
-__weak
+[[gnu::weak]]
 void
 unregister_interrupt_handler(
-    uint vector __unused
+    uint vector [[maybe_unused]]
 ) {
     unimplemented();
 }

@@ -9,7 +9,7 @@
 
 #include "poseidon/thread/thread.h"
 
-struct scheduler_stack
+struct [[gnu::packed]] scheduler_stack
 {
     uint64 rflags;
     uint64 r15;
@@ -19,7 +19,7 @@ struct scheduler_stack
     uint64 rbp;
     uint64 rbx;
     uint64 rip;
-} __packed;
+};
 
 void
 arch_thread_new(

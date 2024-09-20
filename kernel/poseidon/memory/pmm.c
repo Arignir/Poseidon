@@ -35,13 +35,13 @@
 ** We put its content in an extra section so te linker script can put it
 ** after the kernel, therefore making sure it doesn't take any virtual memory.
 */
-static __boot_data struct pmm_arena boot_arena;
-static __boot_data uint8 boot_arena_bitmap[KCONFIG_BOOT_KHEAP_SIZE / (4096 * 8)];
-static __section(".kernel_boot_heap") uint8 kernel_boot_heap[KCONFIG_BOOT_KHEAP_SIZE];
+[[boot_data]] static struct pmm_arena boot_arena;
+[[boot_data]] static uint8 boot_arena_bitmap[KCONFIG_BOOT_KHEAP_SIZE / (4096 * 8)];
+[[gnu::section(".kernel_boot_heap")]] static  uint8 kernel_boot_heap[KCONFIG_BOOT_KHEAP_SIZE];
 
 /* A few shortcuts, to make operations more verbose. */
-static __boot_data uint8 *kernel_boot_heap_start = kernel_boot_heap;
-static __boot_data uint8 *kernel_boot_heap_end = (uint8 *)kernel_boot_heap + sizeof(kernel_boot_heap);
+[[boot_data]] static uint8 *kernel_boot_heap_start = kernel_boot_heap;
+[[boot_data]] static uint8 *kernel_boot_heap_end = (uint8 *)kernel_boot_heap + sizeof(kernel_boot_heap);
 
 /* An array of physical memory regions. */
 static struct pmm_arena *arenas = NULL;

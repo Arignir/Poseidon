@@ -25,9 +25,9 @@ struct logger {
 };
 
 #define REGISTER_LOGGER(n, p)                           \
-    __aligned(sizeof(void *))                           \
-    __used                                              \
-    __section("poseidon_logger")                        \
+    [[gnu::aligned(sizeof(void *))]]                    \
+    [[gnu::used]]                                       \
+    [[gnu::section("poseidon_logger")]]                 \
     static                                              \
     struct logger const _logger_struct_##n = {          \
         .name = #n,                                     \

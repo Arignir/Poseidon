@@ -67,7 +67,9 @@ struct init_hook {
 ** and stores it in the reserved section of the binary dedicated to init hooks.
 */
 # define REGISTER_INIT_HOOK(n, h, l)                                    \
-    __aligned(sizeof(void *)) __used __section("poseidon_init_hooks")   \
+    [[gnu::aligned(sizeof(void *))]]                                    \
+    [[gnu::used]]                                                       \
+    [[gnu::section("poseidon_init_hooks")]]                             \
     static struct init_hook const _init_hook_struct_##n = {             \
         .name = #n,                                                     \
         .level = (l),                                                   \

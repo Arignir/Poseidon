@@ -22,12 +22,12 @@
 ** A descriptor of a code segment.
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_code_segment_descriptor {
+struct [[gnu::packed]] gdt_code_segment_descriptor {
     size_t limit_low: 16;
     size_t base_low: 16;
     size_t base_mid: 8;
-    union {
-        struct {
+    union [[gnu::packed]] {
+        struct [[gnu::packed]] {
             size_t accessed: 1;
             size_t readable: 1;
             size_t conforming: 1;
@@ -40,11 +40,11 @@ struct gdt_code_segment_descriptor {
             size_t long_mode: 1;
             size_t default_op_size: 1;
             size_t granularity: 1;
-        } __packed;
+        };
         size_t flags: 16;
-    } __packed;
+    };
     size_t base_high: 8;
-} __packed;
+};
 
 static_assert(sizeof(struct gdt_code_segment_descriptor) == 8);
 
@@ -53,12 +53,12 @@ static_assert(sizeof(struct gdt_code_segment_descriptor) == 8);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_data_segment_descriptor {
+struct [[gnu::packed]] gdt_data_segment_descriptor {
     size_t limit_low: 16;
     size_t base_low: 16;
     size_t base_mid: 8;
-    union {
-        struct {
+    union [[gnu::packed]] {
+        struct [[gnu::packed]] {
             size_t accessed: 1;
             size_t writable: 1;
             size_t direction: 1;
@@ -71,11 +71,11 @@ struct gdt_data_segment_descriptor {
             size_t long_mode: 1;
             size_t big: 1;
             size_t granularity: 1;
-        } __packed;
+        };
         size_t flags: 16;
-    } __packed;
+    };
     size_t base_high: 8;
-} __packed;
+};
 
 static_assert(sizeof(struct gdt_data_segment_descriptor) == 8);
 
@@ -84,12 +84,12 @@ static_assert(sizeof(struct gdt_data_segment_descriptor) == 8);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_system_segment_descriptor {
+struct [[gnu::packed]] gdt_system_segment_descriptor {
     size_t limit_low: 16;
     size_t base_low: 16;
     size_t base_mid: 8;
-    union {
-        struct {
+    union [[gnu::packed]] {
+        struct [[gnu::packed]] {
             size_t type: 4;
             size_t _reserved0: 1;
             size_t dpl: 2;
@@ -97,11 +97,11 @@ struct gdt_system_segment_descriptor {
             size_t limit_high: 4;
             size_t _reserved1: 3;
             size_t granularity: 1;
-        } __packed;
+        };
         size_t flags: 16;
-    } __packed;
+    };
     size_t base_high: 8;
-} __packed;
+};
 
 static_assert(sizeof(struct gdt_system_segment_descriptor) == 8);
 
@@ -149,10 +149,10 @@ static_assert(sizeof(struct gdt_segment_descriptor) == 8);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct gdt_fatptr {
+struct [[gnu::packed]] gdt_fatptr {
     uint16 limit;
     struct gdt_segment_descriptor const *base;
-} __packed;
+};
 
 static_assert(sizeof(struct gdt_fatptr) == 10);
 

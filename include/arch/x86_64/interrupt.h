@@ -72,7 +72,7 @@ enum interrupt_vector {
 ** Most of these elemnts are pushed by the interrupt handler, but some of them
 ** are also pushed by the processor automatically when the exception is handled.
 */
-struct iframe {
+struct [[gnu::packed]] iframe {
     uintptr rax;
     uintptr rcx;
     uintptr rdx;
@@ -95,7 +95,7 @@ struct iframe {
     struct rflags rflags;
     uintptr rsp;
     uintptr ss;
-} __packed;
+};
 
 static_assert(sizeof(struct iframe) == 22 * sizeof(uint64));
 
@@ -114,7 +114,7 @@ enum idt_gate_descriptor_type {
 **
 ** The layout of this structure is defined by Intel.
 */
-struct idt_descriptor {
+struct [[gnu::packed]] idt_descriptor {
     size_t offset_low: 16;
     size_t segment_selector: 16;
     size_t ist: 3;
@@ -126,7 +126,7 @@ struct idt_descriptor {
     size_t offset_mid: 16;
     size_t offset_high: 32;
     size_t _reserved2: 32;
-} __packed;
+};
 
 static_assert(sizeof(struct idt_descriptor) == 16);
 
@@ -136,10 +136,10 @@ static_assert(sizeof(struct idt_descriptor) == 16);
 **
 ** The layout of this structure is defined by Intel.
 */
-struct idt_fatptr {
+struct [[gnu::packed]] idt_fatptr {
     uint16 limit;
     struct idt_descriptor *base;
-} __packed;
+};
 
 static_assert(sizeof(struct idt_fatptr) == 10);
 

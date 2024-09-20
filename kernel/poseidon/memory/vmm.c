@@ -254,10 +254,10 @@ vmm_validate_user_str(
 /*
 ** Test whether the given virtual address is mapped.
 */
-__weak
+[[gnu::weak]]
 bool
 vmm_is_mapped(
-    virtaddr_const_t va __unused
+    virtaddr_const_t va [[maybe_unused]]
 ) {
     unimplemented();
 }
@@ -265,10 +265,10 @@ vmm_is_mapped(
 /*
 ** Test whether the given virtual address is mapped and belongs to user-space.
 */
-__weak
+[[gnu::weak]]
 bool
 vmm_is_mapped_user(
-    virtaddr_const_t va __unused
+    virtaddr_const_t va [[maybe_unused]]
 ) {
     unimplemented();
 }
@@ -279,12 +279,12 @@ vmm_is_mapped_user(
 **
 ** This function doesn't overwrite any existing mapping, failing instead.
 */
-__weak
+[[gnu::weak]]
 status_t
 vmm_map_frame(
-    virtaddr_t va __unused,
-    physaddr_t pa __unused,
-    mmap_flags_t flags __unused
+    virtaddr_t va [[maybe_unused]],
+    physaddr_t pa [[maybe_unused]],
+    mmap_flags_t flags [[maybe_unused]]
 ) {
     unimplemented();
 }
@@ -292,11 +292,11 @@ vmm_map_frame(
 /*
 ** Unmap the virtual address `va`.
 */
-__weak
+[[gnu::weak]]
 void
 vmm_unmap_frame(
-    virtaddr_t va __unused,
-    munmap_flags_t flags __unused
+    virtaddr_t va [[maybe_unused]],
+    munmap_flags_t flags [[maybe_unused]]
 ) {
     unimplemented();
 }

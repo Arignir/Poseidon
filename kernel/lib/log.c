@@ -20,15 +20,15 @@
 // Ensure logs aren't scrambled because two cores want to log at the same time
 static struct spinlock lock = SPINLOCK_DEFAULT;
 
-extern struct logger const __start_poseidon_logger[] __weak;
-extern struct logger const __stop_poseidon_logger[] __weak;
+[[gnu::weak]] extern struct logger const __start_poseidon_logger[];
+[[gnu::weak]] extern struct logger const __stop_poseidon_logger[];
 
 static
 int
 log_fmt_callback(
     char const *buffer,
     size_t len,
-    void *tmp __unused
+    void *tmp [[maybe_unused]]
 ) {
     struct logger const *logger;
 

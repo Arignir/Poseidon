@@ -55,7 +55,7 @@ putsn(
     }
 }
 
-__boot_text
+[[boot_text]]
 static
 status_t
 uart8250_init(void)

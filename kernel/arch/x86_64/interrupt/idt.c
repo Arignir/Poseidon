@@ -15,9 +15,8 @@
 #include "arch/x86_64/selector.h"
 #include "lib/log.h"
 
-__aligned(16)
-static
-struct idt_descriptor idt[INT_NB] = { 0 };
+[[gnu::aligned(16)]]
+static struct idt_descriptor idt[INT_NB] = { 0 };
 
 /*
 ** The fat pointer describing the IDT.
@@ -26,7 +25,7 @@ struct idt_descriptor idt[INT_NB] = { 0 };
 ** This fat pointer is given in argument to the LIDT instruction when loading
 ** the IDT.
 */
-__aligned(16)
+[[gnu::aligned(16)]]
 struct idt_fatptr const idt_fatptr = {
     .limit = sizeof(idt) - 1,
     .base = idt,
@@ -40,7 +39,7 @@ struct idt_fatptr const idt_fatptr = {
 **
 ** The IDT isn't loaded (use `idt_load()` to do so).
 */
-__boot_text
+[[boot_text]]
 void
 idt_setup(void)
 {
@@ -63,7 +62,7 @@ idt_setup(void)
 /*
 ** Load the IDT
 */
-__boot_text
+[[boot_text]]
 void
 idt_load(void)
 {

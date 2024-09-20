@@ -32,8 +32,8 @@ struct cpuid {
     char brand[49];                     // CPU Brand String (null terminated)
 
     // Content of EAX (CPUID.EAX=0x1)
-    union {
-        struct {
+    union [[gnu::packed]] {
+        struct [[gnu::packed]] {
             size_t stepping_id: 4;
             size_t model_id: 4;
             size_t family_id: 4;
@@ -42,9 +42,9 @@ struct cpuid {
             size_t extended_model_id: 4;
             size_t extended_family_id: 8;
             size_t : 4;
-        } __packed;
+        };
         uint32 raw;
-    } __packed version;
+    } version;
 
     // Content of EBX (CPUID.EAX=0x1)
     uint8 brand_idx;
@@ -61,8 +61,8 @@ struct cpuid {
     uint32 display_model;               // Beautified model ID
 
     // Feature flags
-    union {
-        struct {
+    union [[gnu::packed]] {
+        struct [[gnu::packed]] {
             // EDX when CPUID.EAX=0x1
             size_t fpu: 1;              // x87-FPU on Chip
             size_t vme: 1;              // Virtual-8086 Mode Enhancement
@@ -192,9 +192,9 @@ struct cpuid {
             size_t : 1;
             size_t lm: 1;               // Long mode is available
             size_t : 2;
-        } __packed;
+        };
 
-        struct {
+        struct [[gnu::packed]] {
             uint32 value_1_edx;     // The value of EDX when CPUID.EAX=0x1
             uint32 value_1_ecx;     // The value of ECX when CPUID.EAX=0x1
             uint32 value_7_0_ebx;   // The value of EBX when CPUID.EAX=0x7 and ECX=0
@@ -202,9 +202,9 @@ struct cpuid {
 
             uint32 value_8xx1_ecx;  // The value of ECX when CPUID.EAX=0x80000001
             uint32 value_8xx1_edx;  // The value of EDX when CPUID.EAX=0x80000001
-        } __packed;
+        };
         uint32 raw[6];
-    } __packed features;
+    } features;
 };
 
 static_assert(sizeof(((struct cpuid *)NULL)->version) == sizeof(uint32));

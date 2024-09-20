@@ -46,10 +46,10 @@ struct rflags {
             size_t id: 1;
             size_t : 10;
             size_t : 32;
-        } __packed;
+        };
         uint64 raw;
-    } __packed;
-} __packed;
+    };
+};
 
 static_assert(sizeof(struct rflags) == sizeof(uint64));
 

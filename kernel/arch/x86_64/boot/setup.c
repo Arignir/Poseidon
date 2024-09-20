@@ -30,7 +30,7 @@ static void    common_setup(void);
 /*
 ** Continue the early initialisation of the bootstrap CPU.
 */
-__boot_text
+[[boot_text]]
 static
 status_t
 bsp_early_setup(void)
@@ -59,7 +59,7 @@ REGISTER_INIT_HOOK(bsp_early_setup, &bsp_early_setup, INIT_LEVEL_ARCH_EARLY);
 /*
 ** Continue the initialisation of the bootstrap CPU.
 */
-__boot_text
+[[boot_text]]
 static
 status_t
 bsp_setup(void)
@@ -105,7 +105,7 @@ REGISTER_INIT_HOOK(bsp_setup, &bsp_setup, INIT_LEVEL_ARCH);
 /*
 ** Continue the early initialisation of the other CPUs.
 */
-__boot_text
+[[boot_text]]
 void
 ap_setup(void)
 {
@@ -124,7 +124,7 @@ ap_setup(void)
 /*
 ** Common initialisation for both the BSP and the APs.
 */
-__boot_text
+[[boot_text]]
 static
 void
 common_setup(void)

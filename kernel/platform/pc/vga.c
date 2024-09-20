@@ -20,8 +20,7 @@ NEW_IO_PORT(vga_data, 0x3D5);
 static uint const VGA_WIDTH = 80u;
 static uint const VGA_HEIGHT = 25u;
 
-static struct vga vga =
-{
+static struct vga vga = {
     .attrib = 0,
     .buffer = (uint16 *)0xB8000,
     .cursor_x = 0,
@@ -42,7 +41,8 @@ vga_set_color(
 /*
 ** Moves the visual cursor to it's real coordinates.
 */
-static void
+static
+void
 move_cursor(void)
 {
     uint32 tmp;

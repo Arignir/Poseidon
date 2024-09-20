@@ -20,7 +20,7 @@
 ** more detailed panic messages with, for example,
 ** registers or a dump of the stack.
 */
-__weak
+[[gnu::weak]]
 void
 panic(
     char const *fmt,

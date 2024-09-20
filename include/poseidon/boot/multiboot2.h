@@ -191,13 +191,13 @@ struct multiboot_color
   multiboot_uint8_t blue;
 };
 
-struct multiboot_mmap_entry
+struct [[gnu::packed]] multiboot_mmap_entry
 {
   multiboot_uint64_t addr;
   multiboot_uint64_t len;
   multiboot_uint32_t type;
   multiboot_uint32_t zero;
-} __packed;
+};
 typedef struct multiboot_mmap_entry multiboot_memory_map_t;
 
 struct multiboot_tag

@@ -32,7 +32,7 @@ NEW_IO_PORT(cmos_ret, 0x71);
 static volatile uchar *apic = NULL;
 
 /* Variable to transmit the AP's new stack when starting up */
-__section(".boot_memory")
+[[boot_data]]
 virtaddr_t ap_boot_stack;
 
 /*

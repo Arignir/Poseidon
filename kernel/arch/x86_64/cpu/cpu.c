@@ -12,10 +12,10 @@
 #include "arch/x86_64/apic.h"
 
 /* The bootstrap processor. Only used at boot time. */
-__section(".boot_memory")
+[[boot_data]]
 static struct cpu __bsp = { .thread = NULL };
 
-__section(".boot_memory")
+[[boot_data]]
 struct cpu *bsp = &__bsp;
 
 // Set if the BSP has been remaped to its corresponding entry within the cpu table.
@@ -65,7 +65,7 @@ current_cpu(void)
 /*
 ** TODO FIXME: Remove this little hack and actually use cpus[0] to represent the BSP
 */
-__boot_text
+[[boot_text]]
 void
 cpu_remap_bsp(void)
 {

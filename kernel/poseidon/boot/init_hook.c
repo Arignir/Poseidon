@@ -11,14 +11,14 @@
 #include "poseidon/boot/init_hook.h"
 
 /* Init hooks are located within the 'poseidon_init_hooks' section */
-extern struct init_hook const __start_poseidon_init_hooks[] __weak;
-extern struct init_hook const __stop_poseidon_init_hooks[] __weak;
+[[gnu::weak]] extern struct init_hook const __start_poseidon_init_hooks[];
+[[gnu::weak]] extern struct init_hook const __stop_poseidon_init_hooks[];
 
 /*
 ** Find the next uncalled init hook with an init level above or equal the given
 ** one.
 */
-__boot_text
+[[boot_text]]
 struct init_hook const *
 find_next_init_hook(
     struct init_hook const *last,

@@ -35,7 +35,7 @@ enum thread_state {
 /*
 ** Strings to print each states.
 */
-__unused
+[[maybe_unused]]
 static char const *thread_state_str[] = {
     [NONE]              = "NONE",
     [RUNNABLE]          = "RUNNABLE",

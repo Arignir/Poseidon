@@ -21,7 +21,7 @@ enum msr_list {
     MSR_IA32_EFER           = 0xC0000080,
 };
 
-struct msr_ia32_efer {
+struct [[gnu::packed]] msr_ia32_efer {
     union {
         struct {
             size_t syscall: 1;          // SYSCALL enable
@@ -35,7 +35,7 @@ struct msr_ia32_efer {
         };
         uint64 raw;
     };
-} __packed;
+};
 
 static_assert(sizeof(struct msr_ia32_efer) == sizeof(uint64));
 

@@ -20,8 +20,8 @@
 ** We need one TSS per CPU, so the size of the GDT depends on the maximum
 ** number of supported CPUs.
 */
-__aligned(16)
-struct gdt_segment_descriptor const gdt[] = {
+[[gnu::aligned(16)]]
+struct  gdt_segment_descriptor const gdt[] = {
     /* 0x00: Null segment selector (required by Intel) */
     NEW_NULL_DESCRIPTOR,
 
@@ -99,8 +99,8 @@ struct gdt_segment_descriptor const gdt[] = {
 ** This fat pointer is given in argument to the LGDT instruction when loading
 ** the GDT.
 */
-__boot_rodata
-__aligned(16)
+[[boot_rodata]]
+[[gnu::aligned(16)]]
 struct gdt_fatptr const gdt_fatptr = {
     .limit = sizeof(gdt) - 1,
     .base = gdt,
