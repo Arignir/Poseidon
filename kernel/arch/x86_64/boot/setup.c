@@ -11,19 +11,19 @@
 ** Continue the initialisation of the CPU.
 */
 
-#include <poseidon/boot/init_hook.h>
-#include <poseidon/memory/pmm.h>
-#include <poseidon/cpu/cpu.h>
-#include <poseidon/scheduler/scheduler.h>
-#include <platform/pc/pic8259.h>
-#include <arch/x86_64/interrupt.h>
-#include <arch/x86_64/cpuid.h>
-#include <arch/x86_64/ioapic.h>
-#include <arch/x86_64/apic.h>
-#include <arch/x86_64/msr.h>
-#include <arch/x86_64/cpu.h>
-#include <arch/x86_64/smp.h>
-#include <lib/log.h>
+#include "poseidon/boot/init_hook.h"
+#include "poseidon/memory/pmm.h"
+#include "poseidon/cpu/cpu.h"
+#include "poseidon/scheduler/scheduler.h"
+#include "platform/pc/pic8259.h"
+#include "arch/x86_64/interrupt.h"
+#include "arch/x86_64/cpuid.h"
+#include "arch/x86_64/ioapic.h"
+#include "arch/x86_64/apic.h"
+#include "arch/x86_64/msr.h"
+#include "arch/x86_64/cpu.h"
+#include "arch/x86_64/smp.h"
+#include "lib/log.h"
 
 static void    common_setup(void);
 

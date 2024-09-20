@@ -7,10 +7,10 @@
 **
 \******************************************************************************/
 
-#include <arch/x86_64/interrupt.h>
-#include <poseidon/interrupt.h>
-#include <poseidon/thread/thread.h>
-#include <lib/log.h>
+#include "arch/x86_64/interrupt.h"
+#include "poseidon/interrupt.h"
+#include "poseidon/thread/thread.h"
+#include "lib/log.h"
 
 static interrupt_handler_t irq_handlers[INT_NB];
 

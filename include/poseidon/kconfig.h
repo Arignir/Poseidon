@@ -11,20 +11,19 @@
 ** The kernel's configuration.
 */
 
-#ifndef _POSEIDON_KCONFIG_H_
-# define _POSEIDON_KCONFIG_H_
+#pragma once
 
-# include <platform/target/kconfig.h>
+#define POSEIDON_KCONFIG
+
+#include "platform/target/kconfig.h"
 
 /*
 ** The following can be modified freely almost independently of the
 ** targeted architecture.
 */
 
-/* Enable Symmetric MultiProcessing */
-# define KCONFIG_SMP                            1
+// Enable Symmetric MultiProcessing
+#define KCONFIG_SMP                             1
 
-/* Use a multiboot-compliant bootloader to set-up graphic mode. */
-# define KCONFIG_MULTIBOOT_FRAMEBUFFER          0
-
-#endif /* !_KCONFIG_POSEIDON_H_ */
+// Use a multiboot-compliant bootloader to set-up graphic mode.
+#define KCONFIG_MULTIBOOT_FRAMEBUFFER           0

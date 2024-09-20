@@ -7,11 +7,11 @@
 **
 \******************************************************************************/
 
-#include <arch/x86_64/interrupt.h>
-#include <poseidon/poseidon.h>
-#include <poseidon/interrupt.h>
-#include <poseidon/cpu/cpu.h>
-#include <lib/log.h>
+#include "arch/x86_64/interrupt.h"
+#include "poseidon/poseidon.h"
+#include "poseidon/interrupt.h"
+#include "poseidon/cpu/cpu.h"
+#include "lib/log.h"
 
 void
 exception_breakpoint(

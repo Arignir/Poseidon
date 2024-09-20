@@ -11,8 +11,8 @@
 ** The Great Descriptor Table (GDT).
 */
 
-#include <arch/x86_64/gdt.h>
-#include <poseidon/memory/memory.h>
+#include "arch/x86_64/gdt.h"
+#include "poseidon/memory/memory.h"
 
 /*
 ** A statically allocated GDT.

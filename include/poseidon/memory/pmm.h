@@ -7,10 +7,9 @@
 **
 \******************************************************************************/
 
-#ifndef _POSEIDON_MEMORY_PMM_H_
-# define _POSEIDON_MEMORY_PMM_H_
+#pragma once
 
-# include <poseidon/memory/memory.h>
+#include "poseidon/memory/memory.h"
 
 /*
 ** A region of available physical memory.
@@ -49,12 +48,10 @@ struct pmm_reserved_area {
 **
 ** A macro to easily create a new reserved physical memory area.
 */
-# define REGISTER_PMM_RESERVED_AREA(n, s, e)                            \
+#define REGISTER_PMM_RESERVED_AREA(n, s, e)                             \
     __aligned(sizeof(void *)) __used __section("pmm_reserved_area")     \
     static struct pmm_reserved_area const _pmm_reserved_area_##n = {    \
         .name = #n,                                                     \
-        .start = (physaddr_t)(s),                                                   \
-        .end = (physaddr_t)(e),                                                     \
+        .start = (physaddr_t)(s),                                       \
+        .end = (physaddr_t)(e),                                         \
     }
-
-#endif /* !_POSEIDON_MEMORY_PMM_H_ */

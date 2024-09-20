@@ -17,8 +17,8 @@
 **   https://pdos.csail.mit.edu/6.828/2008/readings/hardware/8259A.pdf
 */
 
-#include <arch/x86_64/io.h>
-#include <arch/x86_64/interrupt.h>
+#include "arch/x86_64/io.h"
+#include "arch/x86_64/interrupt.h"
 
 /*
 ** Define two ports: the master and slave PIC.

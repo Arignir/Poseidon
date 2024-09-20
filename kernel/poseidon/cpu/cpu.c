@@ -7,8 +7,8 @@
 **
 \******************************************************************************/
 
-#include <poseidon/cpu/cpu.h>
-#include <poseidon/memory/memory.h>
+#include "poseidon/cpu/cpu.h"
+#include "poseidon/memory/memory.h"
 
 /* Number of CPUs on the current system. */
 uint ncpu = 0;

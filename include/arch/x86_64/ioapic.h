@@ -7,13 +7,12 @@
 **
 \******************************************************************************/
 
-#ifndef _ARCH_X86_64_IOAPIC_H_
-# define _ARCH_X86_64_IOAPIC_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <poseidon/memory/memory.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/memory/memory.h"
 
-# define IOAPIC_BASE_ADDR               ((physaddr_t)0x0FEC00000)
+#define IOAPIC_BASE_ADDR                ((physaddr_t)0x0FEC00000)
 
 /*
 ** All I/O APIC register offset
@@ -90,5 +89,3 @@ void ioapic_init(void);
 void ioapic_map(physaddr_t);
 void ioapic_mask_int(uint vector);
 void ioapic_unmask_int(uint vector);
-
-#endif /* !_ARCH_X86_64_IOAPIC_H_ */

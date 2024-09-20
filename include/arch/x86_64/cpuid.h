@@ -7,10 +7,9 @@
 **
 \******************************************************************************/
 
-#ifndef _ARCH_X86_64_CPUID_H_
-# define _ARCH_X86_64_CPUID_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** The output of CPUID.
@@ -213,5 +212,3 @@ static_assert(sizeof(((struct cpuid *)NULL)->features) == 6 * sizeof(uint32));
 
 void cpuid_load(struct cpuid *);
 void cpuid_dump(struct cpuid *);
-
-#endif /* !_ARCH_X86_64_CPUID_H_ */

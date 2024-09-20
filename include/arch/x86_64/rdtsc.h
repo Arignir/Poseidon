@@ -7,10 +7,9 @@
 **
 \******************************************************************************/
 
-#ifndef _ARCH_X86_64_ASM_H_
-# define _ARCH_X86_64_ASM_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 static inline
 uint64
@@ -27,5 +26,3 @@ rdtsc(void)
     );
     return ((uint64)d << 32u | a);
 }
-
-#endif /* !_ARCH_X86_64_ASM_H_ */

@@ -7,12 +7,12 @@
 **
 \******************************************************************************/
 
-#include <poseidon/status.h>
-#include <poseidon/poseidon.h>
-#include <poseidon/boot/init_hook.h>
-#include <poseidon/boot/multiboot2.h>
-#include <poseidon/memory/memory.h>
-#include <poseidon/memory/kheap.h>
+#include "poseidon/status.h"
+#include "poseidon/poseidon.h"
+#include "poseidon/boot/init_hook.h"
+#include "poseidon/boot/multiboot2.h"
+#include "poseidon/memory/memory.h"
+#include "poseidon/memory/kheap.h"
 
 /*
 ** The multiboot structure, filled by the bootloader.

@@ -7,9 +7,9 @@
 **
 \******************************************************************************/
 
-#include <poseidon/poseidon.h>
-#include <poseidon/cpu/cpu.h>
-#include <arch/x86_64/apic.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/cpu/cpu.h"
+#include "arch/x86_64/apic.h"
 
 /* The bootstrap processor. Only used at boot time. */
 __section(".boot_memory")

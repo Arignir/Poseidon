@@ -14,8 +14,8 @@
 ** the architecture.
 */
 
-#include <poseidon/poseidon.h>
-#include <poseidon/interrupt.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/interrupt.h"
 
 /*
 ** Test if interruptions are enabled.

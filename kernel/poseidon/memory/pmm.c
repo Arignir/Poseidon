@@ -18,13 +18,13 @@
 ** availability of a frame (1 for taken, 0 for free).
 */
 
-#include <poseidon/boot/init_hook.h>
-#include <poseidon/boot/multiboot2.h>
-#include <poseidon/memory/memory.h>
-#include <poseidon/memory/kheap.h>
-#include <poseidon/memory/pmm.h>
-#include <lib/string.h>
-#include <lib/log.h>
+#include "poseidon/boot/init_hook.h"
+#include "poseidon/boot/multiboot2.h"
+#include "poseidon/memory/memory.h"
+#include "poseidon/memory/kheap.h"
+#include "poseidon/memory/pmm.h"
+#include "lib/string.h"
+#include "lib/log.h"
 
 /*
 ** The arena used early during the boot process, before the PMM can fully be initialized.

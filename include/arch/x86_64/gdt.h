@@ -14,10 +14,9 @@
 ** content.
 */
 
-#ifndef _ARCH_X86_64_GDT_H_
-# define _ARCH_X86_64_GDT_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** A descriptor of a code segment.
@@ -217,5 +216,3 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
             __VA_ARGS__                                     \
         },                                                  \
     })
-
-#endif /* !_ARCH_X86_64_GDT_H_ */

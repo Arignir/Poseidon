@@ -7,11 +7,11 @@
 **
 \******************************************************************************/
 
-#include <arch/x86_64/ioapic.h>
-#include <arch/x86_64/apic.h>
-#include <arch/x86_64/interrupt.h>
-#include <poseidon/memory/pmm.h>
-#include <poseidon/memory/kheap.h>
+#include "arch/x86_64/ioapic.h"
+#include "arch/x86_64/apic.h"
+#include "arch/x86_64/interrupt.h"
+#include "poseidon/memory/pmm.h"
+#include "poseidon/memory/kheap.h"
 
 static volatile uchar *ioapic;
 

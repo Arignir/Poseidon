@@ -11,7 +11,7 @@
 ** Implementation of basic C functions manipulating strings.
 */
 
-#include <lib/string.h>
+#include "lib/string.h"
 
 size_t
 strlen(

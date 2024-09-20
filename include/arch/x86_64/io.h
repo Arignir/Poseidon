@@ -17,10 +17,9 @@
 ** in `poseidon/io.h`.
 */
 
-#ifndef _ARCH_X86_64_IO_H_
-# define _ARCH_X86_64_IO_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** Strong typing the port number.
@@ -117,5 +116,3 @@ io_port_wait(void)
         :
     );
 }
-
-#endif /* !_ARCH_X86_64_IO_H_ */

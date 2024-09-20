@@ -7,10 +7,9 @@
 **
 \******************************************************************************/
 
-#ifndef _POSEIDON_ARCH_X86_64_MSR_H_
-# define _POSEIDON_ARCH_X86_64_MSR_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** A list of all MSRs.
@@ -101,5 +100,3 @@ msr_or(
 ) {
     msr_write(msr, msr_read(msr) | mask);
 }
-
-#endif /* !_POSEIDON_ARCH_X86_64_MSR_H_ */

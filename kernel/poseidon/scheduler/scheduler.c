@@ -7,11 +7,12 @@
 **
 \******************************************************************************/
 
-#include <poseidon/scheduler/scheduler.h>
-#include <poseidon/thread/thread.h>
-#include <lib/list.h>
-#include <lib/sync/spinlock.h>
-#include <lib/log.h>
+#include "poseidon/scheduler/scheduler.h"
+#include "poseidon/thread/thread.h"
+#include "poseidon/interrupt.h"
+#include "lib/list.h"
+#include "lib/sync/spinlock.h"
+#include "lib/log.h"
 
 struct linked_list sched_runnable_threads = LIST_HEAD_INIT(sched_runnable_threads);
 struct spinlock sched_runnable_threads_lock = SPINLOCK_DEFAULT;

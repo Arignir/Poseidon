@@ -22,10 +22,9 @@
 ** hand within the section. The macro will do it for you.
 */
 
-#ifndef _POSEIDON_BOOT_INIT_HOOK_H_
-# define _POSEIDON_BOOT_INIT_HOOk_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** The different init levels that an init hook can suscribe to.
@@ -76,5 +75,3 @@ struct init_hook {
     }
 
 struct init_hook const  *find_next_init_hook();
-
-#endif /* !_POSEIDON_BOOT_INIT_HOOK_H_ */

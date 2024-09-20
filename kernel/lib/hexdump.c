@@ -7,8 +7,8 @@
 **
 \******************************************************************************/
 
-#include <lib/hexdump.h>
-#include <lib/log.h>
+#include "lib/hexdump.h"
+#include "lib/log.h"
 
 static
 void

@@ -11,10 +11,9 @@
 ** Architecture-independent API to manipulate maskable interrupts.
 */
 
-#ifndef _POSEIDON_INTERRUPT_H_
-# define _POSEIDON_INTERRUPT_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** An interrupt handler.
@@ -35,5 +34,3 @@ void pop_interrupts_state(bool const *save);
 void halt(void);
 void register_interrupt_handler(uint vector, interrupt_handler_t handler);
 void unregister_interrupt_handler(uint);
-
-#endif /* !_POSEIDON_INTERRUPT_H_ */

@@ -13,13 +13,13 @@
 ** TODO: List all the features supported.
 */
 
-#include <arch/x86_64/memory.h>
-#include <arch/x86_64/apic.h>
-#include <arch/x86_64/interrupt.h>
-#include <poseidon/memory/pmm.h>
-#include <poseidon/memory/vmm.h>
-#include <lib/string.h>
-#include <lib/sync/spinlock.h>
+#include "arch/x86_64/memory.h"
+#include "arch/x86_64/apic.h"
+#include "arch/x86_64/interrupt.h"
+#include "poseidon/memory/pmm.h"
+#include "poseidon/memory/vmm.h"
+#include "lib/string.h"
+#include "lib/sync/spinlock.h"
 
 virtaddr_t tlb_shootdown_target;
 static struct spinlock tlb_shootdown_target_lock;

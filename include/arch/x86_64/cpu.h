@@ -7,11 +7,10 @@
 **
 \******************************************************************************/
 
-#ifndef _ARCH_X86_64_CPU_H_
-# define _ARCH_X86_64_CPU_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <poseidon/cpu/cpu.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/cpu/cpu.h"
 
 /* The bootstrap processor. Used only at boot time. */
 extern struct cpu *bsp;
@@ -20,5 +19,3 @@ extern struct cpu *bsp;
 extern bool bsp_remapped;
 
 void cpu_remap_bsp(void);
-
-#endif /* !_ARCH_X86_64_CPU_H_ */

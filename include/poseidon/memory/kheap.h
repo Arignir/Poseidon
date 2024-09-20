@@ -7,11 +7,10 @@
 **
 \******************************************************************************/
 
-#ifndef _POSEIDON_MEMORY_KHEAP_H_
-# define _POSEIDON_MEMORY_KHEAP_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <poseidon/memory/memory.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/memory/memory.h"
 
 /*
 ** Each allocation made with `kheap_alloc()` belongs to a block. Each block is
@@ -36,7 +35,7 @@ static_assert(sizeof(struct kheap_block) % sizeof(void *) == 0);
 ** Each block's header must have their `magic` field equal to this or
 ** it has been corrupted.
 */
-# define KHEAP_MAGIC  0xf9f66427
+#define KHEAP_MAGIC     0xf9f66427
 
 /*
 ** We are using a dirty trick to have a quick and functional `kheap_alloc_aligned()`.
@@ -56,5 +55,3 @@ virtaddr_t kheap_alloc_device(physaddr_t, size_t);
 virtaddr_t kheap_realloc(virtaddr_t, size_t);
 virtaddr_t kheap_alloc_zero(size_t);
 void kheap_free(virtaddr_t);
-
-#endif /* !_POSEIDON_MEMORY_KHEAP_H_ */

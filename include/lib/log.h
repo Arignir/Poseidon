@@ -7,11 +7,10 @@
 **
 \******************************************************************************/
 
-#ifndef _LIB_LOG_H_
-# define _LIB_LOG_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <stdarg.h>
+#include <stdarg.h>
+#include "poseidon/poseidon.h"
 
 void log(char const *, ...);
 void logln(char const *, ...);
@@ -34,5 +33,3 @@ struct logger {
         .name = #n,                                     \
         .print = (p),                                   \
     }
-
-#endif /* !_LIB_LOG_H_ */

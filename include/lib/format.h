@@ -7,11 +7,10 @@
 **
 \******************************************************************************/
 
-#ifndef _LIB_FORMAT_H_
-# define _LIB_FORMAT_H_
+#pragma once
 
-# include <stddef.h>
-# include <stdarg.h>
+#include <stddef.h>
+#include <stdarg.h>
 
 /*
 ** The type of a `format()` output callback.
@@ -19,5 +18,3 @@
 typedef int(*printf_output_func)(char const *, size_t, void *);
 
 int format(char const *fmt, va_list va, printf_output_func out, void *params);
-
-#endif /* !_LIB_FORMAT_H_ */

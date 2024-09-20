@@ -18,9 +18,9 @@
 **
 */
 
-#include <poseidon/kconfig.h>
-#include <poseidon/boot/multiboot2.h>
-#include <arch/x86_64/selector.h>
+#include "poseidon/kconfig.h"
+#include "poseidon/boot/multiboot2.h"
+#include "arch/x86_64/selector.h"
 
 .section .text
 .code32

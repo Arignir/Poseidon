@@ -7,10 +7,9 @@
 **
 \******************************************************************************/
 
-#ifndef _LIB_STRING_H_
-# define _LIB_STRING_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** Feel free to complete this list as needed.
@@ -29,5 +28,3 @@ void *memcpy(void *dest, void const *src, size_t n);
 int memcmp(void const *s1, void const *s2, size_t n) __pure;
 void *memchr(void const *src, int c, size_t n) __pure;
 void *memmove(void *dest, void const *src, size_t n);
-
-#endif /* !_LIB_STRING_H_ */

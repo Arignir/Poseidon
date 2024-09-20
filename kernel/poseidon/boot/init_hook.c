@@ -7,8 +7,8 @@
 **
 \******************************************************************************/
 
-#include <poseidon/poseidon.h>
-#include <poseidon/boot/init_hook.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/boot/init_hook.h"
 
 /* Init hooks are located within the 'poseidon_init_hooks' section */
 extern struct init_hook const __start_poseidon_init_hooks[] __weak;

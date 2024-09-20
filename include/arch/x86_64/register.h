@@ -11,10 +11,9 @@
 ** Types and functions to read and manipulate x86_64 registers.
 */
 
-#ifndef _ARCH_X86_64_REGISTER_H_
-# define _ARCH_X86_64_REGISTER_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** System flags and fields in the RFLAGS register.
@@ -131,5 +130,3 @@ set_cr3(
         : "memory"
     );
 }
-
-#endif /* !_ARCH_X86_64_REGISTER_H_ */

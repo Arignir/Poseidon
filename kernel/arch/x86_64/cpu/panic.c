@@ -7,11 +7,11 @@
 **
 \******************************************************************************/
 
-#include <poseidon/interrupt.h>
-#include <poseidon/cpu/cpu.h>
-#include <arch/x86_64/apic.h>
-#include <arch/x86_64/interrupt.h>
-#include <lib/log.h>
+#include "poseidon/interrupt.h"
+#include "poseidon/cpu/cpu.h"
+#include "arch/x86_64/apic.h"
+#include "arch/x86_64/interrupt.h"
+#include "lib/log.h"
 #include <stdarg.h>
 
 /*

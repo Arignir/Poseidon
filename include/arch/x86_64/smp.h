@@ -7,15 +7,16 @@
 **
 \******************************************************************************/
 
-#include <poseidon/kconfig.h>
+#pragma once
 
-#if !defined(_ARCH_X86_64_SMP_H_) && KCONFIG_SMP
-# define _ARCH_X86_64_SMP_H_
+#include "poseidon/kconfig.h"
 
-# include <poseidon/poseidon.h>
-# include <poseidon/memory/memory.h>
+#if KCONFIG_SMP
 
-# define TRAMPOLINE_START       (0x10000)
+#include "poseidon/poseidon.h"
+#include "poseidon/memory/memory.h"
+
+#define TRAMPOLINE_START        (0x10000)
 
 /*
 ** References:
@@ -148,4 +149,4 @@ enum MP_ENTRY_TYPE {
 status_t smp_detect(void);
 void smp_start_aps(void);
 
-#endif /* !_ARCH_X86_SMP_H_ */
+#endif /* KCONFIG_SMP */

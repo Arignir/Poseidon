@@ -11,9 +11,9 @@
 ** A basic printf-like `format` engine, used by functions like `logln()`.
 */
 
-#include <poseidon/poseidon.h>
-#include <lib/format.h>
-#include <lib/string.h>
+#include "poseidon/poseidon.h"
+#include "lib/format.h"
+#include "lib/string.h"
 
 #define PRINTF_HALF         0x00000001
 #define PRINTF_HALFHALF     0x00000002

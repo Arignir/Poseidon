@@ -27,13 +27,13 @@
 ** those areas to the list of areas the PMM can pick from.
 */
 
-#include <poseidon/boot/multiboot2.h>
-#include <poseidon/boot/init_hook.h>
-#include <poseidon/memory/memory.h>
-#include <poseidon/memory/pmm.h>
-#include <poseidon/memory/kheap.h>
-#include <poseidon/status.h>
-#include <lib/log.h>
+#include "poseidon/boot/multiboot2.h"
+#include "poseidon/boot/init_hook.h"
+#include "poseidon/memory/memory.h"
+#include "poseidon/memory/pmm.h"
+#include "poseidon/memory/kheap.h"
+#include "poseidon/status.h"
+#include "lib/log.h"
 
 static
 status_t

@@ -7,8 +7,8 @@
 **
 \******************************************************************************/
 
-#include <poseidon/kconfig.h>
-#include <poseidon/boot/multiboot2.h>
+#include "poseidon/kconfig.h"
+#include "poseidon/boot/multiboot2.h"
 
 /*
 ** References:

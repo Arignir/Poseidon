@@ -7,12 +7,12 @@
 **
 \******************************************************************************/
 
-#include <arch/x86_64/io.h>
-#include <poseidon/boot/init_hook.h>
-#include <poseidon/io.h>
-#include <platform/pc/vga.h>
-#include <lib/string.h>
-#include <lib/log.h>
+#include "arch/x86_64/io.h"
+#include "poseidon/boot/init_hook.h"
+#include "poseidon/io.h"
+#include "platform/pc/vga.h"
+#include "lib/string.h"
+#include "lib/log.h"
 
 NEW_IO_PORT(vga_index, 0x3D4);
 NEW_IO_PORT(vga_data, 0x3D5);

@@ -20,19 +20,19 @@
 **   https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf
 */
 
-#include <poseidon/kconfig.h>
+#include "poseidon/kconfig.h"
 
 #if KCONFIG_SMP
 
-#include <poseidon/poseidon.h>
-#include <poseidon/status.h>
-#include <poseidon/cpu/cpu.h>
-#include <arch/x86_64/smp.h>
-#include <arch/x86_64/apic.h>
-#include <arch/x86_64/ioapic.h>
-#include <lib/string.h>
-#include <lib/checksum.h>
-#include <lib/log.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/status.h"
+#include "poseidon/cpu/cpu.h"
+#include "arch/x86_64/smp.h"
+#include "arch/x86_64/apic.h"
+#include "arch/x86_64/ioapic.h"
+#include "lib/string.h"
+#include "lib/checksum.h"
+#include "lib/log.h"
 
 # define TRAMPOLINE_START       (0x10000)
 

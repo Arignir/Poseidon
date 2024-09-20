@@ -7,11 +7,10 @@
 **
 \******************************************************************************/
 
-#ifndef _ARCH_X86_64_API_CPU_H_
-# define _ARCH_X86_64_API_CPU_H_
+#pragma once
 
-# include <arch/x86_64/cpuid.h>
-# include <poseidon/poseidon.h>
+#include "arch/x86_64/cpuid.h"
+#include "poseidon/poseidon.h"
 
 /*
 ** A structure representing the arch-specific values of a single CPU.
@@ -20,5 +19,3 @@ struct arch_cpu {
     struct cpuid cpuid;         // CPUID
     uint32 apic_id;             // Local APIC id
 };
-
-#endif /* !_ARCH_X86_64_API_CPU_H_ */

@@ -7,7 +7,7 @@
 **
 \******************************************************************************/
 
-#include <poseidon/thread/thread.h>
+#include "poseidon/thread/thread.h"
 
 struct scheduler_stack
 {

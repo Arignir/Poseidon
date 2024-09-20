@@ -23,11 +23,10 @@
 ** implementation.
 */
 
-#ifndef _POSEIDON_IO_H_
-# define _POSEIDON_IO_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <poseidon/memory/memory.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/memory/memory.h"
 
 /*
 ** Strong typing the address of a memory-mapped io port.
@@ -43,7 +42,7 @@ struct io_mm {
 **
 ** This acts as a shortcut to reduce boilerplate.
 */
-# define NEW_IO_MM(_name, _address)                 \
+#define NEW_IO_MM(_name, _address)                  \
     static                                          \
     struct io_port const _name = {                  \
         .address = _address                         \
@@ -104,16 +103,14 @@ io_mm_in8_offset(
 ** for all platforms.
 */
 
-# ifdef KCONFIG_PLATFORM_PC
-#  define io_out8(...)              io_port_out8(__VA_ARGS__)
-#  define io_out8_offset(...)       io_port_out8_offset(__VA_ARGS__)
-#  define io_in8(...)               io_port_in8(__VA_ARGS__)
-#  define io_in8_offset(...)        io_port_in8_offset(__VA_ARGS__)
-# else
-#  define io_out8(...)              io_mm_out8(__VA_ARGS__)
-#  define io_out8_offset(...)       io_mm_out8_offset(__VA_ARGS__)
-#  define io_in8(...)               io_mm_in8(__VA_ARGS__)
-#  define io_in8_offset(...)        io_mm_in8_offset(__VA_ARGS__)
-# endif /* KCONFIG_PLATFORM_PC */
-
-#endif /* !_POSEIDON_IO_H_ */
+#ifdef KCONFIG_PLATFORM_PC
+#define io_out8(...)                io_port_out8(__VA_ARGS__)
+#define io_out8_offset(...)         io_port_out8_offset(__VA_ARGS__)
+#define io_in8(...)                 io_port_in8(__VA_ARGS__)
+#define io_in8_offset(...)          io_port_in8_offset(__VA_ARGS__)
+#else
+#define io_out8(...)                io_mm_out8(__VA_ARGS__)
+#define io_out8_offset(...)         io_mm_out8_offset(__VA_ARGS__)
+#define io_in8(...)                 io_mm_in8(__VA_ARGS__)
+#define io_in8_offset(...)          io_mm_in8_offset(__VA_ARGS__)
+#endif /* KCONFIG_PLATFORM_PC */

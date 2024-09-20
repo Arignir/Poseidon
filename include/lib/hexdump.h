@@ -7,13 +7,10 @@
 **
 \******************************************************************************/
 
-#ifndef _LIB_HEXDUMP_H_
-# define _LIB_HEXDUMP_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
-# define HEXDUMP_WIDTH        16
+#define HEXDUMP_WIDTH        16
 
 void hexdump(uchar const *start, size_t size);
-
-#endif /* !_LIB_HEXDUMP_H_ */

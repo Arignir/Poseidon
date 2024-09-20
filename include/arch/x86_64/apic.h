@@ -7,12 +7,11 @@
 **
 \******************************************************************************/
 
-#ifndef _ARCH_X86_64_APIC_H_
-# define _ARCH_X86_64_APIC_H_
+#pragma once
 
-# include <poseidon/memory/memory.h>
+#include "poseidon/memory/memory.h"
 
-# define APIC_BASE_ADDR             ((physaddr_t)(0xFEE00000))
+#define APIC_BASE_ADDR              ((physaddr_t)(0xFEE00000))
 
 /*
 ** Local APIC registers offset
@@ -42,26 +41,26 @@ enum apic_reg {
     APIC_TIMER_DCR          = 0x3E0, // Timer Divide Configuration Register
 };
 
-# define APIC_LVT_MASKED    0x00010000
-# define APIC_SVR_ENABLED   0x00000100
+#define APIC_LVT_MASKED     0x00010000
+#define APIC_SVR_ENABLED    0x00000100
 
 /* Bitfield for the Interrupt Command Register */
-# define APIC_ICR_FIXED         (0b000 << 8)
-# define APIC_ICR_LOWPRI        (0b001 << 8)
-# define APIC_ICR_SMI           (0b010 << 8)
-# define APIC_ICR_NMI           (0b100 << 8)
-# define APIC_ICR_INIT          (0b101 << 8)
-# define APIC_ICR_STARTUP       (0b110 << 8)
-# define APIC_ICR_PHYSICAL      (0 << 11)
-# define APIC_ICR_LOGICAL       (1 << 11)
-# define APIC_ICR_IDLE          (0 << 12)
-# define APIC_ICR_PENDING       (1 << 12)
-# define APIC_ICR_DEASSERT      (0 << 14)
-# define APIC_ICR_ASSERT        (1 << 14)
-# define APIC_ICR_EDGE          (0 << 15)
-# define APIC_ICR_LEVEL         (1 << 15)
-# define APIC_ICR_BROADCAST     (0b11 << 18)
-# define APIC_ICR_DELIVERED     (0x1000)
+#define APIC_ICR_FIXED          (0b000 << 8)
+#define APIC_ICR_LOWPRI         (0b001 << 8)
+#define APIC_ICR_SMI            (0b010 << 8)
+#define APIC_ICR_NMI            (0b100 << 8)
+#define APIC_ICR_INIT           (0b101 << 8)
+#define APIC_ICR_STARTUP        (0b110 << 8)
+#define APIC_ICR_PHYSICAL       (0 << 11)
+#define APIC_ICR_LOGICAL        (1 << 11)
+#define APIC_ICR_IDLE           (0 << 12)
+#define APIC_ICR_PENDING        (1 << 12)
+#define APIC_ICR_DEASSERT       (0 << 14)
+#define APIC_ICR_ASSERT         (1 << 14)
+#define APIC_ICR_EDGE           (0 << 15)
+#define APIC_ICR_LEVEL          (1 << 15)
+#define APIC_ICR_BROADCAST      (0b11 << 18)
+#define APIC_ICR_DELIVERED      (0x1000)
 
 enum apic_timer_speed {
     APIC_TIMER_X1           = 0b1011,
@@ -95,5 +94,3 @@ void apic_panic_ihandler(void);
 void apic_tlb_ihandler(void);
 void apic_error_ihandler(void);
 void apic_spurious_ihandler(void);
-
-#endif /* !_ARCH_X86_64_APIC_H_ */

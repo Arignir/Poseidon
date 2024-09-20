@@ -23,10 +23,10 @@
 ** This definitely deserve an improvement, but eh, it's not fun enough. Big sad.
 */
 
-#include <poseidon/memory/kheap.h>
-#include <poseidon/memory/vmm.h>
-#include <poseidon/boot/init_hook.h>
-#include <lib/string.h>
+#include "poseidon/memory/kheap.h"
+#include "poseidon/memory/vmm.h"
+#include "poseidon/boot/init_hook.h"
+#include "lib/string.h"
 
 /* `kheap_alloc()` global variables */
 static struct kheap_block *kheap_head;

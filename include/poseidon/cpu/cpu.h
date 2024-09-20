@@ -7,14 +7,11 @@
 **
 \******************************************************************************/
 
-#ifndef _POSEIDON_CPU_CPU_H_
-# define _POSEIDON_CPU_CPU_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <poseidon/kconfig.h>
-# include <poseidon/interrupt.h>
-# include <arch/target/api/cpu.h>
-# include <lib/sync/spinrwlock.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/kconfig.h"
+#include "arch/target/api/cpu.h"
 
 struct thread;
 
@@ -55,5 +52,3 @@ extern struct cpu const *cpus_end;
 ** NOTE: This function is implemented by the architecture-dependant code.
 */
 struct cpu *current_cpu(void);
-
-#endif /* !_POSEIDON_CPU_CPU_H_ */

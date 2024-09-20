@@ -7,11 +7,10 @@
 **
 \******************************************************************************/
 
-#ifndef _LIB_SYNC_SPINSYNC_H_
-# define _LIB_SYNC_SPINSYNC_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <poseidon/atomic.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/atomic.h"
 
 /*
 ** A simple spin lock.
@@ -20,7 +19,7 @@ struct spinlock {
     uint lock;                          // Is the lock held?
 };
 
-# define SPINLOCK_DEFAULT               \
+#define SPINLOCK_DEFAULT                \
     ((struct spinlock) {                \
         .lock = 0,                      \
     })
@@ -57,5 +56,3 @@ spinlock_release(
 ) {
     atomic_exchange(&sl->lock, 0, ATOMIC_RELEASE);
 }
-
-#endif /* !_LIB_SYNC_SPINSYNC_H_ */

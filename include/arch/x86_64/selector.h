@@ -11,8 +11,7 @@
 ** Segments selectors used by the kernel.
 */
 
-#ifndef _ARCH_X86_64_SELECTOR_H_
-# define _ARCH_X86_64_SELECTOR_H_
+#pragma once
 
 /*
 ** Those descriptors should be the same for both the boot gdt and the dynamic
@@ -23,9 +22,7 @@
 ** dynamic gdt.)
 */
 
-# define KERNEL_CODE_SELECTOR       0x08
-# define KERNEL_DATA_SELECTOR       0x10
-# define USER_CODE_SELECTOR         0x18
-# define USER_DATA_SELECTOR         0x20
-
-#endif /* !_ARCH_X86_64_SELECTOR_H_ */
+#define KERNEL_CODE_SELECTOR            0x08
+#define KERNEL_DATA_SELECTOR            0x10
+#define USER_CODE_SELECTOR              0x18
+#define USER_DATA_SELECTOR              0x20

@@ -7,13 +7,13 @@
 **
 \******************************************************************************/
 
-#include <poseidon/poseidon.h>
-#include <poseidon/thread/thread.h>
-#include <poseidon/memory/kheap.h>
-#include <poseidon/scheduler/scheduler.h>
-#include <lib/sync/spinrwlock.h>
-#include <lib/list.h>
-#include <lib/string.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/thread/thread.h"
+#include "poseidon/memory/kheap.h"
+#include "poseidon/scheduler/scheduler.h"
+#include "lib/sync/spinrwlock.h"
+#include "lib/list.h"
+#include "lib/string.h"
 
 static struct linked_list threads_list = LIST_HEAD_INIT(threads_list);
 static tid_t global_pid = 1;

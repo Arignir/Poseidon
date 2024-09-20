@@ -11,9 +11,9 @@
 ** Functions to manipulations the Interrupt Descriptor Table (IDT).
 */
 
-#include <arch/x86_64/interrupt.h>
-#include <arch/x86_64/selector.h>
-#include <lib/log.h>
+#include "arch/x86_64/interrupt.h"
+#include "arch/x86_64/selector.h"
+#include "lib/log.h"
 
 __aligned(16)
 static

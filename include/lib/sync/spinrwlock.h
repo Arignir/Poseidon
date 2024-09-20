@@ -7,12 +7,11 @@
 **
 \******************************************************************************/
 
-#ifndef _LIB_SYNC_SPINRWSYNC_H_
-# define _LIB_SYNC_SPINRWSYNC_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <poseidon/atomic.h>
-# include <lib/sync/spinlock.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/atomic.h"
+#include "lib/sync/spinlock.h"
 
 /*
 ** A structure representing a read-write lock backed by spinlocks.
@@ -25,7 +24,7 @@ struct spin_rwlock
     struct spinlock service_queue;
 };
 
-# define SPIN_RWLOCK_DEFAULT                                \
+#define SPIN_RWLOCK_DEFAULT                                 \
     ((struct spin_rwlock) {                                 \
         .readcount = 0,                                     \
         .resource_access = SPINLOCK_DEFAULT,                \
@@ -88,5 +87,3 @@ spin_rwlock_release_write(
 ) {
     spinlock_release(&rw->resource_access);
 }
-
-#endif /* !_LIB_SYNC_SPINRWSYNC_H_ */

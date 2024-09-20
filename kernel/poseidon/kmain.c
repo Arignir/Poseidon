@@ -17,12 +17,12 @@
 ** reaching the final and sufficient state to start 'init'.
 */
 
-#include <poseidon/boot/init_hook.h>
-#include <poseidon/memory/pmm.h>
-#include <poseidon/interrupt.h>
-#include <poseidon/thread/thread.h>
-#include <poseidon/scheduler/scheduler.h>
-#include <lib/log.h>
+#include "poseidon/boot/init_hook.h"
+#include "poseidon/memory/pmm.h"
+#include "poseidon/interrupt.h"
+#include "poseidon/thread/thread.h"
+#include "poseidon/scheduler/scheduler.h"
+#include "lib/log.h"
 
 int
 thread_test(void)

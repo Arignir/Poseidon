@@ -7,10 +7,9 @@
 **
 \******************************************************************************/
 
-#ifndef _PLATFORM_PC_VGA_H_
-# define _PLATFORM_PC_VGA_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 /*
 ** All colors the vga screen can handle
@@ -46,5 +45,3 @@ void vga_clear(void);
 int vga_putchar(int);
 int vga_puts(char const *str);
 int vga_putsn(char const *str, size_t n);
-
-#endif /* !_PLATFORM_PC_VGA_H_ */

@@ -11,10 +11,10 @@
 ** A logging engine that writes incoming text to registered loggers.
 */
 
-#include <poseidon/poseidon.h>
-#include <lib/sync/spinlock.h>
-#include <lib/format.h>
-#include <lib/log.h>
+#include "poseidon/poseidon.h"
+#include "lib/sync/spinlock.h"
+#include "lib/format.h"
+#include "lib/log.h"
 #include <stdarg.h>
 
 // Ensure logs aren't scrambled because two cores want to log at the same time

@@ -7,17 +7,16 @@
 **
 \******************************************************************************/
 
-#ifndef _LIB_LIST_H_
-# define _LIB_LIST_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
+#include "poseidon/poseidon.h"
 
 struct linked_list {
     struct linked_list *next;
     struct linked_list *prev;
 };
 
-# define LIST_HEAD_INIT(name) ((struct linked_list) { &(name), &(name) })
+#define LIST_HEAD_INIT(name)    ((struct linked_list) { &(name), &(name) })
 
 static inline
 bool
@@ -104,23 +103,21 @@ list_move_tail(
     list_add_tail(head, node);
 }
 
-# define list_entry(ptr, type, member) ({                                   \
+#define list_entry(ptr, type, member) ({                                    \
         unsigned char *uptr = (unsigned char *)(ptr);                       \
         (type *)(uptr - offsetof(type, member));                            \
     })
 
-# define list_next_entry(ptr, member) ({                                    \
+#define list_next_entry(ptr, member) ({                                     \
         list_entry((ptr)->member.next, typeof(*(ptr)), member);             \
     })
 
-# define list_first_entry_or_null(ptr, type, member) ({                     \
+#define list_first_entry_or_null(ptr, type, member) ({                      \
         struct linked_list *head = (ptr);                                   \
         struct linked_list *cursor = head->next;                            \
                                                                             \
         (head != cursor) ? list_entry(cursor, type, member) : NULL;         \
     })
 
-# define list_for_each(cursor, head)                                        \
+#define list_for_each(cursor, head)                                         \
     for (cursor = (head)->next; cursor != (head); cursor = cursor ->next)   \
-
-#endif /* !_LIB_LIST_H_ */

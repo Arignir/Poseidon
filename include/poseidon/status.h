@@ -11,10 +11,9 @@
 ** Kernel error management.
 */
 
-#ifndef _POSEIDON_STATUS_H_
-# define _POSEIDON_STATUS_H_
+#pragma once
 
-# include <limits.h>
+#include <limits.h>
 
 /*
 ** Kernel error management.
@@ -89,5 +88,3 @@ static char const * const status_str[] = {
     [ERR_NOT_MAPPED]            = "ERR_NOT_MAPPED",
     [ERR_BAD_MEMORY]            = "ERR_BAD_MEMORY",
 };
-
-#endif /* !_POSEIDON_STATUS_H_ */

@@ -11,11 +11,10 @@
 ** Interrupts handling for the x86_64 architecture.
 */
 
-#ifndef _ARCH_X86_64_INTERRUPT_H_
-# define _ARCH_X86_64_INTERRUPT_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <arch/x86_64/register.h>
+#include "poseidon/poseidon.h"
+#include "arch/x86_64/register.h"
 
 /*
 ** Exception/Interruption and their vector.
@@ -177,5 +176,3 @@ static_assert(sizeof(struct idt_fatptr) == 10);
 void idt_setup(void);
 void idt_load(void);
 void exception_breakpoint(struct iframe *);
-
-#endif /* !_ARCH_X86_64_INTERRUPT_H_ */

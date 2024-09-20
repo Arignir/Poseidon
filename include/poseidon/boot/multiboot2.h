@@ -19,8 +19,7 @@
 ** IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _POSEIDON_BOOT_MULTIBOOT2_H_
-#define _POSEIDON_BOOT_MULTIBOOT2_H_
+#pragma once
 
 /* How many bytes from the start of the file we search for the header. */
 #define MULTIBOOT_SEARCH 32768
@@ -79,7 +78,7 @@
 
 #ifndef __ASSEMBLER__
 
-#include <poseidon/memory/memory.h>
+#include "poseidon/memory/memory.h"
 
 #define MULTIBOOT_MEMORY_AVAILABLE		1
 #define MULTIBOOT_MEMORY_RESERVED		2
@@ -393,5 +392,3 @@ struct multiboot_tag_efi_mmap
 };
 
 #endif /* ! __ASSEMBLER__ */
-
-#endif /* ! _POSEIDON_BOOT_MULTIBOOT2_H_ */

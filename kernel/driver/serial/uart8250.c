@@ -15,8 +15,8 @@
 ** devince.
 */
 
-#include <poseidon/poseidon.h>
-#include <poseidon/io.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/io.h"
 
 /*
 ** The UART8250 driver is only implemented for the PC platform yet.
@@ -32,8 +32,8 @@ NEW_IO_PORT(io_uart8250, 0x3F8);
 
 #ifdef USE_UART8250
 
-#include <poseidon/boot/init_hook.h>
-#include <lib/log.h>
+#include "poseidon/boot/init_hook.h"
+#include "lib/log.h"
 
 static
 int

@@ -11,11 +11,10 @@
 ** Low-level memory-related functions and types.
 */
 
-#ifndef _ARCH_X86_64_MEMORY_H_
-# define _ARCH_X86_64_MEMORY_H_
+#pragma once
 
-# include <poseidon/poseidon.h>
-# include <poseidon/memory/memory.h>
+#include "poseidon/poseidon.h"
+#include "poseidon/memory/memory.h"
 
 /*
 ** An entry in the 4-level PML4
@@ -179,5 +178,3 @@ static_assert(sizeof(struct virtaddr_layout) == sizeof(void *));
 
 /* Target for TLB shootdowns. */
 extern virtaddr_t tlb_shootdown_target;
-
-#endif /* !_ARCH_X86_64_MEMORY_H_ */

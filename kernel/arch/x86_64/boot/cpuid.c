@@ -7,10 +7,10 @@
 **
 \******************************************************************************/
 
-#include <poseidon/poseidon.h>
-#include <arch/x86_64/cpuid.h>
-#include <lib/string.h>
-#include <lib/log.h>
+#include "poseidon/poseidon.h"
+#include "arch/x86_64/cpuid.h"
+#include "lib/string.h"
+#include "lib/log.h"
 
 static char const * const features_name[ARRAY_LENGTH(((struct cpuid *)NULL)->features.raw)][32] = {
     // EDX when CPUID.EAX=0x1

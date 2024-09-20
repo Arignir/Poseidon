@@ -7,14 +7,13 @@
 **
 \******************************************************************************/
 
-#ifndef _POSEIDON_THREAD_THREAD_H_
-# define _POSEIDON_THREAD_THREAD_H_
+#pragma once
 
-# include <poseidon/memory/memory.h>
-# include <poseidon/poseidon.h>
-# include <poseidon/cpu/cpu.h>
-# include <lib/sync/spinrwlock.h>
-# include <lib/list.h>
+#include "poseidon/memory/memory.h"
+#include "poseidon/poseidon.h"
+#include "poseidon/cpu/cpu.h"
+#include "lib/sync/spinrwlock.h"
+#include "lib/list.h"
 
 typedef uint32 tid_t;
 typedef int (*thread_entry)();
@@ -30,7 +29,7 @@ enum thread_state {
 };
 
 /*
-** Strings to print each thread state
+** Strings to print each states.
 */
 static char const *thread_state_str[] = {
     [NONE]              = "NONE",
@@ -96,5 +95,3 @@ current_thread(void)
     t = cpu->thread;
     return (t);
 }
-
-#endif /* !_POSEIDON_THREAD_THREAD_H_ */

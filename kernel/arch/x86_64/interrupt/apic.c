@@ -7,22 +7,22 @@
 **
 \******************************************************************************/
 
-#include <arch/x86_64/apic.h>
-#include <arch/x86_64/interrupt.h>
-#include <arch/x86_64/msr.h>
-#include <arch/x86_64/io.h>
-#include <arch/x86_64/rdtsc.h>
-#include <arch/x86_64/memory.h>
-#include <poseidon/poseidon.h>
-#include <poseidon/interrupt.h>
-#include <poseidon/thread/thread.h>
-#include <poseidon/scheduler/scheduler.h>
-#include <poseidon/memory/pmm.h>
-#include <poseidon/memory/kheap.h>
-#include <poseidon/status.h>
-#include <poseidon/cpu/cpu.h>
-#include <poseidon/io.h>
-#include <lib/log.h>
+#include "arch/x86_64/apic.h"
+#include "arch/x86_64/interrupt.h"
+#include "arch/x86_64/msr.h"
+#include "arch/x86_64/io.h"
+#include "arch/x86_64/rdtsc.h"
+#include "arch/x86_64/memory.h"
+#include "poseidon/poseidon.h"
+#include "poseidon/interrupt.h"
+#include "poseidon/thread/thread.h"
+#include "poseidon/scheduler/scheduler.h"
+#include "poseidon/memory/pmm.h"
+#include "poseidon/memory/kheap.h"
+#include "poseidon/status.h"
+#include "poseidon/cpu/cpu.h"
+#include "poseidon/io.h"
+#include "lib/log.h"
 
 # define APIC_INIT_CLOCK_WAIT	300000000ull
 

@@ -7,7 +7,7 @@
 **
 \******************************************************************************/
 
-#include <lib/checksum.h>
+#include "lib/checksum.h"
 
 uint8
 checksum8(
