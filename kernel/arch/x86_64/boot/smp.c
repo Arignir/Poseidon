@@ -74,7 +74,7 @@ struct mp const *
 smp_search(void)
 {
     struct mp const *mp;
-    uchar *bda;
+    uchar volatile * volatile bda; // Volatile here is used to silent -Warray-bounds
     physaddr_t p;
 
     mp = NULL;

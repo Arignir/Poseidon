@@ -11,8 +11,8 @@
 
 set -e -u
 
-declare binutils_version="2.35"
-declare gcc_version="10.2.0"
+declare binutils_version="2.43.1"
+declare gcc_version="14.2.0"
 
 function print_usage {
     printf "Usage: $0 <sysroot_dir> <target_triplet>\n"

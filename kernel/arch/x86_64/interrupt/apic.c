@@ -202,7 +202,7 @@ apic_start_ap(
     uintptr addr
 ) {
     uint32_t apic_id;
-    ushort *wrv;
+    ushort volatile * volatile wrv; // Volatile here is used to silent -Warray-bounds
 
     assert((addr & 0xFFF00FFF) == 0);
 
