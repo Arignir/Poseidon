@@ -24,40 +24,32 @@
 ** between physical and virtual addresses, therefore avoiding any confusion.
 */
 
-/*
-** A physical address.
-*/
+// A physical address
 typedef uintptr physaddr_t;
 
-/*
-** A virtual address.
-*/
+// A 64-bit physical address
+typedef uint64_t physaddr64_t;
+
+// A 32-bit physical address
+typedef uint32_t physaddr32_t;
+
+// A virtual address
 typedef void *virtaddr_t;
 
-/*
-** A virtual address where the content shouldn't be modified.
-*/
+// A virtual address where the content shouldn't be modified
 typedef const void *virtaddr_const_t;
 
-/*
-** The equivalent of NULL for physical addresses.
-*/
+// The equivalent of NULL for physical addresses
 #define PHYS_NULL               ((physaddr_t)0)
 
-/*
-** Shortcuts to make the code easier to read.
-*/
+// Shortcuts to make the code easier to read
 #define PAGE_SIZE               (KCONFIG_PAGE_SIZE)
 #define FRAME_SIZE              (KCONFIG_FRAME_SIZE)
 
-/*
-** Mask to test if an address is page-aligned
-*/
+// Mask to test if an address is page-aligned
 #define PAGE_SIZE_MASK          ((PAGE_SIZE) - 1u)
 
-/*
-** Test if a given address is a multiple of PAGE_SIZE
-*/
+// Test if a given address is a multiple of PAGE_SIZE
 #define IS_PAGE_ALIGNED(x)      (!((uintptr)(x) & PAGE_SIZE_MASK))
 
 extern uint8 kernel_start[];                    // Beginning of the kernel (virtual)

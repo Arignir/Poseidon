@@ -66,7 +66,7 @@ start64:
     mov %ax, %gs
     mov %ax, %ss
 
-    mov (ap_boot_stack), %rsp        // Reset kernel stack
+    mov (g_ap_boot_stack), %rsp        // Reset kernel stack
 
     .extern ap_setup
     call ap_setup

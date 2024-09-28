@@ -75,7 +75,7 @@ typedef uintptr_t           uintptr;
     do {                                                    \
         if (unlikely(!(expr))) {                            \
             panic(                                          \
-                "assert(%s) failed (in %s at line %u).\n",  \
+                "assert(%s) failed (in %s at line %u).",    \
                 #expr,                                      \
                 __FILE__,                                   \
                 __LINE__                                    \
@@ -90,7 +90,7 @@ typedef uintptr_t           uintptr;
         status_t __s = (expr);                                      \
         if (unlikely(__s != OK)) {                                  \
             panic(                                                  \
-                "assert_ok(%s) failed: %s (in %s at line %u).\n",   \
+                "assert_ok(%s) failed: %s (in %s at line %u).",     \
                 #expr,                                              \
                 status_str[__s],                                    \
                 __FILE__,                                           \

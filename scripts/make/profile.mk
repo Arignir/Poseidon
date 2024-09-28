@@ -31,6 +31,7 @@ endif
 # Add new CFLAGS when building the "debug" target.
 ifeq ($(PROFILE), debug)
 CFLAGS	+= \
+	-O2 \
 	-g3 \
 	-DDEBUG
 endif

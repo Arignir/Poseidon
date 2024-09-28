@@ -9,8 +9,11 @@
 
 #pragma once
 
-#define CPU_TRAMPOLINE_START    (0x10000)
+#include "arch/x86_64/io.h"
 
-void start_ap(void);
-void cpu_start_all_aps(void);
-void cpu_remap_bsp(void);
+#define CMOS_RESET_REGISTER 0xF
+
+extern struct io_port g_cmos;
+extern struct io_port g_cmos_ret;
+
+void cmos_write(uint8_t reg, uint8_t value);

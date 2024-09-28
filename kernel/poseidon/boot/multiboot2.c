@@ -65,7 +65,7 @@ multiboot_load(void)
 
     /*
     ** Round down to a page boundary `mb_tag_pa` and calculate on how many
-    ** pages the multiboot tags spread on.
+    ** pages the multiboot tags spreads on.
     */
     aligned_tag_pa = ROUND_DOWN(mb_tag_pa, PAGE_SIZE);
     aligned_tag_len = ALIGN(mb_tag_pa + mb_tag_len, PAGE_SIZE) - aligned_tag_pa;
@@ -73,10 +73,7 @@ multiboot_load(void)
     /*
     ** Map the multiboot structure to virtual memory.
     */
-    aligned_mb_tag = kheap_alloc_device(
-        aligned_tag_pa,
-        aligned_tag_len
-    );
+    aligned_mb_tag = kheap_alloc_device(aligned_tag_pa, aligned_tag_len);
 
     if (!aligned_mb_tag) {
         return (ERR_OUT_OF_MEMORY);

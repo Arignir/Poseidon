@@ -108,6 +108,7 @@ io_mm_in8_offset(
 */
 
 #ifdef KCONFIG_PLATFORM_PC
+#include "arch/x86_64/io.h"
 #define io_out8(...)                io_port_out8(__VA_ARGS__)
 #define io_out8_offset(...)         io_port_out8_offset(__VA_ARGS__)
 #define io_in8(...)                 io_port_in8(__VA_ARGS__)

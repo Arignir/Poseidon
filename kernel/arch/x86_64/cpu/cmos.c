@@ -7,10 +7,16 @@
 **
 \******************************************************************************/
 
-#pragma once
+#include "poseidon/io.h"
 
-#define CPU_TRAMPOLINE_START    (0x10000)
+NEW_IO_PORT(cmos_reg, 0x70);
+NEW_IO_PORT(cmos_data, 0x71);
 
-void start_ap(void);
-void cpu_start_all_aps(void);
-void cpu_remap_bsp(void);
+void
+cmos_write(
+        uint8_t reg,
+        uint8_t value
+) {
+        io_out8(cmos_reg, reg);
+        io_out8(cmos_data, value);
+}

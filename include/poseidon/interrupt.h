@@ -25,7 +25,7 @@
 */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-prototypes"
-typedef void (*interrupt_handler_t)();
+typedef void (*interrupt_handler_t)(...);
 #pragma GCC diagnostic pop
 
 bool interrupts_enabled(void);

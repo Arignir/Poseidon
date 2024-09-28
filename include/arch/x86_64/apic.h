@@ -85,7 +85,6 @@ void apic_init(void);
 void apic_eoi(void);
 void apic_map(physaddr_t pa);
 uint32 apic_get_id(void);
-status_t apic_start_ap(struct cpu *ap, uintptr addr);
 void apic_send_ipi(uint32 apic_id, uint32 flags);
 bool apic_ipi_acked(void);
 

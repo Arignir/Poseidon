@@ -11,18 +11,17 @@
 ** Continue the initialisation of the CPU.
 */
 
+#include "arch/x86_64/interrupt.h"
+#include "arch/x86_64/cpuid.h"
+#include "arch/x86_64/ioapic.h"
+#include "arch/x86_64/apic.h"
+#include "arch/x86_64/acpi.h"
+#include "arch/x86_64/cpu.h"
 #include "poseidon/boot/init_hook.h"
 #include "poseidon/memory/pmm.h"
 #include "poseidon/cpu/cpu.h"
 #include "poseidon/scheduler/scheduler.h"
 #include "platform/pc/pic8259.h"
-#include "arch/x86_64/interrupt.h"
-#include "arch/x86_64/cpuid.h"
-#include "arch/x86_64/ioapic.h"
-#include "arch/x86_64/apic.h"
-#include "arch/x86_64/msr.h"
-#include "arch/x86_64/cpu.h"
-#include "arch/x86_64/smp.h"
 #include "lib/log.h"
 
 static void    common_setup(void);
@@ -64,24 +63,7 @@ static
 status_t
 bsp_setup(void)
 {
-    bool smp_enabled;
-
-    /* If SMP is enabled, detect other CPUs */
-#if KCONFIG_SMP
-    smp_enabled = (smp_detect() == OK);
-#else
-    smp_enabled = false;
-#endif /* KCONFIG_SMP */
-
-    /* Else, set the only processor to default values */
-    if (!smp_enabled) {
-        ncpu = 1;
-        ioapic_map(IOAPIC_BASE_ADDR);
-        apic_map(APIC_BASE_ADDR);
-        cpus[0].apic_id = apic_get_id();
-        cpus[0].cpu_id = 0;
-    }
-
+    acpi_init();
     pic8259_init();
     ioapic_init();
     apic_init();
@@ -93,7 +75,8 @@ bsp_setup(void)
 #if KCONFIG_SMP
     logln("Number of cpus: %u", ncpu);
 
-    smp_start_aps();    // Start other processors
+    // Start other processors
+    cpu_start_all_aps();
 #endif /* KCONFIG_SMP */
 
 

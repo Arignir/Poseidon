@@ -17,5 +17,6 @@
 */
 struct arch_cpu {
     struct cpuid cpuid;         // CPUID
+    uint32 acpi_id;             // ACPI Processor id
     uint32 apic_id;             // Local APIC id
 };
