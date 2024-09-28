@@ -252,5 +252,5 @@ pic8259_init(void)
     // Mask all IRQs
     pic8259_set_irq_mask(0xFFFF);
 
-    return (OK);
+    return OK;
 }

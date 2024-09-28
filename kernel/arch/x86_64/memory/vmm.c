@@ -33,7 +33,7 @@ static inline
 struct pml4 *
 get_pml4(void)
 {
-    return ((struct pml4 *)0xFFFFFFFFFFFFF000ULL);
+    return (struct pml4 *)0xFFFFFFFFFFFFF000ULL;
 }
 
 /*
@@ -46,7 +46,7 @@ struct pdpt *
 get_pdpt_of(
     struct virtaddr_layout val
 ) {
-    return ((struct pdpt *)(0xFFFFFFFFFFE00000ULL | (val.pml4_idx << 12u)));
+    return (struct pdpt *)(0xFFFFFFFFFFE00000ULL | (val.pml4_idx << 12u));
 }
 
 /*
@@ -59,7 +59,7 @@ struct page_directory *
 get_pd_of(
     struct virtaddr_layout val
 ) {
-    return ((struct page_directory *)(0xFFFFFFFFC0000000ULL | (val.pml4_idx << 21u) | (val.pdpt_idx << 12u)));
+    return (struct page_directory *)(0xFFFFFFFFC0000000ULL | (val.pml4_idx << 21u) | (val.pdpt_idx << 12u));
 }
 
 /*
@@ -72,7 +72,7 @@ struct page_table *
 get_pt_of(
     struct virtaddr_layout val
 ) {
-    return ((struct page_table *)(0xFFFFFF8000000000ULL | (val.pml4_idx << 30u) | (val.pdpt_idx << 21u) | (val.pd_idx << 12u)));
+    return (struct page_table *)(0xFFFFFF8000000000ULL | (val.pml4_idx << 30u) | (val.pdpt_idx << 21u) | (val.pd_idx << 12u));
 }
 
 /*
@@ -198,7 +198,7 @@ vmm_map_frame(
     if (!pml4e->present) {
         physaddr_t frame = pmm_alloc_frame();
         if (frame == PHYS_NULL) {
-            return (ERR_OUT_OF_MEMORY);
+            return ERR_OUT_OF_MEMORY;
         }
 
         /* Map high-level page tables with the most flexible permissions */
@@ -216,7 +216,7 @@ vmm_map_frame(
     if (!pdpte->present) {
         physaddr_t frame = pmm_alloc_frame();
         if (frame == PHYS_NULL) {
-            return (ERR_OUT_OF_MEMORY);
+            return ERR_OUT_OF_MEMORY;
         }
 
         /* Map high-level page tables with the most flexible permissions */
@@ -234,7 +234,7 @@ vmm_map_frame(
     if (!pde->present) {
         physaddr_t frame = pmm_alloc_frame();
         if (frame == PHYS_NULL) {
-            return (ERR_OUT_OF_MEMORY);
+            return ERR_OUT_OF_MEMORY;
         }
 
         /* Map high-level page tables with the most flexible permissions */
@@ -251,7 +251,7 @@ vmm_map_frame(
     pte = get_pt_of(val)->entries + val.pt_idx;
 
     if (pte->present) {
-        return (ERR_ALREADY_MAPPED);
+        return ERR_ALREADY_MAPPED;
     }
 
     pte->raw = pa; // This also unsets all flags
@@ -262,7 +262,7 @@ vmm_map_frame(
 
     tlb_invalidate_page(va);
 
-    return (OK);
+    return OK;
 }
 
 /*

@@ -60,7 +60,7 @@ current_cpu(void)
         cpu = g_cpus;
         while (cpu < g_cpus_end) {
             if (cpu->apic_id == apic_id) {
-                return (cpu);
+                return cpu;
             }
             ++cpu;
         }
@@ -68,7 +68,7 @@ current_cpu(void)
         panic("Current cpu has an unknown local APIC id\n");
     }
     else {
-        return (g_bsp);
+        return g_bsp;
     }
 }
 
@@ -130,7 +130,7 @@ cpu_start_ap(
     ap->scheduler_stack_top = (uchar *)ap->scheduler_stack + KCONFIG_KERNEL_STACK_SIZE;
 
     if (ap->scheduler_stack == NULL) {
-        return (ERR_OUT_OF_MEMORY);
+        return ERR_OUT_OF_MEMORY;
     }
 
     g_ap_boot_stack = ap->scheduler_stack_top;
@@ -157,7 +157,7 @@ cpu_start_ap(
         apic_send_ipi(apic_id, APIC_ICR_STARTUP | (addr >> 12));
         cpu_micro_wait();
     }
-    return (OK);
+    return OK;
 }
 
 /*

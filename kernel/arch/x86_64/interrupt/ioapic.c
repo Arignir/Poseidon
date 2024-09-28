@@ -58,7 +58,7 @@ ioapic_read(
     enum ioapic_reg reg
 ) {
     *(volatile uint32 *)g_ioapic = reg;
-    return (*((volatile uint32 *)g_ioapic + 0x4)); // Offset is 0x10 (0x4 * 0x4)
+    return *((volatile uint32 *)g_ioapic + 0x4); // Offset is 0x10 (0x4 * 0x4)
 }
 
 /*

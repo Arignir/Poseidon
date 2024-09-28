@@ -50,7 +50,7 @@ bsp_early_setup(void)
         panic("Your CPU doesn't contain an APIC");
     }
 
-    return (OK);
+    return OK;
 }
 
 REGISTER_INIT_HOOK(bsp_early_setup, &bsp_early_setup, INIT_LEVEL_ARCH_EARLY);
@@ -80,7 +80,7 @@ bsp_setup(void)
 #endif /* KCONFIG_SMP */
 
 
-    return (OK);
+    return OK;
 }
 
 REGISTER_INIT_HOOK(bsp_setup, &bsp_setup, INIT_LEVEL_ARCH);

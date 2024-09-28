@@ -76,7 +76,7 @@ memory_init(void)
 
     logln("Dynamic memory allocator initialized.");
 
-    return (OK);
+    return OK;
 }
 
 REGISTER_INIT_HOOK(memory_init, &memory_init, INIT_LEVEL_MEMORY);

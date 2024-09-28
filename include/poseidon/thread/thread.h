@@ -98,5 +98,5 @@ current_thread(void)
 
     cpu = current_cpu();
     t = cpu->thread;
-    return (t);
+    return t;
 }

@@ -25,7 +25,7 @@ checksum8(
         res += *c;
         ++c;
     }
-    return (res);
+    return res;
 }
 
 uint16
@@ -44,7 +44,7 @@ checksum16(
         res += *c;
         ++c;
     }
-    return (res);
+    return res;
 }
 
 uint32
@@ -63,5 +63,5 @@ checksum32(
         res += *c;
         ++c;
     }
-    return (res);
+    return res;
 }

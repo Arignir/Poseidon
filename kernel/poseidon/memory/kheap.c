@@ -77,10 +77,10 @@ grow_heap(
 
         if (s != OK) {
             g_kernel_heap_size -= inc;
-            return (NULL);
+            return NULL;
         }
     }
-    return (old);
+    return old;
 }
 
 /*
@@ -97,11 +97,11 @@ find_free_block(
     while (block <= g_kheap_tail) {
         assert(block->magic == KHEAP_MAGIC);
         if (!block->used && block->size >= size) {
-            return (block);
+            return block;
         }
         block = (struct kheap_block *)((uchar *)(block + 1) + block->size);
     }
-    return (NULL);
+    return NULL;
 }
 
 /*
@@ -198,7 +198,7 @@ find_real_from_aligned_ptr(
         }
         ++aligned_ptr;
     }
-    return (ptr);
+    return ptr;
 }
 
 /*
@@ -234,10 +234,10 @@ kheap_alloc(
     }
 
 ret_ok:
-    return (block + 1);
+    return block + 1;
 
 ret_err:
-    return (NULL);
+    return NULL;
 }
 
 /*
@@ -266,7 +266,7 @@ kheap_alloc_aligned(
 
         if (!new_kheap_aligned_ptrs) {
             kheap_free(ptr);
-            return (NULL);
+            return NULL;
         }
 
         g_kheap_aligned_ptrs = new_kheap_aligned_ptrs;
@@ -278,7 +278,7 @@ kheap_alloc_aligned(
         };
         g_kheap_aligned_ptrs_len += 1;
     }
-    return (aligned_ptr);
+    return aligned_ptr;
 }
 
 /*
@@ -303,10 +303,10 @@ kheap_alloc_device(
         ptr != NULL &&
         vmm_remap(ptr, pa, size, MMAP_RDWR, MUNMAP_FREE) == OK
     ) {
-        return (ptr);
+        return ptr;
     }
 
-    return (NULL);
+    return NULL;
 }
 
 /*
@@ -355,7 +355,7 @@ kheap_realloc(
         memcpy(ptr, old_ptr, block->size > new_size ? new_size : block->size);
         kheap_free(old_ptr);
     }
-    return (ptr);
+    return ptr;
 }
 
 /*
@@ -373,7 +373,7 @@ kheap_alloc_zero(
     if (likely(ptr != NULL)) {
         memset(ptr, 0, size);
     }
-    return (ptr);
+    return ptr;
 }
 
 status_t
@@ -388,5 +388,5 @@ kheap_init(void)
     g_kheap_aligned_ptrs_len = 0;
 
     /* `kheap_alloc()` algorithm assumes the first page is mapped */
-    return (vmm_map(kernel_heap_start, PAGE_SIZE, MMAP_RDWR));
+    return vmm_map(kernel_heap_start, PAGE_SIZE, MMAP_RDWR);
 }

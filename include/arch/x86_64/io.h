@@ -86,7 +86,7 @@ io_port_in8(
         : "d"(port.port)
         :
     );
-    return (data);
+    return data;
 }
 
 /*
@@ -99,7 +99,7 @@ io_port_in8_offset(
     uint16 offset
 ) {
     port.port += offset;
-    return (io_port_in8(port));
+    return io_port_in8(port);
 }
 
 /*

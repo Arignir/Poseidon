@@ -45,5 +45,5 @@ find_next_init_hook(
             break;
         }
     }
-    return (found);
+    return found;
 }

@@ -38,7 +38,7 @@ find_next_thread(void)
         }
     }
     spinlock_release(&g_sched_runnable_threads_lock);
-    return (thread);
+    return thread;
 }
 
 /*
@@ -85,7 +85,7 @@ reschedule(
     stack_saved = new->sched_info.stack_saved;
     spin_rwlock_release_write(&new->sched_info.lock);
 
-    return (stack_saved);
+    return stack_saved;
 }
 
 /*

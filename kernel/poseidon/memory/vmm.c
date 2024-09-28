@@ -37,7 +37,7 @@ vmm_map(
         !IS_PAGE_ALIGNED(va) ||
         !IS_PAGE_ALIGNED(size)
     ) {
-        return (ERR_INVALID_ARGS);
+        return ERR_INVALID_ARGS;
     }
 
     /* Quick-check round-up to limit failures later */
@@ -46,7 +46,7 @@ vmm_map(
     origin = va;
     while ((uchar *)va < origin + size) {
         if (vmm_is_mapped(va)) {
-            return (ERR_ALREADY_MAPPED);
+            return ERR_ALREADY_MAPPED;
         }
         va = (uchar *)va + PAGE_SIZE;
     }
@@ -70,12 +70,12 @@ vmm_map(
         va = (uchar *)va + PAGE_SIZE;
     }
 
-    return (OK);
+    return OK;
 
 err:
     /* In case of error, unmap what has been done */
     vmm_unmap(origin, (uchar *)va - origin, MUNMAP_FREE);
-    return (s);
+    return s;
 }
 
 /*
@@ -103,7 +103,7 @@ vmm_map_device(
         !IS_PAGE_ALIGNED(pa) ||
         !IS_PAGE_ALIGNED(size)
     ) {
-        return (ERR_INVALID_ARGS);
+        return ERR_INVALID_ARGS;
     }
 
     /* Quick-check round-up to limit failures later */
@@ -111,7 +111,7 @@ vmm_map_device(
     origin = va;
     while ((uchar *)va < origin + size) {
         if (vmm_is_mapped(va)) {
-            return (ERR_ALREADY_MAPPED);
+            return ERR_ALREADY_MAPPED;
         }
         va = (uchar *)va + PAGE_SIZE;
     }
@@ -124,13 +124,13 @@ vmm_map_device(
         if (s != OK) {
             // We checked for that earlier, it shouldn't happen
             debug_assert(s != ERR_ALREADY_MAPPED);
-            return (s);
+            return s;
         }
         va = (uchar *)va + PAGE_SIZE;
         pa += PAGE_SIZE;
     }
 
-    return (OK);
+    return OK;
 }
 
 /*
@@ -148,7 +148,7 @@ vmm_remap(
     munmap_flags_t munmap_flags
 ) {
     vmm_unmap(va, size, munmap_flags);
-    return (vmm_map_device(va, pa, size, mmap_flags));
+    return vmm_map_device(va, pa, size, mmap_flags);
 }
 
 /*
@@ -197,12 +197,12 @@ vmm_validate_user_buffer(
 
     do {
         if (!vmm_is_mapped_user(buff_start)) {
-            return (ERR_PERMISSION_DENIED);
+            return ERR_PERMISSION_DENIED;
         }
         buff_start += PAGE_SIZE;
     } while (buff_start <= buff_end);
 
-    return (OK);
+    return OK;
 }
 
 /*
@@ -229,7 +229,7 @@ vmm_validate_user_str(
 
     while (true) {
         if (!vmm_is_mapped_user(str_align)) {
-            return (ERR_PERMISSION_DENIED);
+            return ERR_PERMISSION_DENIED;
         }
 
         while (str < str_align + PAGE_SIZE) {
@@ -237,7 +237,7 @@ vmm_validate_user_str(
                 if (len) {
                     *len = str - str_start;
                 }
-                return (OK);
+                return OK;
             }
             ++str;
         }

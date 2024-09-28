@@ -76,7 +76,7 @@ multiboot_load(void)
     g_aligned_mb_tag = kheap_alloc_device(aligned_tag_pa, aligned_tag_len);
 
     if (!g_aligned_mb_tag) {
-        return (ERR_OUT_OF_MEMORY);
+        return ERR_OUT_OF_MEMORY;
     }
 
     /*
@@ -118,5 +118,5 @@ multiboot_load(void)
             8
         );
     }
-    return (OK);
+    return OK;
 }

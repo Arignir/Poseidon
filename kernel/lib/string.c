@@ -23,7 +23,7 @@ strlen(
     while (*s) {
         ++s;
     }
-    return ((size_t)(s - str));
+    return (size_t)(s - str);
 }
 
 char *
@@ -40,7 +40,7 @@ strcpy(
         ++src;
     }
     *dest = '\0';
-    return (ori_dest);
+    return ori_dest;
 }
 
 char *
@@ -60,7 +60,7 @@ strncpy(
         dest[i] = '\0';
         ++i;
     }
-    return (dest);
+    return dest;
 }
 
 char *
@@ -80,7 +80,7 @@ strcat(
         ++src;
     }
     *dest = '\0';
-    return (dest_ori);
+    return dest_ori;
 }
 
 int
@@ -90,12 +90,12 @@ strcmp(
 ) {
     while (*s1 == *s2) {
         if (*s1 == '\0') {
-            return (0);
+            return 0;
         }
         ++s1;
         ++s2;
     }
-    return (*s1 - *s2);
+    return *s1 - *s2;
 }
 
 int
@@ -106,13 +106,13 @@ strncmp(
 ) {
     while (n) {
         if (*s1 != *s2 || *s1 == '\0') {
-            return (*s1 - *s2);
+            return *s1 - *s2;
         }
         ++s1;
         ++s2;
         --n;
     }
-    return (0);
+    return 0;
 }
 
 char
@@ -127,19 +127,19 @@ char
     c = *needle++;
     len = strlen(needle);
     if (c == '\0') {
-        return ((char *)haystack);
+        return (char *)haystack;
     }
     do {
         do {
             sc = *haystack++;
             if (sc == '\0') {
-                return (NULL);
+                return NULL;
             }
         }
         while (sc != c);
     }
     while (strncmp(haystack, needle, len) != 0);
-    return ((char *)haystack - 1);
+    return (char *)haystack - 1;
 }
 
 void *
@@ -155,7 +155,7 @@ memset(
         *s++ = c;
         --n;
     }
-    return (src);
+    return src;
 }
 
 void *
@@ -173,7 +173,7 @@ memcpy(
         *d++ = *s++;
         --n;
     }
-    return (dest);
+    return dest;
 }
 
 void *
@@ -197,7 +197,7 @@ memmove(
             d[n] = s[n];
         }
     }
-    return (dest);
+    return dest;
 }
 
 int
@@ -214,13 +214,13 @@ memcmp(
     while (n)
     {
         if (*c1 != *c2) {
-            return (*c1 - *c2);
+            return *c1 - *c2;
         }
         ++c1;
         ++c2;
         --n;
     }
-    return (0);
+    return 0;
 }
 
 void *
@@ -235,10 +235,10 @@ memchr(
     while (n)
     {
         if (*s == c) {
-            return ((void *)s);
+            return (void *)s;
         }
         ++s;
         --n;
     }
-    return (NULL);
+    return NULL;
 }

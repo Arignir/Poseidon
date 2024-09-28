@@ -62,7 +62,7 @@ pmm_get_frame_idx(
     struct pmm_arena *arena,
     physaddr_t frame
 ) {
-    return (((frame - arena->start) >> 12u) / 8u);
+    return ((frame - arena->start) >> 12u) / 8u;
 }
 
 /*
@@ -76,7 +76,7 @@ pmm_get_frame_mask(
     struct pmm_arena *arena,
     physaddr_t frame
 ) {
-    return (1u << (((frame - arena->start) >> 12u) % 8u));
+    return 1u << (((frame - arena->start) >> 12u) % 8u);
 }
 
 /*
@@ -90,7 +90,7 @@ pmm_is_frame_allocated(
     struct pmm_arena *arena,
     physaddr_t frame
 ) {
-    return (arena->bitmap[pmm_get_frame_idx(arena, frame)] & pmm_get_frame_mask(arena, frame));
+    return arena->bitmap[pmm_get_frame_idx(arena, frame)] & pmm_get_frame_mask(arena, frame);
 }
 
 /*
@@ -194,7 +194,7 @@ look_for_frame:
             arena->bitmap[i] |= (1 << j); // mark the frame as taken
             arena->next_frame = i;
             arena->free_frames--;
-            return (arena->start + PAGE_SIZE * (i * 8u + j));
+            return arena->start + PAGE_SIZE * (i * 8u + j);
         }
         ++i;
     }
@@ -204,7 +204,7 @@ look_for_frame:
         pass = true;
         goto look_for_frame;
     }
-    return (PHYS_NULL);
+    return PHYS_NULL;
 }
 
 /*
@@ -219,11 +219,11 @@ pmm_alloc_frame(void)
     arena = g_arenas;
     while (arena < g_arenas + g_arenas_len) {
         if (arena->free_frames) {
-            return (pmm_alloc_frame_in_arena(arena));
+            return pmm_alloc_frame_in_arena(arena);
         }
         ++arena;
     }
-    return (PHYS_NULL);
+    return PHYS_NULL;
 }
 
 /*
@@ -287,7 +287,7 @@ pmm_init(void)
     size_t j;
 
     if (!g_mb_mmap) {
-        return (ERR_BAD_STATE);
+        return ERR_BAD_STATE;
     }
 
     new_arenas_len = 0;
@@ -310,7 +310,7 @@ pmm_init(void)
 
     new_arenas = kheap_alloc_zero(sizeof(struct pmm_arena) * new_arenas_len);
     if (!new_arenas) {
-        return (ERR_OUT_OF_MEMORY);
+        return ERR_OUT_OF_MEMORY;
     }
 
     logln("Memory regions:");
@@ -347,7 +347,7 @@ pmm_init(void)
             arena->free_frames = (arena->end - arena->start) / PAGE_SIZE;
             arena->bitmap = kheap_alloc_zero(arena->bitmap_size);
             if (!arena->bitmap) {
-                return (ERR_OUT_OF_MEMORY);
+                return ERR_OUT_OF_MEMORY;
             }
 
             // TODO Mark as allocated the few bits over arena->end but still
@@ -385,5 +385,5 @@ pmm_init(void)
         (physaddr_t)g_kernel_boot_heap_end
     );
 
-    return (OK);
+    return OK;
 }

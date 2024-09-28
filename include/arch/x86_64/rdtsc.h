@@ -24,5 +24,5 @@ rdtsc(void)
         :
         :
     );
-    return ((uint64)d << 32u | a);
+    return ((uint64)d << 32u) | a;
 }

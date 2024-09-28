@@ -85,7 +85,7 @@ long_to_string(
     } else {
         *sign = '\0';
     }
-    return (buffer + pos);
+    return buffer + pos;
 }
 
 /*
@@ -134,7 +134,7 @@ long_to_readable(
         ++c;
     }
     buff[buffsize - 1] = '\0';
-    return (out);
+    return out;
 }
 
 /*
@@ -343,5 +343,5 @@ print_output:
             out(s, string_len, params);
         }
     }
-    return (out(NULL, 0, params));
+    return out(NULL, 0, params);
 }

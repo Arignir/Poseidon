@@ -37,7 +37,7 @@ log_fmt_callback(
         logger->print(buffer, len);
         ++logger;
     }
-    return (len);
+    return len;
 }
 
 /*

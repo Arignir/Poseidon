@@ -80,7 +80,7 @@ msr_read(
         :
     );
 
-    return ((uint64)eax | ((uint64)edx << 32u));
+    return (uint64)eax | ((uint64)edx << 32u);
 }
 
 static inline

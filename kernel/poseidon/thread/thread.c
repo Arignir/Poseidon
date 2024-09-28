@@ -46,7 +46,7 @@ thread_create_stacks(
     /* Allocate the user stack */
     thread->sched_info.stack = kheap_alloc_aligned(KCONFIG_THREAD_STACK_SIZE);
     if (!thread->sched_info.stack) {
-        return (ERR_OUT_OF_MEMORY);
+        return ERR_OUT_OF_MEMORY;
     }
     thread->sched_info.stack_top = (uchar *)thread->sched_info.stack + KCONFIG_THREAD_STACK_SIZE;
 
@@ -57,14 +57,14 @@ thread_create_stacks(
         /* In case of failure, we free the user stack previously allocated*/
         if (!thread->sched_info.kstack) {
             kheap_free(thread->sched_info.stack);
-            return (ERR_OUT_OF_MEMORY);
+            return ERR_OUT_OF_MEMORY;
         }
 
         thread->sched_info.kstack_top = (uchar *)thread->sched_info.kstack + KCONFIG_KERNEL_STACK_SIZE;
     }
 
     thread->sched_info.stack_saved = thread->sched_info.kstack_top;
-    return (OK);
+    return OK;
 }
 
 /*
@@ -88,7 +88,7 @@ thread_new(
     thread = kheap_alloc_zero(sizeof(*thread));
 
     if (!thread) {
-        return (ERR_OUT_OF_MEMORY);
+        return ERR_OUT_OF_MEMORY;
     }
 
     thread->tid = g_next_pid++;             // Set the thread's TID
@@ -107,7 +107,7 @@ thread_new(
     s = thread_create_stacks(thread);   // Create two stacks (user and kernel) for this process
     if (s != OK) {
         kheap_free(thread);
-        return (s);
+        return s;
     }
 
     arch_thread_new(thread);    // Initialize the arch-dependant side of this thread.
@@ -120,5 +120,5 @@ thread_new(
 
     *pthread = thread;
 
-    return (OK);
+    return OK;
 }

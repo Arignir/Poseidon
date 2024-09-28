@@ -39,7 +39,7 @@ static
 int
 is_transmit_empty(void)
 {
-    return (io_in8_offset(io_uart8250, 5) & 0x20);
+    return io_in8_offset(io_uart8250, 5) & 0x20;
 }
 
 static void
@@ -70,7 +70,7 @@ uart8250_init(void)
     io_out8_offset(io_uart8250, 2, 0xC7); // Enable FIFO, clear them, with 14-byte threshold
     io_out8_offset(io_uart8250, 4, 0x0B); // IRQs enabled, RTS/DSR set
 
-    return (OK);
+    return OK;
 }
 
 REGISTER_LOGGER(uart8250, &putsn);

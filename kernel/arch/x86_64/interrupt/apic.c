@@ -40,7 +40,7 @@ uint32
 apic_read(
     enum apic_reg reg
 ) {
-    return (*((volatile uint32 *)(g_apic + reg)));
+    return *((volatile uint32 *)(g_apic + reg));
 }
 
 /*
@@ -49,7 +49,7 @@ apic_read(
 uint32
 apic_get_id(void)
 {
-    return (apic_read(APIC_ID) >> 24u);
+    return apic_read(APIC_ID) >> 24u;
 }
 
 /*
@@ -109,10 +109,10 @@ apic_ipi_acked(void)
     while (--timeout > 0) {
         reg = apic_read(APIC_ICR_LOW);
         if (!(reg & APIC_ICR_PENDING)) {
-            return (true);
+            return true;
         }
     }
-    return (false);
+    return false;
 }
 
 /*

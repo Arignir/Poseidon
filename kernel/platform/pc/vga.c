@@ -141,7 +141,7 @@ vga_naked_putchar(
         vga_scroll();
         g_vga.cursor_y -= 1;
     }
-    return (1);
+    return 1;
 }
 
 /*
@@ -155,7 +155,7 @@ vga_putchar(
 
     ret = vga_naked_putchar(c);
     move_cursor();
-    return (ret);
+    return ret;
 }
 
 /*
@@ -173,7 +173,7 @@ vga_puts(
         ++str;
     }
     move_cursor();
-    return (str - s);
+    return str - s;
 }
 
 /*
@@ -193,7 +193,7 @@ vga_putsn(
         --n;
     }
     move_cursor();
-    return (old_n);
+    return old_n;
 }
 
 /*
@@ -232,7 +232,7 @@ vga_init(void)
     vga_set_color(VGA_BLACK, VGA_WHITE);
     vga_putchar('\n');
 
-    return (OK);
+    return OK;
 }
 
 REGISTER_LOGGER(vga, &vga_log);

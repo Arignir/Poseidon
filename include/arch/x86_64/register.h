@@ -66,7 +66,7 @@ get_rflags(void)
         :
         :
     );
-    return (rflags);
+    return rflags;
 }
 
 static inline
@@ -116,7 +116,7 @@ get_cr3(void)
         :
         :
     );
-    return (cr3);
+    return cr3;
 }
 
 static inline
