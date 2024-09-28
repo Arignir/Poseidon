@@ -31,8 +31,9 @@ static struct spinlock g_tlb_shootdown_target_lock;
 */
 static inline
 struct pml4 *
-get_pml4(void)
-{
+get_pml4(
+    void
+) {
     return (struct pml4 *)0xFFFFFFFFFFFFF000ULL;
 }
 

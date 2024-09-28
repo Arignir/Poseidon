@@ -25,8 +25,9 @@
 #include "lib/log.h"
 
 int
-thread_test(void)
-{
+thread_test(
+    void
+) {
     while (42) {
         log("%i", current_cpu()->cpu_id);
         halt();
@@ -41,8 +42,9 @@ thread_test(void)
 ** Poseidon's architecture-independent entry point.
 */
 void
-kmain(void)
-{
+kmain(
+    void
+) {
     struct init_hook const *hook;
     status_t s;
     struct thread *kthread1;

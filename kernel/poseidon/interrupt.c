@@ -22,8 +22,9 @@
 */
 [[gnu::weak]]
 bool
-interrupts_enabled(void)
-{
+interrupts_enabled(
+    void
+) {
     unimplemented();
 }
 
@@ -32,8 +33,9 @@ interrupts_enabled(void)
 */
 [[gnu::weak]]
 void
-enable_interrupts(void)
-{
+enable_interrupts(
+    void
+) {
     unimplemented();
 }
 
@@ -42,8 +44,9 @@ enable_interrupts(void)
 */
 [[gnu::weak]]
 void
-disable_interrupts(void)
-{
+disable_interrupts(
+    void
+) {
     unimplemented();
 }
 
@@ -91,8 +94,9 @@ pop_interrupts_state(
 */
 [[gnu::weak]]
 void
-halt(void)
-{
+halt(
+    void
+) {
     unimplemented();
 }
 

@@ -107,8 +107,9 @@ io_port_in8_offset(
 */
 static inline
 void
-io_port_wait(void)
-{
+io_port_wait(
+    void
+) {
     asm volatile(
         "outb %%al, $0x80"
         :

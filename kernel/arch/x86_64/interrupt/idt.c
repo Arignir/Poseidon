@@ -41,8 +41,9 @@ struct idt_fatptr const g_idt_fatptr = {
 */
 [[boot_text]]
 void
-idt_setup(void)
-{
+idt_setup(
+    void
+) {
     extern uchar isr_bootstraps[];
     extern uint64 isr_bootstrap_len;
     uint i;
@@ -64,8 +65,9 @@ idt_setup(void)
 */
 [[boot_text]]
 void
-idt_load(void)
-{
+idt_load(
+    void
+) {
     asm volatile(
         "lidt (%%rax)"
         :

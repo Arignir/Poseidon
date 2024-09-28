@@ -32,8 +32,9 @@ static void    common_setup(void);
 [[boot_text]]
 static
 status_t
-bsp_early_setup(void)
-{
+bsp_early_setup(
+    void
+) {
     struct cpu *bsp;
 
     bsp = current_cpu();
@@ -61,8 +62,9 @@ REGISTER_INIT_HOOK(bsp_early_setup, &bsp_early_setup, INIT_LEVEL_ARCH_EARLY);
 [[boot_text]]
 static
 status_t
-bsp_setup(void)
-{
+bsp_setup(
+    void
+) {
     acpi_init();
     pic8259_init();
     ioapic_init();
@@ -90,8 +92,9 @@ REGISTER_INIT_HOOK(bsp_setup, &bsp_setup, INIT_LEVEL_ARCH);
 */
 [[boot_text]]
 void
-ap_setup(void)
-{
+ap_setup(
+    void
+) {
     struct cpu *cpu;
 
     apic_init();
@@ -110,8 +113,9 @@ ap_setup(void)
 [[boot_text]]
 static
 void
-common_setup(void)
-{
+common_setup(
+    void
+) {
     struct cpu *cpu;
 
     idt_load();

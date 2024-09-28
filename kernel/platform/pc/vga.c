@@ -40,8 +40,9 @@ vga_set_color(
 */
 static
 void
-move_cursor(void)
-{
+move_cursor(
+    void
+) {
     uint32 tmp;
 
     tmp = g_vga.cursor_y * VGA_WIDTH + g_vga.cursor_x;
@@ -56,8 +57,9 @@ move_cursor(void)
 ** Clears the screen
 */
 void
-vga_clear(void)
-{
+vga_clear(
+    void
+) {
     uint i;
     uint16 blank;
 
@@ -84,8 +86,9 @@ vga_clear(void)
 */
 static
 void
-vga_scroll(void)
-{
+vga_scroll(
+    void
+) {
     uint16 blank;
     size_t i = 0;
 
@@ -215,8 +218,9 @@ vga_log(
 ** debugging
 */
 status_t
-vga_init(void)
-{
+vga_init(
+    void
+) {
     // Clear the screen
     vga_set_color(VGA_BLACK, VGA_WHITE);
     vga_clear();

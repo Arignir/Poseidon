@@ -212,8 +212,9 @@ look_for_frame:
 ** memory left.
 */
 physaddr_t
-pmm_alloc_frame(void)
-{
+pmm_alloc_frame(
+    void
+) {
     struct pmm_arena *arena;
 
     arena = g_arenas;
@@ -255,8 +256,9 @@ pmm_free_frame(
 ** (see the comment at the beginning of this module).
 */
 void
-pmm_early_init(void)
-{
+pmm_early_init(
+    void
+) {
     memset(&g_boot_arena, 0, sizeof(g_boot_arena));
 
     g_boot_arena.start = (physaddr_t)g_kernel_boot_heap_start;
@@ -277,8 +279,9 @@ pmm_early_init(void)
 ** in `pmm_early_init()`.
 */
 status_t
-pmm_init(void)
-{
+pmm_init(
+    void
+) {
     struct pmm_arena *new_arenas;
     size_t new_arenas_len;
     struct pmm_reserved_area const *pra;

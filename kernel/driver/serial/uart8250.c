@@ -37,8 +37,9 @@ NEW_IO_PORT(io_uart8250, 0x3F8);
 
 static
 int
-is_transmit_empty(void)
-{
+is_transmit_empty(
+    void
+) {
     return io_in8_offset(io_uart8250, 5) & 0x20;
 }
 
@@ -58,8 +59,9 @@ putsn(
 [[boot_text]]
 static
 status_t
-uart8250_init(void)
-{
+uart8250_init(
+    void
+) {
     /* TODO: Name the offset so they look a bit less like magic values */
 
     io_out8_offset(io_uart8250, 1, 0x00); // Disable all interrupts

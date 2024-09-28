@@ -91,8 +91,9 @@ void arch_thread_new(struct thread *t);
 */
 static inline
 struct thread *
-current_thread(void)
-{
+current_thread(
+    void
+) {
     struct cpu *cpu;
     struct thread *t;
 

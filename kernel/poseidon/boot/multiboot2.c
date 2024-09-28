@@ -54,8 +54,9 @@ struct multiboot_tag_framebuffer const *g_mb_fb = NULL;
 ** useful tags.
 */
 status_t
-multiboot_load(void)
-{
+multiboot_load(
+    void
+) {
     struct multiboot_tag const *tag;
     physaddr_t aligned_tag_pa;
     size_t aligned_tag_len;

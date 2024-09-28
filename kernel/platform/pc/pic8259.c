@@ -113,8 +113,9 @@ pic8259_set_irq_mask(ushort mask)
 ** Send an End Of Interrupt (EOI) to the master PIC.
 */
 void
-pic8259_master_eoi(void)
-{
+pic8259_master_eoi(
+    void
+) {
     // Send an OCW2 with EOI = 1.
     io_port_out8_offset(master, CMD, 0b00100000);
     io_port_wait();
@@ -124,8 +125,9 @@ pic8259_master_eoi(void)
 ** Send an End Of Interrupt (EOI) to the slave PIC.
 */
 void
-pic8259_slave_eoi(void)
-{
+pic8259_slave_eoi(
+    void
+) {
     // Send an OCW2 with EOI = 1.
     io_port_out8_offset(slave, CMD, 0b00100000);
 }
@@ -141,8 +143,9 @@ pic8259_slave_eoi(void)
 */
 [[boot_text]]
 status_t
-pic8259_init(void)
-{
+pic8259_init(
+    void
+) {
     /*
     ** The PIC is initialized using a set of Initialization Command Words (ICW).
     **

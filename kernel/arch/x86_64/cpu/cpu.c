@@ -49,8 +49,9 @@ extern virtaddr_t bsp_kernel_stack_bot[];
 ** TODO: Improve this using fs/gs instead of an iterative loop over `cpus`.
 */
 struct cpu *
-current_cpu(void)
-{
+current_cpu(
+    void
+) {
     struct cpu *cpu;
     uint32 apic_id;
 
@@ -77,8 +78,9 @@ current_cpu(void)
 */
 [[boot_text]]
 void
-cpu_remap_bsp(void)
-{
+cpu_remap_bsp(
+    void
+) {
     struct cpu *cpu;
 
     assert(!g_bsp_remapped);
@@ -102,8 +104,9 @@ cpu_remap_bsp(void)
 ** Waits for a couple of cpu clocks
 */
 static void
-cpu_micro_wait(void)
-{
+cpu_micro_wait(
+    void
+) {
     uint64 tsc;
 
     tsc = rdtsc();
@@ -164,8 +167,9 @@ cpu_start_ap(
 ** Start all the other processors
 */
 void
-cpu_start_all_aps(void)
-{
+cpu_start_all_aps(
+    void
+) {
     struct cpu *cpu;
     struct cpu *current;
 

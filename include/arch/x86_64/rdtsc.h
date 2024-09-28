@@ -13,8 +13,9 @@
 
 static inline
 uint64
-rdtsc(void)
-{
+rdtsc(
+    void
+) {
     uint32 a;
     uint32 d;
 

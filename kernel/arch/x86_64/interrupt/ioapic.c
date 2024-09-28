@@ -107,8 +107,9 @@ ioapic_mask_int(
 ** Initialize the I/O APIC.
 */
 void
-ioapic_init(void)
-{
+ioapic_init(
+    void
+) {
     size_t i;
     size_t max_ints;
 

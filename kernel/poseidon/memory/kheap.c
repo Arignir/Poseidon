@@ -377,8 +377,9 @@ kheap_alloc_zero(
 }
 
 status_t
-kheap_init(void)
-{
+kheap_init(
+    void
+) {
     g_kheap_head = (void*)1;
     g_kheap_tail = NULL;
 

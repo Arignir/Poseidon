@@ -37,8 +37,9 @@
 
 static
 status_t
-memory_init(void)
-{
+memory_init(
+    void
+) {
     /*
     ** Initialize the physical memory manager using a reserved area of the binary
     ** (called the boot heap) as a free region of physical memory.

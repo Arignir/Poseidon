@@ -55,8 +55,9 @@ static_assert(sizeof(struct rflags) == sizeof(uint64));
 
 static inline
 struct rflags
-get_rflags(void)
-{
+get_rflags(
+    void
+) {
     struct rflags rflags;
 
     asm volatile (
@@ -106,8 +107,9 @@ static_assert(sizeof(struct cr3) == sizeof(uint64));
 
 static inline
 struct cr3
-get_cr3(void)
-{
+get_cr3(
+    void
+) {
     struct cr3 cr3;
 
     asm volatile (

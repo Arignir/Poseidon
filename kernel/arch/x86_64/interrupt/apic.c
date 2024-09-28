@@ -47,8 +47,9 @@ apic_read(
 ** Return the id of the current processor's local APIC.
 */
 uint32
-apic_get_id(void)
-{
+apic_get_id(
+    void
+) {
     return apic_read(APIC_ID) >> 24u;
 }
 
@@ -76,8 +77,9 @@ apic_map(
 ** interrupt.
 */
 void
-apic_eoi(void)
-{
+apic_eoi(
+    void
+) {
     apic_write(APIC_EOI, 0x0);
 }
 
@@ -100,8 +102,9 @@ apic_send_ipi(
 ** FIXME: We should use fine-grained timeout
 */
 bool
-apic_ipi_acked(void)
-{
+apic_ipi_acked(
+    void
+) {
     size_t timeout;
     uint32 reg;
 
@@ -119,8 +122,9 @@ apic_ipi_acked(void)
 ** Initialize the local APIC.
 */
 void
-apic_init(void)
-{
+apic_init(
+    void
+) {
     uint64 msr;
 
     assert(g_apic);
@@ -168,8 +172,9 @@ apic_init(void)
 ** Handler for the APIC timer interrupt
 */
 void
-apic_timer_ihandler(void)
-{
+apic_timer_ihandler(
+    void
+) {
     bool in_thread;
 
     in_thread = (current_thread());
@@ -183,8 +188,9 @@ apic_timer_ihandler(void)
 ** Handler for the APIC error interrupt
 */
 void
-apic_error_ihandler(void)
-{
+apic_error_ihandler(
+    void
+) {
     panic("apic error encountered");
 }
 
@@ -192,8 +198,9 @@ apic_error_ihandler(void)
 ** Handler for the APIC spurious interrupt
 */
 void
-apic_spurious_ihandler(void)
-{
+apic_spurious_ihandler(
+    void
+) {
     panic("apic spurious interruption received");
 }
 
@@ -204,8 +211,9 @@ apic_spurious_ihandler(void)
 ** all the others to halt indefinitely.
 */
 void
-apic_panic_ihandler(void)
-{
+apic_panic_ihandler(
+    void
+) {
     disable_interrupts();
     while (42) {
         halt();
@@ -222,8 +230,9 @@ apic_panic_ihandler(void)
 ** but eeeh, we'll go for the quick & dirty way instead :D
 */
 void
-apic_tlb_ihandler(void)
-{
+apic_tlb_ihandler(
+    void
+) {
     asm volatile(
         "invlpg (%%rax)"
         :

@@ -18,8 +18,9 @@ static interrupt_handler_t g_irq_handlers[INT_NB];
 ** Test if interruptions are enabled.
 */
 bool
-interrupts_enabled(void)
-{
+interrupts_enabled(
+    void
+) {
     struct rflags rflags;
 
     rflags = get_rflags();
@@ -27,8 +28,9 @@ interrupts_enabled(void)
 }
 
 void
-enable_interrupts(void)
-{
+enable_interrupts(
+    void
+) {
     asm volatile (
         "sti"
         :
@@ -38,8 +40,9 @@ enable_interrupts(void)
 }
 
 void
-disable_interrupts(void)
-{
+disable_interrupts(
+    void
+) {
     asm volatile (
         "cli"
         :
@@ -49,8 +52,9 @@ disable_interrupts(void)
 }
 
 void
-halt(void)
-{
+halt(
+    void
+) {
     asm volatile(
         "hlt"
         :

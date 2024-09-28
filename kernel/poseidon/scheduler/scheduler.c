@@ -24,8 +24,9 @@ struct spinlock g_sched_runnable_threads_lock = SPINLOCK_DEFAULT;
 */
 static
 struct thread *
-find_next_thread(void)
-{
+find_next_thread(
+    void
+) {
     struct thread *thread;
 
     spinlock_acquire(&g_sched_runnable_threads_lock);
@@ -98,8 +99,9 @@ reschedule(
 ** The current thread must NOT be acquired before calling this, NOR its address space.
 */
 void
-yield(void)
-{
+yield(
+    void
+) {
     struct cpu const *cpu;
     struct thread *thread;
     bool state;
