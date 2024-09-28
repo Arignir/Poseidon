@@ -11,10 +11,10 @@
 #include "poseidon/memory/memory.h"
 
 /* Number of CPUs on the current system. */
-uint ncpu = 0;
+uint g_cpus_len = 0;
 
 /* An array for all cpus. */
-struct cpu cpus[KCONFIG_MAX_CPUS] = { 0 };
+struct cpu g_cpus[KCONFIG_MAX_CPUS] = { 0 };
 
 /* The end of `cpus`. Used for iterating over `cpus`. */
-struct cpu const *cpus_end = cpus + KCONFIG_MAX_CPUS;
+struct cpu const *g_cpus_end = g_cpus + KCONFIG_MAX_CPUS;

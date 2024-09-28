@@ -94,14 +94,14 @@ static char const * const multiboot_memory_str[] = {
   [MULTIBOOT_MEMORY_BADRAM] = "BADRAM"
 };
 
-extern struct multiboot_tag_string const *mb_cmdline;
-extern struct multiboot_tag_string const *mb_bootloader;
-extern struct multiboot_tag_basic_meminfo const *mb_meminfo;
-extern struct multiboot_tag_mmap const *mb_mmap;
-extern struct multiboot_tag_framebuffer const *mb_fb;
+extern struct multiboot_tag_string const *g_mb_cmdline;
+extern struct multiboot_tag_string const *g_mb_bootloader;
+extern struct multiboot_tag_basic_meminfo const *g_mb_meminfo;
+extern struct multiboot_tag_mmap const *g_mb_mmap;
+extern struct multiboot_tag_framebuffer const *g_mb_fb;
 
-extern physaddr_t mb_tag_pa;
-extern uint32 mb_tag_len;
+extern physaddr_t g_mb_tag_pa;
+extern uint32 g_mb_tag_len;
 
 status_t multiboot_load(void);
 

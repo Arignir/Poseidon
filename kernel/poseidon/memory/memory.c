@@ -70,8 +70,8 @@ memory_init(void)
     ** at compile-time)
     */
     pmm_mark_range_as_allocated(
-        ROUND_DOWN(mb_tag_pa, PAGE_SIZE),
-        ALIGN(mb_tag_pa + mb_tag_len, PAGE_SIZE)
+        ROUND_DOWN(g_mb_tag_pa, PAGE_SIZE),
+        ALIGN(g_mb_tag_pa + g_mb_tag_len, PAGE_SIZE)
     );
 
     logln("Dynamic memory allocator initialized.");

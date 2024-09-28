@@ -21,7 +21,7 @@
 ** number of supported CPUs.
 */
 [[gnu::aligned(16)]]
-struct  gdt_segment_descriptor const gdt[] = {
+struct  gdt_segment_descriptor const g_gdt[] = {
     /* 0x00: Null segment selector (required by Intel) */
     NEW_NULL_DESCRIPTOR,
 
@@ -101,7 +101,7 @@ struct  gdt_segment_descriptor const gdt[] = {
 */
 [[boot_rodata]]
 [[gnu::aligned(16)]]
-struct gdt_fatptr const gdt_fatptr = {
-    .limit = sizeof(gdt) - 1,
-    .base = gdt,
+struct gdt_fatptr const g_gdt_fatptr = {
+    .limit = sizeof(g_gdt) - 1,
+    .base = g_gdt,
 };

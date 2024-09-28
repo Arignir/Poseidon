@@ -14,8 +14,8 @@
 #include "lib/sync/spinlock.h"
 #include "lib/log.h"
 
-struct linked_list sched_runnable_threads = LIST_HEAD_INIT(sched_runnable_threads);
-struct spinlock sched_runnable_threads_lock = SPINLOCK_DEFAULT;
+struct linked_list g_sched_runnable_threads = LIST_HEAD_INIT(g_sched_runnable_threads);
+struct spinlock g_sched_runnable_threads_lock = SPINLOCK_DEFAULT;
 
 /*
 ** Search for the next runnable thread.
@@ -28,16 +28,16 @@ find_next_thread(void)
 {
     struct thread *thread;
 
-    spinlock_acquire(&sched_runnable_threads_lock);
+    spinlock_acquire(&g_sched_runnable_threads_lock);
     {
-        thread = list_first_entry_or_null(&sched_runnable_threads, struct thread, sched_info.runnable_threads);
+        thread = list_first_entry_or_null(&g_sched_runnable_threads, struct thread, sched_info.runnable_threads);
         if (thread) {
             spin_rwlock_acquire_write(&thread->sched_info.lock);
             list_remove(&thread->sched_info.runnable_threads);
             assert(thread->sched_info.state == RUNNABLE);
         }
     }
-    spinlock_release(&sched_runnable_threads_lock);
+    spinlock_release(&g_sched_runnable_threads_lock);
     return (thread);
 }
 
@@ -113,15 +113,15 @@ yield(void)
 
         /* Set current thread as runnable */
         if (thread) {
-            spinlock_acquire(&sched_runnable_threads_lock);
+            spinlock_acquire(&g_sched_runnable_threads_lock);
             {
                 spin_rwlock_acquire_write(&thread->sched_info.lock); /* Released in `reschedule()` */
                 assert(thread->sched_info.state == RUNNING);
                 thread->sched_info.state = RUNNABLE;
 
-                list_add_tail(&sched_runnable_threads, &thread->sched_info.runnable_threads);
+                list_add_tail(&g_sched_runnable_threads, &thread->sched_info.runnable_threads);
             }
-            spinlock_release(&sched_runnable_threads_lock);
+            spinlock_release(&g_sched_runnable_threads_lock);
         }
 
         enter_scheduler(cpu->scheduler_stack_top);

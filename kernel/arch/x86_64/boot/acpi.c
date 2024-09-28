@@ -123,7 +123,7 @@ acpi_map_table(
         return nullptr;
     }
 
-    // Save the return value of `kheap_alloc_device` in case the calling function
+    // Save the return value of `kheap_alloc_device()` in case the calling function
     // needs to free the allocated memory.
     if (ptr_to_kheap_free) {
         *ptr_to_kheap_free = aligned_ptr;
@@ -156,11 +156,11 @@ acpi_parse_madt(
                 struct madt_processor_local_apic_entry const *entry;
 
                 entry = (struct madt_processor_local_apic_entry const *)header;
-                if (ncpu < KCONFIG_MAX_CPUS) {
-                    cpus[ncpu].acpi_id = entry->acpi_processor_id;
-                    cpus[ncpu].apic_id = entry->apic_id;
-                    cpus[ncpu].cpu_id = ncpu;
-                    ncpu++;
+                if (g_cpus_len < KCONFIG_MAX_CPUS) {
+                    g_cpus[g_cpus_len].acpi_id = entry->acpi_processor_id;
+                    g_cpus[g_cpus_len].apic_id = entry->apic_id;
+                    g_cpus[g_cpus_len].cpu_id = g_cpus_len;
+                    g_cpus_len++;
                 }
                 break;
             };

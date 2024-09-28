@@ -12,8 +12,8 @@
 #include "lib/list.h"
 #include "lib/sync/spinlock.h"
 
-extern struct linked_list sched_runnable_threads;
-extern struct spinlock sched_runnable_threads_lock;
+extern struct linked_list g_sched_runnable_threads;
+extern struct spinlock g_sched_runnable_threads_lock;
 
 void *reschedule(void *);
 void yield(void);

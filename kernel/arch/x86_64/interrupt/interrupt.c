@@ -12,7 +12,7 @@
 #include "poseidon/thread/thread.h"
 #include "lib/log.h"
 
-static interrupt_handler_t irq_handlers[INT_NB];
+static interrupt_handler_t g_irq_handlers[INT_NB];
 
 /*
 ** Test if interruptions are enabled.
@@ -66,7 +66,7 @@ register_interrupt_handler(
 ) {
     debug_assert(vector >= INT_IRQ0 && vector < INT_NB);
 
-    irq_handlers[vector] = handler;
+    g_irq_handlers[vector] = handler;
 }
 
 void
@@ -75,7 +75,7 @@ unregister_interrupt_handler(
 ) {
     debug_assert(vector >= INT_IRQ0 && vector < INT_NB);
 
-    irq_handlers[vector] = NULL;
+    g_irq_handlers[vector] = NULL;
 }
 
 /*
@@ -97,8 +97,8 @@ common_int_handler(
             panic("Unhandled exception %#x", iframe->int_vector);
             break;
         case INT_IRQ0 ... INT_NB:
-            if (irq_handlers[iframe->int_vector]) {
-                irq_handlers[iframe->int_vector](iframe);
+            if (g_irq_handlers[iframe->int_vector]) {
+                g_irq_handlers[iframe->int_vector](iframe);
             } else {
                 logln(
                     "Unhandled IRQ %#x",

@@ -18,7 +18,7 @@
 #include <stdarg.h>
 
 // Ensure logs aren't scrambled because two cores want to log at the same time
-static struct spinlock lock = SPINLOCK_DEFAULT;
+static struct spinlock g_log_lock = SPINLOCK_DEFAULT;
 
 [[gnu::weak]] extern struct logger const __start_poseidon_logger[];
 [[gnu::weak]] extern struct logger const __stop_poseidon_logger[];
@@ -51,9 +51,9 @@ log(
     va_list va;
     va_start(va, fmt);
 
-    spinlock_acquire(&lock);
+    spinlock_acquire(&g_log_lock);
     format(fmt, va, &log_fmt_callback, NULL);
-    spinlock_release(&lock);
+    spinlock_release(&g_log_lock);
 
     va_end(va);
 }
@@ -69,10 +69,10 @@ logln(
     va_list va;
     va_start(va, fmt);
 
-    spinlock_acquire(&lock);
+    spinlock_acquire(&g_log_lock);
     format(fmt, va, &log_fmt_callback, NULL);
     log_fmt_callback("\n", 1, NULL);
-    spinlock_release(&lock);
+    spinlock_release(&g_log_lock);
 
     va_end(va);
 }
@@ -86,9 +86,9 @@ vlog(
     char const *fmt,
     va_list va
 ) {
-    spinlock_acquire(&lock);
+    spinlock_acquire(&g_log_lock);
     format(fmt, va, &log_fmt_callback, NULL);
-    spinlock_release(&lock);
+    spinlock_release(&g_log_lock);
 }
 
 /*
@@ -100,8 +100,8 @@ vlogln(
     char const *fmt,
     va_list va
 ) {
-    spinlock_acquire(&lock);
+    spinlock_acquire(&g_log_lock);
     format(fmt, va, &log_fmt_callback, NULL);
     log_fmt_callback("\n", 1, NULL);
-    spinlock_release(&lock);
+    spinlock_release(&g_log_lock);
 }

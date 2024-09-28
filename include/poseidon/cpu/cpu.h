@@ -38,13 +38,13 @@ struct cpu {
 };
 
 /* Number of CPUs on the current system. */
-extern uint ncpu;
+extern uint g_cpus_len;
 
 /* An array for all cpus. */
-extern struct cpu cpus[KCONFIG_MAX_CPUS];
+extern struct cpu g_cpus[KCONFIG_MAX_CPUS];
 
 /* The end of `cpus`. Used for iterating over `cpus`. */
-extern struct cpu const *cpus_end;
+extern struct cpu const *g_cpus_end;
 
 /*
 ** Return the current cpu actually running this code.

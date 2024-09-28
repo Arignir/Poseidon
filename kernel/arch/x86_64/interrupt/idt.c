@@ -16,7 +16,7 @@
 #include "lib/log.h"
 
 [[gnu::aligned(16)]]
-static struct idt_descriptor idt[INT_NB] = { 0 };
+static struct idt_descriptor g_idt[INT_NB] = { 0 };
 
 /*
 ** The fat pointer describing the IDT.
@@ -26,9 +26,9 @@ static struct idt_descriptor idt[INT_NB] = { 0 };
 ** the IDT.
 */
 [[gnu::aligned(16)]]
-struct idt_fatptr const idt_fatptr = {
-    .limit = sizeof(idt) - 1,
-    .base = idt,
+struct idt_fatptr const g_idt_fatptr = {
+    .limit = sizeof(g_idt) - 1,
+    .base = g_idt,
 };
 
 /*
@@ -50,7 +50,7 @@ idt_setup(void)
     // Set the default handler for each exception/interruption.
     // This handler will redirect to `common_int_handler()`.
     for (i = 0; i < INT_NB; ++i) {
-        idt[i] = NEW_IDT_INTERRUPT_GATE_ENTRY(
+        g_idt[i] = NEW_IDT_INTERRUPT_GATE_ENTRY(
             isr_bootstraps + i * isr_bootstrap_len,
             .present = true,
             .dpl = 0,
@@ -69,7 +69,7 @@ idt_load(void)
     asm volatile(
         "lidt (%%rax)"
         :
-        : "a"(&idt_fatptr)
+        : "a"(&g_idt_fatptr)
         :
     );
 }

@@ -12,7 +12,7 @@
 #include "lib/string.h"
 #include "lib/log.h"
 
-static char const * const features_name[ARRAY_LENGTH(((struct cpuid *)NULL)->features.raw)][32] = {
+static char const * const g_features_name[ARRAY_LENGTH(((struct cpuid *)NULL)->features.raw)][32] = {
     // EDX when CPUID.EAX=0x1
     [0] = {
         [0] = "fpu",
@@ -316,7 +316,7 @@ cpuid_dump(
     log("flag             |");
     for (uint i = 0; i < ARRAY_LENGTH(cpuid->features.raw); ++i) {
         for (uint j = 0; j < 32; ++j) {
-            char const *feature_name = features_name[i][j];
+            char const *feature_name = g_features_name[i][j];
             if (feature_name) { // feature_name is NULL for reserved bytes
                 if ((cpuid->features.raw[i] >> j & 0x1)) {
                     log(" %s", feature_name);

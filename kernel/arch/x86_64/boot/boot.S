@@ -60,8 +60,8 @@ start:
     call enable_paging              // Enable long-mode and paging, leaving
                                     // the CPU in a 32-bit compatiblity mode.
 
-    .extern gdt_fatptr
-    lgdt (gdt_fatptr)               // Load the 64-bit GDT
+    .extern g_gdt_fatptr
+    lgdt (g_gdt_fatptr)             // Load the 64-bit GDT
 
     // Transition to 64-bit by reloading the code segment register
     // with the new 64-bit code segment selector
@@ -101,12 +101,12 @@ ensure_multiboot2:
     cmp $MULTIBOOT2_BOOTLOADER_MAGIC, %eax
     jne .no_multiboot2
 
-    .extern mb_tag_pa
-    .extern mb_tag_size
+    .extern g_mb_tag_pa
+    .extern g_mb_tag_size
     movl (%ebx), %ecx
-    movl %ecx, mb_tag_len           // Save the multiboot2 segment length for later use
+    movl %ecx, g_mb_tag_len         // Save the multiboot2 segment length for later use
     add $8, %ebx
-    movl %ebx, mb_tag_pa            // Save the multiboot2 segment pointer for later use.
+    movl %ebx, g_mb_tag_pa          // Save the multiboot2 segment pointer for later use.
 
     ret
 

@@ -35,17 +35,17 @@
 ** We put its content in an extra section so te linker script can put it
 ** after the kernel, therefore making sure it doesn't take any virtual memory.
 */
-[[boot_data]] static struct pmm_arena boot_arena;
-[[boot_data]] static uint8 boot_arena_bitmap[KCONFIG_BOOT_KHEAP_SIZE / (4096 * 8)];
-[[gnu::section(".kernel_boot_heap")]] static  uint8 kernel_boot_heap[KCONFIG_BOOT_KHEAP_SIZE];
+[[boot_data]] static struct pmm_arena g_boot_arena;
+[[boot_data]] static uint8 g_boot_arena_bitmap[KCONFIG_BOOT_KHEAP_SIZE / (4096 * 8)];
+[[gnu::section(".kernel_boot_heap")]] static  uint8 g_kernel_boot_heap[KCONFIG_BOOT_KHEAP_SIZE];
 
 /* A few shortcuts, to make operations more verbose. */
-[[boot_data]] static uint8 *kernel_boot_heap_start = kernel_boot_heap;
-[[boot_data]] static uint8 *kernel_boot_heap_end = (uint8 *)kernel_boot_heap + sizeof(kernel_boot_heap);
+[[boot_data]] static uint8 *g_kernel_boot_heap_start = g_kernel_boot_heap;
+[[boot_data]] static uint8 *g_kernel_boot_heap_end = (uint8 *)g_kernel_boot_heap + sizeof(g_kernel_boot_heap);
 
 /* An array of physical memory regions. */
-static struct pmm_arena *arenas = NULL;
-static size_t arenas_len = 0;
+static struct pmm_arena *g_arenas = NULL;
+static size_t g_arenas_len = 0;
 
 /* The beginning and end of the `pmm_reserved_area` ELF section. */
 extern struct pmm_reserved_area const __start_pmm_reserved_area[];
@@ -129,9 +129,9 @@ pmm_mark_range_as_allocated(
         bool found;
 
         found = false;
-        arena = arenas;
+        arena = g_arenas;
 
-        while (arena < arenas + arenas_len) {
+        while (arena < g_arenas + g_arenas_len) {
             if (arena->start <= frame && frame < arena->end) {
                 while (frame < arena->end && frame < end) {
                     arena->free_frames -= !pmm_is_frame_allocated(arena, frame);
@@ -216,8 +216,8 @@ pmm_alloc_frame(void)
 {
     struct pmm_arena *arena;
 
-    arena = arenas;
-    while (arena < arenas + arenas_len) {
+    arena = g_arenas;
+    while (arena < g_arenas + g_arenas_len) {
         if (arena->free_frames) {
             return (pmm_alloc_frame_in_arena(arena));
         }
@@ -237,8 +237,8 @@ pmm_free_frame(
 ) {
     struct pmm_arena *arena;
 
-    arena = arenas;
-    while (arena < arenas + arenas_len) {
+    arena = g_arenas;
+    while (arena < g_arenas + g_arenas_len) {
         if (arena->start <= frame && frame < arena->end) {
             arena->free_frames += (pmm_is_frame_allocated(arena, frame));
             pmm_mark_as_free(arena, frame);
@@ -257,19 +257,19 @@ pmm_free_frame(
 void
 pmm_early_init(void)
 {
-    memset(&boot_arena, 0, sizeof(boot_arena));
+    memset(&g_boot_arena, 0, sizeof(g_boot_arena));
 
-    boot_arena.start = (physaddr_t)kernel_boot_heap_start;
-    boot_arena.end = (physaddr_t)kernel_boot_heap_end;
+    g_boot_arena.start = (physaddr_t)g_kernel_boot_heap_start;
+    g_boot_arena.end = (physaddr_t)g_kernel_boot_heap_end;
 
-    boot_arena.bitmap = boot_arena_bitmap;
-    boot_arena.bitmap_size = sizeof(boot_arena_bitmap);
-    boot_arena.free_frames = (boot_arena.end - boot_arena.start) / PAGE_SIZE;
+    g_boot_arena.bitmap = g_boot_arena_bitmap;
+    g_boot_arena.bitmap_size = sizeof(g_boot_arena_bitmap);
+    g_boot_arena.free_frames = (g_boot_arena.end - g_boot_arena.start) / PAGE_SIZE;
 
-    memset(boot_arena.bitmap, 0, boot_arena.bitmap_size);
+    memset(g_boot_arena.bitmap, 0, g_boot_arena.bitmap_size);
 
-    arenas = &boot_arena;
-    arenas_len = 1;
+    g_arenas = &g_boot_arena;
+    g_arenas_len = 1;
 }
 
 /*
@@ -286,12 +286,12 @@ pmm_init(void)
     size_t i;
     size_t j;
 
-    if (!mb_mmap) {
+    if (!g_mb_mmap) {
         return (ERR_BAD_STATE);
     }
 
     new_arenas_len = 0;
-    mmap_len = (mb_mmap->size - sizeof(*mb_mmap)) / mb_mmap->entry_size;
+    mmap_len = (g_mb_mmap->size - sizeof(*g_mb_mmap)) / g_mb_mmap->entry_size;
 
     /*
     ** First, we calculate how many arenas we'll need.
@@ -299,7 +299,7 @@ pmm_init(void)
 
     i = 0;
     while (i < mmap_len) {
-        new_arenas_len += (mb_mmap->entries[i].type == MULTIBOOT_MEMORY_AVAILABLE);
+        new_arenas_len += (g_mb_mmap->entries[i].type == MULTIBOOT_MEMORY_AVAILABLE);
         ++i;
     }
 
@@ -320,7 +320,7 @@ pmm_init(void)
     while (i < mmap_len) {
         struct multiboot_mmap_entry const *entry;
 
-        entry = mb_mmap->entries + i;
+        entry = g_mb_mmap->entries + i;
 
         logln(
             "    %i | 0x%p-0x%p | %s",
@@ -361,8 +361,8 @@ pmm_init(void)
     /*
     ** Swap the old arena with the new ones
     */
-    arenas = new_arenas;
-    arenas_len = new_arenas_len;
+    g_arenas = new_arenas;
+    g_arenas_len = new_arenas_len;
 
     /*
     ** The allocator is now initialized but we still have to mark all reserved
@@ -381,8 +381,8 @@ pmm_init(void)
     */
 
     pmm_mark_range_as_allocated(
-        (physaddr_t)kernel_boot_heap_start,
-        (physaddr_t)kernel_boot_heap_end
+        (physaddr_t)g_kernel_boot_heap_start,
+        (physaddr_t)g_kernel_boot_heap_end
     );
 
     return (OK);

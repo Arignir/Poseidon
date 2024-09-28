@@ -18,7 +18,7 @@
 #include "poseidon/memory/pmm.h"
 #include "poseidon/memory/kheap.h"
 
-static volatile uchar *apic = NULL;
+static volatile uchar *g_apic = NULL;
 
 /*
 ** Write to a local APIC register
@@ -29,7 +29,7 @@ apic_write(
     enum apic_reg reg,
     uint32 value
 ) {
-    *((volatile uint32 *)(apic + reg)) = value;
+    *((volatile uint32 *)(g_apic + reg)) = value;
 }
 
 /*
@@ -40,7 +40,7 @@ uint32
 apic_read(
     enum apic_reg reg
 ) {
-    return (*((volatile uint32 *)(apic + reg)));
+    return (*((volatile uint32 *)(g_apic + reg)));
 }
 
 /*
@@ -63,12 +63,12 @@ apic_map(
     pmm_mark_range_as_allocated(pa, PAGE_SIZE);
 
     /* Map it to memory */
-    apic = kheap_alloc_device(
+    g_apic = kheap_alloc_device(
         pa,
         PAGE_SIZE
     );
 
-    assert(apic);
+    assert(g_apic);
 }
 
 /*
@@ -123,7 +123,7 @@ apic_init(void)
 {
     uint64 msr;
 
-    assert(apic);
+    assert(g_apic);
 
     /* Enable Local APIC by setting spurious interrupt vector */
     apic_write(APIC_SIV, APIC_SVR_ENABLED | INT_APIC_SPURIOUS);
@@ -227,7 +227,7 @@ apic_tlb_ihandler(void)
     asm volatile(
         "invlpg (%%rax)"
         :
-        : "a"(tlb_shootdown_target)
+        : "a"(g_tlb_shootdown_target)
         :
     );
     apic_eoi();

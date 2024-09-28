@@ -15,8 +15,8 @@
 #include "lib/list.h"
 #include "lib/string.h"
 
-static struct linked_list threads_list = LIST_HEAD_INIT(threads_list);
-static tid_t global_pid = 1;
+static struct linked_list g_threads_list = LIST_HEAD_INIT(g_threads_list);
+static tid_t g_next_pid = 1;
 
 /*
 ** Set the new name of the thread
@@ -91,7 +91,7 @@ thread_new(
         return (ERR_OUT_OF_MEMORY);
     }
 
-    thread->tid = global_pid++;             // Set the thread's TID
+    thread->tid = g_next_pid++;             // Set the thread's TID
     thread->entry = entry;                  // Set the thread's entry point
     thread->sched_info.state = RUNNABLE;    // Set the state of the new thread to `RUNNABLE`
     thread->sched_info.lock = SPIN_RWLOCK_DEFAULT;
@@ -112,11 +112,11 @@ thread_new(
 
     arch_thread_new(thread);    // Initialize the arch-dependant side of this thread.
 
-    list_add_tail(&threads_list, &thread->threads);
+    list_add_tail(&g_threads_list, &thread->threads);
 
-    spinlock_acquire(&sched_runnable_threads_lock);
-    list_add_tail(&sched_runnable_threads, &thread->sched_info.runnable_threads);
-    spinlock_release(&sched_runnable_threads_lock);
+    spinlock_acquire(&g_sched_runnable_threads_lock);
+    list_add_tail(&g_sched_runnable_threads, &thread->sched_info.runnable_threads);
+    spinlock_release(&g_sched_runnable_threads_lock);
 
     *pthread = thread;
 

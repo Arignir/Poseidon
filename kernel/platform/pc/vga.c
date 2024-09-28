@@ -17,10 +17,7 @@
 NEW_IO_PORT(vga_ctrl, 0x3D4);
 NEW_IO_PORT(vga_data, 0x3D5);
 
-static uint const VGA_WIDTH = 80u;
-static uint const VGA_HEIGHT = 25u;
-
-static struct vga vga = {
+static struct vga g_vga = {
     .attrib = 0,
     .buffer = (uint16 *)0xB8000,
     .cursor_x = 0,
@@ -35,7 +32,7 @@ vga_set_color(
     enum vga_color bg,
     enum vga_color fg
 ) {
-    vga.attrib = ((bg << 4u) | (fg & 0x0F)) << 8u;
+    g_vga.attrib = ((bg << 4u) | (fg & 0x0F)) << 8u;
 }
 
 /*
@@ -47,7 +44,7 @@ move_cursor(void)
 {
     uint32 tmp;
 
-    tmp = vga.cursor_y * VGA_WIDTH + vga.cursor_x;
+    tmp = g_vga.cursor_y * VGA_WIDTH + g_vga.cursor_x;
 
     io_out8(vga_ctrl, 14);
     io_out8(vga_data, tmp >> 8);
@@ -65,20 +62,20 @@ vga_clear(void)
     uint16 blank;
 
     i = 0;
-    blank = vga.attrib | 0x20;
+    blank = g_vga.attrib | 0x20;
     while (i < VGA_WIDTH)
     {
-        *(vga.buffer + i) = blank;
+        *(g_vga.buffer + i) = blank;
         ++i;
     }
     i = 1;
     while (i < VGA_HEIGHT)
     {
-        memcpy(vga.buffer + VGA_WIDTH * i, vga.buffer, sizeof(uint16) * VGA_WIDTH);
+        memcpy(g_vga.buffer + VGA_WIDTH * i, g_vga.buffer, sizeof(uint16) * VGA_WIDTH);
         ++i;
     }
-    vga.cursor_x = 0;
-    vga.cursor_y = 0;
+    g_vga.cursor_x = 0;
+    g_vga.cursor_y = 0;
     move_cursor();
 }
 
@@ -93,11 +90,11 @@ vga_scroll(void)
     size_t i = 0;
 
     i = 0;
-    blank = vga.attrib | 0x20;
-    memmove(vga.buffer, vga.buffer + VGA_WIDTH, (VGA_HEIGHT - 1) * VGA_WIDTH * sizeof(uint16));
+    blank = g_vga.attrib | 0x20;
+    memmove(g_vga.buffer, g_vga.buffer + VGA_WIDTH, (VGA_HEIGHT - 1) * VGA_WIDTH * sizeof(uint16));
     while (i < VGA_WIDTH)
     {
-        *(vga.buffer + (VGA_HEIGHT - 1) * VGA_WIDTH + i) = blank;
+        *(g_vga.buffer + (VGA_HEIGHT - 1) * VGA_WIDTH + i) = blank;
         ++i;
     }
 }
@@ -114,35 +111,35 @@ vga_naked_putchar(
     switch (c)
     {
     case '\n': /* new line */
-        vga.cursor_x = 0;
-        vga.cursor_y++;
+        g_vga.cursor_x = 0;
+        g_vga.cursor_y++;
         break;
     case '\t': /* tabulation */
-        vga.cursor_x = (vga.cursor_x + 8u) & ~7u;
+        g_vga.cursor_x = (g_vga.cursor_x + 8u) & ~7u;
         break;
     case '\r': /* carriage return */
-        vga.cursor_x = 0;
+        g_vga.cursor_x = 0;
         break;
     case '\b': /* backspace */
-        if (vga.cursor_x == 0) {
-            vga.cursor_y -= (vga.cursor_y > 0);
-            vga.cursor_x = VGA_WIDTH - 1;
+        if (g_vga.cursor_x == 0) {
+            g_vga.cursor_y -= (g_vga.cursor_y > 0);
+            g_vga.cursor_x = VGA_WIDTH - 1;
         }
         else {
-            vga.cursor_x -= (vga.cursor_x > 0);
+            g_vga.cursor_x -= (g_vga.cursor_x > 0);
         }
         break;
     default:
-        *(vga.buffer + vga.cursor_y * VGA_WIDTH + vga.cursor_x) =
-            vga.attrib | (uchar)c;
-        vga.cursor_x += 1;
+        *(g_vga.buffer + g_vga.cursor_y * VGA_WIDTH + g_vga.cursor_x) =
+            g_vga.attrib | (uchar)c;
+        g_vga.cursor_x += 1;
         break;
     }
-    vga.cursor_y += (vga.cursor_x >= VGA_WIDTH);
-    vga.cursor_x *= (vga.cursor_x < VGA_WIDTH);
-    while (vga.cursor_y >= VGA_HEIGHT) {
+    g_vga.cursor_y += (g_vga.cursor_x >= VGA_WIDTH);
+    g_vga.cursor_x *= (g_vga.cursor_x < VGA_WIDTH);
+    while (g_vga.cursor_y >= VGA_HEIGHT) {
         vga_scroll();
-        vga.cursor_y -= 1;
+        g_vga.cursor_y -= 1;
     }
     return (1);
 }

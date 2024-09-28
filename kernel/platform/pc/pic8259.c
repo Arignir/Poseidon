@@ -36,7 +36,7 @@ NEW_IO_PORT(slave, 0xA0);
 ** Current IRQs mask on slave:master.
 ** 0 = unmask, 1 = mask.
 */
-static ushort pic_mask = 0;
+static ushort g_pic_mask = 0;
 
 /*
 ** Mask the IRQ.
@@ -51,11 +51,11 @@ pic8259_irq_mask(uchar irq)
     debug_assert(irq <= 0xF);
 
     // Send an OCW1
-    pic_mask |= (1 << irq);
+    g_pic_mask |= (1 << irq);
     if (irq <= 0x7) {
-        io_port_out8_offset(master, DATA, pic_mask & 0xFF);
+        io_port_out8_offset(master, DATA, g_pic_mask & 0xFF);
     } else {
-        io_port_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+        io_port_out8_offset(slave, DATA, (g_pic_mask >> 8) & 0xFF);
     }
 }
 
@@ -72,20 +72,20 @@ pic8259_irq_unmask(uchar irq)
     debug_assert(irq <= 0xF);
 
     // Unmask the IRQ
-    pic_mask &= ~(1 << irq);
+    g_pic_mask &= ~(1 << irq);
 
     // If the IRQ is handled by the slave AND the slave is masked,
     // then unmask the slave
-    if (irq >= 0x8 && (pic_mask & (1 << 2))) {
-        pic_mask &= ~(1 << 2);
-        io_port_out8_offset(master, DATA, pic_mask & 0xFF);
+    if (irq >= 0x8 && (g_pic_mask & (1 << 2))) {
+        g_pic_mask &= ~(1 << 2);
+        io_port_out8_offset(master, DATA, g_pic_mask & 0xFF);
     }
 
     // Send the OCW1 to the corresponding PIC
     if (irq <= 0x7) {
-        io_port_out8_offset(master, DATA, pic_mask & 0xFF);
+        io_port_out8_offset(master, DATA, g_pic_mask & 0xFF);
     } else {
-        io_port_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+        io_port_out8_offset(slave, DATA, (g_pic_mask >> 8) & 0xFF);
     }
 }
 
@@ -102,11 +102,11 @@ void
 pic8259_set_irq_mask(ushort mask)
 {
     // Send an OCW1
-    pic_mask = mask;
+    g_pic_mask = mask;
 
-    io_port_out8_offset(master, DATA, pic_mask & 0xFF);
+    io_port_out8_offset(master, DATA, g_pic_mask & 0xFF);
     io_port_wait();
-    io_port_out8_offset(slave, DATA, (pic_mask >> 8) & 0xFF);
+    io_port_out8_offset(slave, DATA, (g_pic_mask >> 8) & 0xFF);
 }
 
 /*

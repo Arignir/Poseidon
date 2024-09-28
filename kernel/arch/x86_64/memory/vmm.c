@@ -21,8 +21,8 @@
 #include "lib/string.h"
 #include "lib/sync/spinlock.h"
 
-virtaddr_t tlb_shootdown_target;
-static struct spinlock tlb_shootdown_target_lock;
+virtaddr_t g_tlb_shootdown_target;
+static struct spinlock g_tlb_shootdown_target_lock;
 
 /*
 ** Return the address of the current PML4.
@@ -93,9 +93,9 @@ tlb_invalidate_page(
         :
     );
 
-    spinlock_acquire(&tlb_shootdown_target_lock);
+    spinlock_acquire(&g_tlb_shootdown_target_lock);
 
-    tlb_shootdown_target = va;
+    g_tlb_shootdown_target = va;
 
     /* Send the IPI to the other cores */
     apic_send_ipi(
@@ -105,7 +105,7 @@ tlb_invalidate_page(
 
     apic_ipi_acked();
 
-    spinlock_release(&tlb_shootdown_target_lock);
+    spinlock_release(&g_tlb_shootdown_target_lock);
 }
 
 /*

@@ -9,8 +9,6 @@
 
 #include "arch/x86_64/selector.h"
 
-.extern gdt
-
 .section .text
 .code16
 
@@ -25,8 +23,8 @@ start_ap:
     mov %ax, %ss
 
     // Load the 64-bits GDT
-    .extern gdt_fatptr
-    lgdt %ds:(gdt_fatptr - 0xFFFF0)
+    .extern g_gdt_fatptr
+    lgdt %ds:(g_gdt_fatptr - 0xFFFF0)
 
     // Enable protected mode (without paging)
     mov %cr0, %eax

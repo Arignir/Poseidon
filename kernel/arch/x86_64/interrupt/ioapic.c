@@ -13,7 +13,7 @@
 #include "poseidon/memory/pmm.h"
 #include "poseidon/memory/kheap.h"
 
-static volatile uchar *ioapic;
+static volatile uchar *g_ioapic;
 
 /*
 ** Map the I/O APIC registers to the given physical address.
@@ -26,12 +26,12 @@ ioapic_map(
     pmm_mark_range_as_allocated(pa, pa + PAGE_SIZE);
 
     /* Map it to memory */
-    ioapic = kheap_alloc_device(
+    g_ioapic = kheap_alloc_device(
         pa,
         PAGE_SIZE
     );
 
-    assert(ioapic != NULL);
+    assert(g_ioapic != NULL);
 }
 
 /*
@@ -44,8 +44,8 @@ ioapic_write(
     enum ioapic_reg reg,
     uint32 value
 ) {
-    *(volatile uint32 *)ioapic = reg;
-    *((volatile uint32 *)ioapic + 0x4) = value; // Offset is 0x10 (0x4 * 0x4)
+    *(volatile uint32 *)g_ioapic = reg;
+    *((volatile uint32 *)g_ioapic + 0x4) = value; // Offset is 0x10 (0x4 * 0x4)
 }
 
 /*
@@ -57,8 +57,8 @@ uint32
 ioapic_read(
     enum ioapic_reg reg
 ) {
-    *(volatile uint32 *)ioapic = reg;
-    return (*((volatile uint32 *)ioapic + 0x4)); // Offset is 0x10 (0x4 * 0x4)
+    *(volatile uint32 *)g_ioapic = reg;
+    return (*((volatile uint32 *)g_ioapic + 0x4)); // Offset is 0x10 (0x4 * 0x4)
 }
 
 /*
@@ -112,7 +112,7 @@ ioapic_init(void)
     size_t i;
     size_t max_ints;
 
-    assert(ioapic);
+    assert(g_ioapic);
     max_ints = (ioapic_read(IOAPIC_VERSION) >> 16) & 0xFF;
     for (i = 0; i < max_ints; ++i) {
         ioapic_mask_int(INT_IRQ0 + i);

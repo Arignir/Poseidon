@@ -11,6 +11,9 @@
 
 #include "poseidon/poseidon.h"
 
+#define VGA_WIDTH   80u
+#define VGA_HEIGHT  25u
+
 /*
 ** All colors the vga screen can handle
 */

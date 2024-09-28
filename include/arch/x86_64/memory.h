@@ -177,4 +177,4 @@ struct [[gnu::packed]] virtaddr_layout {
 static_assert(sizeof(struct virtaddr_layout) == sizeof(void *));
 
 /* Target for TLB shootdowns. */
-extern virtaddr_t tlb_shootdown_target;
+extern virtaddr_t g_tlb_shootdown_target;

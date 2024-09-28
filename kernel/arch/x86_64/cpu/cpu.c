@@ -19,13 +19,13 @@
 
 /* The bootstrap processor. Only used at boot time. */
 [[boot_data]]
-static struct cpu __bsp = { .thread = NULL };
+static struct cpu g__bsp = { .thread = NULL };
 
 [[boot_data]]
-struct cpu *bsp = &__bsp;
+struct cpu *g_bsp = &g__bsp;
 
 // Set if the BSP has been remaped to its corresponding entry within the cpu table.
-static bool bsp_remapped = false;
+static bool g_bsp_remapped = false;
 
 // Variable shared with the AP starting up to give it its kernel stack.
 [[boot_data]]
@@ -54,11 +54,11 @@ current_cpu(void)
     struct cpu *cpu;
     uint32 apic_id;
 
-    if (bsp_remapped) {
+    if (g_bsp_remapped) {
         apic_id = apic_get_id();
 
-        cpu = cpus;
-        while (cpu < cpus_end) {
+        cpu = g_cpus;
+        while (cpu < g_cpus_end) {
             if (cpu->apic_id == apic_id) {
                 return (cpu);
             }
@@ -68,7 +68,7 @@ current_cpu(void)
         panic("Current cpu has an unknown local APIC id\n");
     }
     else {
-        return (bsp);
+        return (g_bsp);
     }
 }
 
@@ -81,14 +81,14 @@ cpu_remap_bsp(void)
 {
     struct cpu *cpu;
 
-    assert(!bsp_remapped);
+    assert(!g_bsp_remapped);
 
-    bsp_remapped = true;
+    g_bsp_remapped = true;
 
     // Swap the data structure
     cpu = current_cpu();
-    *cpu = *bsp;
-    bsp = NULL;
+    *cpu = *g_bsp;
+    g_bsp = NULL;
 
     // Set the scheduler stack of the BSP
     cpu->scheduler_stack = bsp_kernel_stack_bot;
@@ -179,7 +179,7 @@ cpu_start_all_aps(void)
     *(ushort *)(CPU_TRAMPOLINE_START + 3) = 0xFFFF;
 
     /* Start all available cpus */
-    for (cpu = cpus; cpu < cpus + ncpu; ++cpu) {
+    for (cpu = g_cpus; cpu < g_cpus + g_cpus_len; ++cpu) {
         if (cpu == current)
             continue;
 

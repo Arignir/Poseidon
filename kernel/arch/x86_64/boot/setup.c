@@ -73,7 +73,7 @@ bsp_setup(void)
     common_setup();
 
 #if KCONFIG_SMP
-    logln("Number of cpus: %u", ncpu);
+    logln("Number of cpus: %u", g_cpus_len);
 
     // Start other processors
     cpu_start_all_aps();
