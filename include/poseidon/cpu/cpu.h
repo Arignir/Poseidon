@@ -16,6 +16,19 @@
 struct thread;
 
 /*
+** A structure representing the data local to each CPU.
+**
+** This structure can be accessed using `cpu_get_current_cpu_local_data()`.
+*/
+struct cpu_local_data {
+    struct cpu *cpu;
+
+    // Current thread executed by the CPU.
+    // Might be NULL if the cpu is idling or in the scheduler.
+    struct thread *thread;
+};
+
+/*
 ** A structure representing a CPU
 **
 ** The lock policy for this structure is that it's only allowed to be written by the CPU it belongs to.
@@ -30,25 +43,32 @@ struct cpu {
     void *scheduler_stack;          // Stack for the scheduler. Also the boot stack of the CPU.
     void *scheduler_stack_top;
 
-    struct thread *thread;          // Current thread executed by the CPU.
-                                    // Might be NULL if the cpu is idling or in the scheduler.
-
     size_t cpu_id;                  // ID of the CPU.
 
 };
 
-/* Number of CPUs on the current system. */
+// Number of CPUs on the current system.
 extern uint g_cpus_len;
 
-/* An array for all cpus. */
+// An array of all cpu structures.
 extern struct cpu g_cpus[KCONFIG_MAX_CPUS];
 
-/* The end of `cpus`. Used for iterating over `cpus`. */
+// The end of `g_cpus`. Used for iterating over `g_cpus`.
 extern struct cpu const *g_cpus_end;
+
+// An array of all cpu-local data .
+extern struct cpu_local_data g_cpus_local_data[KCONFIG_MAX_CPUS];
 
 /*
 ** Return the current cpu actually running this code.
-**
-** NOTE: This function is implemented by the architecture-dependant code.
 */
-struct cpu *current_cpu(void);
+static inline
+struct cpu *
+current_cpu(
+    void
+) {
+    return cpu_get_current_cpu_local_data()->cpu;
+}
+
+struct cpu *cpu_get_bsp(void);
+void cpu_init(void);

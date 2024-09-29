@@ -19,6 +19,9 @@
 enum msr_list {
     MSR_IA32_APIC_BASE      = 0x1B,
     MSR_IA32_EFER           = 0xC0000080,
+    MSR_IA32_FSBASE         = 0xC0000100,
+    MSR_IA32_GSBASE         = 0xC0000101,
+    MSR_IA32_KERNEL_GSBASE  = 0xC0000102,
 };
 
 struct [[gnu::packed]] msr_ia32_efer {

@@ -17,87 +17,30 @@
 #include "poseidon/memory/kheap.h"
 #include "lib/log.h"
 
-/* The bootstrap processor. Only used at boot time. */
-[[boot_data]]
-static struct cpu g__bsp = { .thread = NULL };
-
-[[boot_data]]
-struct cpu *g_bsp = &g__bsp;
-
-// Set if the BSP has been remaped to its corresponding entry within the cpu table.
-static bool g_bsp_remapped = false;
-
 // Variable shared with the AP starting up to give it its kernel stack.
 [[boot_data]]
 virtaddr_t g_ap_boot_stack;
 
 /*
-** Kernel's Bootstrap Processor boot stack.
-** Will be used as the scheduler's stack.
+** Look for the CPU-local data manually, using the current cpu's APIC ID instead
+** of using the GS segment.
 */
-extern virtaddr_t bsp_kernel_stack_top[];
-extern virtaddr_t bsp_kernel_stack_bot[];
-
-/*
-** Return the current cpu actually running this code.
-**
-** We can't use `apic_get_id()` if the APIC isn't set up yet, so we're
-** using an other structure, `bsp`, which can be used temporarily.
-** The function cpu_remap_bsp() will transfer the content of 'bsp'
-** to the actuel entry of the BSP within the cpus table.
-**
-** TODO: Improve this using fs/gs instead of an iterative loop over `cpus`.
-*/
-struct cpu *
-current_cpu(
+struct cpu_local_data const *
+cpu_find_current_cpu_local_data_manually(
     void
 ) {
-    struct cpu *cpu;
-    uint32 apic_id;
+    uint32_t apic_id;
+    size_t i;
 
-    if (g_bsp_remapped) {
-        apic_id = apic_get_id();
+    apic_id = apic_get_id();
 
-        cpu = g_cpus;
-        while (cpu < g_cpus_end) {
-            if (cpu->apic_id == apic_id) {
-                return cpu;
-            }
-            ++cpu;
+    for (i = 0; i < KCONFIG_MAX_CPUS; ++i) {
+        if (g_cpus[i].apic_id == apic_id) {
+            return &g_cpus_local_data[i];
         }
-
-        panic("Current cpu has an unknown local APIC id\n");
     }
-    else {
-        return g_bsp;
-    }
-}
 
-/*
-** TODO FIXME: Remove this little hack and actually use cpus[0] to represent the BSP
-*/
-[[boot_text]]
-void
-cpu_remap_bsp(
-    void
-) {
-    struct cpu *cpu;
-
-    assert(!g_bsp_remapped);
-
-    g_bsp_remapped = true;
-
-    // Swap the data structure
-    cpu = current_cpu();
-    *cpu = *g_bsp;
-    g_bsp = NULL;
-
-    // Set the scheduler stack of the BSP
-    cpu->scheduler_stack = bsp_kernel_stack_bot;
-    cpu->scheduler_stack_top = bsp_kernel_stack_top;
-
-    // Mark the current CPU as the BSP
-    cpu->bsp = true;
+    panic("Failed to manually find the CPU-local data of the current CPU.");
 }
 
 /*
@@ -171,21 +114,20 @@ cpu_start_all_aps(
     void
 ) {
     struct cpu *cpu;
-    struct cpu *current;
 
     /*
     ** Boot code is size-limited, so we only do a far-jump to boot_ap,
     ** where it's more convienent and not restricted.
     */
-    current = current_cpu();
     *(uchar *)(CPU_TRAMPOLINE_START) = 0xEA; /* Far jump, IP, CS */
     *(ushort *)(CPU_TRAMPOLINE_START + 1) = (uint16)(uintptr)&start_ap + 0x10;
     *(ushort *)(CPU_TRAMPOLINE_START + 3) = 0xFFFF;
 
     /* Start all available cpus */
     for (cpu = g_cpus; cpu < g_cpus + g_cpus_len; ++cpu) {
-        if (cpu == current)
+        if (cpu == cpu_get_bsp()) {
             continue;
+        }
 
         log("Starting AP processor %zu ...", cpu->cpu_id);
 

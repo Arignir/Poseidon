@@ -8,6 +8,7 @@
 \******************************************************************************/
 
 #include "poseidon/scheduler/scheduler.h"
+#include "arch/x86_64/api/cpu.h"
 #include "poseidon/thread/thread.h"
 #include "poseidon/interrupt.h"
 #include "lib/list.h"
@@ -64,7 +65,7 @@ reschedule(
     if (old) {
         old->sched_info.stack_saved = old_sp;
         spin_rwlock_release_write(&old->sched_info.lock);       // Acquired in `yield()`.
-        current_cpu()->thread = NULL;
+        set_current_thread(NULL);
     }
 
     /* Find the new thread or halt (to save power) */
@@ -76,8 +77,8 @@ reschedule(
         new = find_next_thread();
     }
 
-    /* Switch to new thread */
-    current_cpu()->thread = new;
+    // Switch to new thread
+    set_current_thread(new);
     new->sched_info.state = RUNNING;
 
     //arch_set_kernel_stack((uintptr)new->kstack_top);

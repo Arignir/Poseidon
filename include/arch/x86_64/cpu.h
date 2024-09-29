@@ -13,4 +13,4 @@
 
 void start_ap(void);
 void cpu_start_all_aps(void);
-void cpu_remap_bsp(void);
+struct cpu_local_data const *cpu_find_current_cpu_local_data_manually(void);

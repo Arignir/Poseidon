@@ -17,7 +17,9 @@
 ** reaching the final and sufficient state to start 'init'.
 */
 
+#include "arch/x86_64/api/cpu.h"
 #include "poseidon/boot/init_hook.h"
+#include "poseidon/cpu/cpu.h"
 #include "poseidon/memory/pmm.h"
 #include "poseidon/interrupt.h"
 #include "poseidon/thread/thread.h"
@@ -29,7 +31,7 @@ thread_test(
     void
 ) {
     while (42) {
-        log("%i", current_cpu()->cpu_id);
+        log("%zu", current_cpu()->cpu_id);
         halt();
     }
 }

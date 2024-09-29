@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "arch/x86_64/api/cpu.h"
 #include "poseidon/memory/memory.h"
 #include "poseidon/poseidon.h"
 #include "poseidon/cpu/cpu.h"
@@ -94,10 +95,17 @@ struct thread *
 current_thread(
     void
 ) {
-    struct cpu *cpu;
-    struct thread *t;
+    return cpu_get_current_cpu_local_data()->thread;
+}
 
-    cpu = current_cpu();
-    t = cpu->thread;
-    return t;
+/*
+** Set the current thread, aka the thread the CPU was running before an
+** interruption occured.
+*/
+static inline
+void
+set_current_thread(
+    struct thread *new_thread
+) {
+    cpu_get_current_cpu_local_data()->thread = new_thread;
 }
