@@ -11,7 +11,7 @@
 #include "arch/x86_64/apic.h"
 #include "arch/x86_64/interrupt.h"
 #include "poseidon/memory/pmm.h"
-#include "poseidon/memory/kheap.h"
+#include "poseidon/memory/memory.h"
 
 static volatile uchar *g_ioapic;
 

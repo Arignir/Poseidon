@@ -22,9 +22,9 @@
 ** The UART8250 driver is only implemented for the PC platform yet.
 */
 #ifdef KCONFIG_PLATFORM_PC
-# define USE_UART8250
+#define USE_UART8250
 
-# include <arch/target/io.h>
+#include "arch/target/io.h"
 
 NEW_IO_PORT(io_uart8250, 0x3F8);
 
@@ -43,7 +43,8 @@ is_transmit_empty(
     return io_in8_offset(io_uart8250, 5) & 0x20;
 }
 
-static void
+static
+void
 putsn(
     char const *s,
     size_t len

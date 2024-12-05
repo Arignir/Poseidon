@@ -67,7 +67,7 @@ struct cpu *
 current_cpu(
     void
 ) {
-    return cpu_get_current_cpu_local_data()->cpu;
+    return arch_fetch_current_cpu_local_data()->cpu;
 }
 
 struct cpu *cpu_get_bsp(void);

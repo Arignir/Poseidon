@@ -7,10 +7,13 @@
 **
 \******************************************************************************/
 
+/*
+** Architecture-dependent API to manipulate threads.
+*/
+
 #pragma once
 
-#define CPU_TRAMPOLINE_START    (0x10000)
+struct thread;
 
-void start_ap(void);
-void cpu_start_all_aps(void);
-struct cpu_local_data const *cpu_fetch_current_cpu_local_data_manually(void);
+void arch_thread_new(struct thread *t);
+

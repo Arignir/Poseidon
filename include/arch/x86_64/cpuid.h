@@ -28,7 +28,10 @@ struct cpuid {
     // The maximum virtual-address width supported by the processor, *in bits*.
     uint maxvirtaddr;
 
+    [[gnu::aligned(sizeof(uint32_t))]]  // Allows `vendor_id` to be casted to `uint32_t *`
     char vendor_id[13];                 // CPU Vendor ID String (null terminated)
+
+    [[gnu::aligned(sizeof(uint32_t))]]  // Allows `brand` to be casted to `uint32_t *`
     char brand[49];                     // CPU Brand String (null terminated)
 
     // Content of EAX (CPUID.EAX=0x1)

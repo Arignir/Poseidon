@@ -22,12 +22,9 @@
 #include "arch/x86_64/ioapic.h"
 #include "poseidon/cpu/cpu.h"
 #include "poseidon/memory/memory.h"
-#include "poseidon/memory/kheap.h"
 #include "lib/log.h"
 #include "lib/checksum.h"
 #include "lib/string.h"
-#include "poseidon/memory/pmm.h"
-#include "poseidon/poseidon.h"
 
 static struct rsdp const *g_rsdp = nullptr;
 static struct rsdt const *g_rsdt = nullptr;

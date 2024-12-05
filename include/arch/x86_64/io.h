@@ -33,7 +33,7 @@ struct io_port {
 **
 ** This acts as a shortcut to reduce boilerplate.
 */
-# define NEW_IO_PORT(_name, _port)                  \
+#define NEW_IO_PORT(_name, _port)                   \
     static                                          \
     struct io_port const _name = {                  \
         .port = _port                               \

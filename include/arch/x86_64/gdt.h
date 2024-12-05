@@ -159,7 +159,7 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
 /*
 ** Create a null descriptor, with all bits set to 0.
 */
-# define NEW_NULL_DESCRIPTOR                        \
+#define NEW_NULL_DESCRIPTOR                         \
     ((struct gdt_segment_descriptor) {              \
         .raw = 0                                    \
     })
@@ -167,7 +167,7 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
 ** Create a code segment descriptor, using the given base and limit.
 ** The value of the other fields can also be appended.
 */
-# define NEW_GDT_CODE_ENTRY(base, limit, ...)               \
+#define NEW_GDT_CODE_ENTRY(base, limit, ...)                \
     ((struct gdt_segment_descriptor) {                      \
         .code = {                                           \
             .limit_low = ((limit) & 0xFFFF),                \
@@ -185,7 +185,7 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
 ** Create a data segment descriptor, using the given base and limit.
 ** The value of the other fields can also be appended.
 */
-# define NEW_GDT_DATA_ENTRY(base, limit, ...)               \
+#define NEW_GDT_DATA_ENTRY(base, limit, ...)                \
     ((struct gdt_segment_descriptor) {                      \
         .data = {                                           \
             .limit_low = ((limit) & 0xFFFF),                \
@@ -203,7 +203,7 @@ static_assert(sizeof(struct gdt_fatptr) == 10);
 ** Create a system segment descriptor, using the given base and limit.
 ** The value of the other fields can also be appended.
 */
-# define NEW_GDT_SYSTEM_ENTRY(base, limit, ...)             \
+#define NEW_GDT_SYSTEM_ENTRY(base, limit, ...)              \
     ((struct gdt_segment_descriptor) {                      \
         .system = {                                         \
             .limit_low = ((limit) & 0xFFFF),                \

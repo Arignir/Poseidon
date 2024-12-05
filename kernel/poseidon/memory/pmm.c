@@ -21,7 +21,7 @@
 #include "poseidon/boot/init_hook.h"
 #include "poseidon/boot/multiboot2.h"
 #include "poseidon/memory/memory.h"
-#include "poseidon/memory/kheap.h"
+#include "poseidon/memory/memory.h"
 #include "poseidon/memory/pmm.h"
 #include "lib/string.h"
 #include "lib/log.h"

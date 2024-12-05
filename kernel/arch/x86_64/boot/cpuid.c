@@ -133,7 +133,7 @@ static char const * const g_features_name[ARRAY_LENGTH(((struct cpuid *)NULL)->f
 ** Use the `cpuid` instructio to discover the features available to the currently
 ** running CPU.
 **
-** Results are stored in `features`.
+** Results are stored in `cpuid`.
 */
 void
 cpuid_load(

@@ -84,7 +84,6 @@ struct thread {
 };
 
 status_t thread_new(thread_entry entry, struct thread **thread);
-void arch_thread_new(struct thread *t);
 
 /*
 ** Return the current thread, aka the thread the CPU was running before an
@@ -95,7 +94,7 @@ struct thread *
 current_thread(
     void
 ) {
-    return cpu_get_current_cpu_local_data()->thread;
+    return arch_fetch_current_cpu_local_data()->thread;
 }
 
 /*
@@ -107,5 +106,5 @@ void
 set_current_thread(
     struct thread *new_thread
 ) {
-    cpu_get_current_cpu_local_data()->thread = new_thread;
+    arch_fetch_current_cpu_local_data()->thread = new_thread;
 }

@@ -7,9 +7,10 @@
 **
 \******************************************************************************/
 
+#include "arch/target/api/thread.h"
 #include "poseidon/poseidon.h"
 #include "poseidon/thread/thread.h"
-#include "poseidon/memory/kheap.h"
+#include "poseidon/memory/memory.h"
 #include "poseidon/scheduler/scheduler.h"
 #include "lib/sync/spinrwlock.h"
 #include "lib/list.h"
@@ -104,13 +105,13 @@ thread_new(
         thread_set_name(thread, "kthread");                 // Hard-code the name to `kthread`.
     }
 
-    s = thread_create_stacks(thread);   // Create two stacks (user and kernel) for this process
+    s = thread_create_stacks(thread);       // Create two stacks (user and kernel) for this process
     if (s != OK) {
         kheap_free(thread);
         return s;
     }
 
-    arch_thread_new(thread);    // Initialize the arch-dependant side of this thread.
+    arch_thread_new(thread);                // Initialize the arch-dependant side of this thread.
 
     list_add_tail(&g_threads_list, &thread->threads);
 

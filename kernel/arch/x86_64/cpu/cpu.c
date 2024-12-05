@@ -14,7 +14,7 @@
 #include "arch/x86_64/apic.h"
 #include "poseidon/poseidon.h"
 #include "poseidon/cpu/cpu.h"
-#include "poseidon/memory/kheap.h"
+#include "poseidon/memory/memory.h"
 #include "lib/log.h"
 
 // Variable shared with the AP starting up to give it its kernel stack.
@@ -26,7 +26,7 @@ virtaddr_t g_ap_boot_stack;
 ** of using the GS segment.
 */
 struct cpu_local_data const *
-cpu_find_current_cpu_local_data_manually(
+cpu_fetch_current_cpu_local_data_manually(
     void
 ) {
     uint32_t apic_id;

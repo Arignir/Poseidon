@@ -117,7 +117,7 @@ ap_setup(
 
     apic_init();
 
-    msr_write(MSR_IA32_GSBASE, (uint64_t)cpu_find_current_cpu_local_data_manually());
+    msr_write(MSR_IA32_GSBASE, (uint64_t)cpu_fetch_current_cpu_local_data_manually());
 
     cpu = current_cpu();
     cpuid_load(&cpu->cpuid);

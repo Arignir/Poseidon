@@ -16,7 +16,7 @@
 #include "poseidon/thread/thread.h"
 #include "poseidon/scheduler/scheduler.h"
 #include "poseidon/memory/pmm.h"
-#include "poseidon/memory/kheap.h"
+#include "poseidon/memory/memory.h"
 
 static volatile uchar *g_apic = NULL;
 

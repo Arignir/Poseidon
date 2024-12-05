@@ -7,6 +7,13 @@
 **
 \******************************************************************************/
 
+/*
+** Architecture-independent API to manipulate, allocate and free memory.
+**
+** This file defines the internal data structures and functions that are used
+** by the kernel heap allocator.
+*/
+
 #pragma once
 
 #include "poseidon/poseidon.h"
@@ -49,9 +56,3 @@ struct kheap_aligned_metadata {
 };
 
 status_t kheap_init(void);
-virtaddr_t kheap_alloc(size_t);
-virtaddr_t kheap_alloc_aligned(size_t);
-virtaddr_t kheap_alloc_device(physaddr_t, size_t);
-virtaddr_t kheap_realloc(virtaddr_t, size_t);
-virtaddr_t kheap_alloc_zero(size_t);
-void kheap_free(virtaddr_t);

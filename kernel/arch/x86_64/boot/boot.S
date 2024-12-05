@@ -36,7 +36,7 @@
 ** we'll save for later use.
 **
 ** At this stage, the CPU is in 32-bits protected mode and paging is disabled.
-** We must enable paging and go to long mode before executing any Rust code.
+** We must enable paging and go to long mode before executing any C code.
 **
 ** We cannot dereference any address unless we do the translation to its
 ** physical address counterpart ourselves. This is done using the V2P() macro.

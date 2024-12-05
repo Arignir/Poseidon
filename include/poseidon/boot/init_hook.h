@@ -66,7 +66,7 @@ struct init_hook {
 ** Registers an init hook given its name, an address to call and an init level,
 ** and stores it in the reserved section of the binary dedicated to init hooks.
 */
-# define REGISTER_INIT_HOOK(n, h, l)                                    \
+#define REGISTER_INIT_HOOK(n, h, l)                                     \
     [[gnu::aligned(sizeof(void *))]]                                    \
     [[gnu::used]]                                                       \
     [[gnu::section("poseidon_init_hooks")]]                             \

@@ -31,7 +31,7 @@ struct arch_cpu {
 */
 static inline
 struct cpu_local_data __seg_gs *
-cpu_get_current_cpu_local_data(
+arch_fetch_current_cpu_local_data(
     void
 ) {
     return (struct cpu_local_data __seg_gs*)0;

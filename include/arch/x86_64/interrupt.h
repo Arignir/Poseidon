@@ -147,7 +147,7 @@ static_assert(sizeof(struct idt_fatptr) == 10);
 ** Create an interrupt gate entry, using the given address as the entry point.
 ** The value of other fields can also be appended.
 */
-# define NEW_IDT_INTERRUPT_GATE_ENTRY(offset, ...)                  \
+#define NEW_IDT_INTERRUPT_GATE_ENTRY(offset, ...)                   \
     ((struct idt_descriptor) {                                      \
         .offset_low = (((uintptr)(offset)) & 0xFFFF),               \
         .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),       \
@@ -162,7 +162,7 @@ static_assert(sizeof(struct idt_fatptr) == 10);
 ** Create a trap gate entry, using the given address as the entry point.
 ** The value of other fields can also be appended.
 */
-# define NEW_IDT_TRAP_GATE_ENTRY(offset, ...)                       \
+#define NEW_IDT_TRAP_GATE_ENTRY(offset, ...)                        \
     ((struct idt_descriptor) {                                      \
         .offset_low = (((uintptr)(offset)) & 0xFFFF),               \
         .offset_mid = ((((uintptr)(offset)) >> 16) & 0xFFFF),       \

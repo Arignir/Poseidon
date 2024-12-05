@@ -36,7 +36,7 @@ spinlock_init(
 }
 
 /*
-** Acquire a spinlock
+** Acquire a spinlock, blocking until the lock is released.
 */
 static inline
 void

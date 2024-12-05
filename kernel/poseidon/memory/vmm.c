@@ -40,7 +40,7 @@ vmm_map(
         return ERR_INVALID_ARGS;
     }
 
-    /* Quick-check round-up to limit failures later */
+    // Quick-check round-up to limit failures later
     // TODO Pre-allocate memory
 
     origin = va;
@@ -53,7 +53,7 @@ vmm_map(
 
     va = origin;
 
-    /* The mapping can now be performed */
+    // The mapping can now be performed
     while ((uchar *)va < origin + size) {
         pa = pmm_alloc_frame();
         if (pa == PHYS_NULL) {
@@ -73,7 +73,7 @@ vmm_map(
     return OK;
 
 err:
-    /* In case of error, unmap what has been done */
+    // In case of error, unmap what has been done
     vmm_unmap(origin, (uchar *)va - origin, MUNMAP_FREE);
     return s;
 }
@@ -106,7 +106,7 @@ vmm_map_device(
         return ERR_INVALID_ARGS;
     }
 
-    /* Quick-check round-up to limit failures later */
+    // Quick-check round-up to limit failures later
 
     origin = va;
     while ((uchar *)va < origin + size) {
@@ -118,7 +118,7 @@ vmm_map_device(
 
     va = origin;
 
-    /* The mapping can now be performed */
+    // The mapping can now be performed
     while ((uchar *)va < origin + size) {
         s = vmm_map_frame(va, pa, flags);
         if (s != OK) {
@@ -225,7 +225,7 @@ vmm_validate_user_str(
     str_start = str;
     str_align = ROUND_DOWN(str, PAGE_SIZE);
 
-    /* Iterate page by page and then char by char */
+    // Iterate page by page and then char by char
 
     while (true) {
         if (!vmm_is_mapped_user(str_align)) {
@@ -244,59 +244,4 @@ vmm_validate_user_str(
 
         str_align += PAGE_SIZE;
     }
-}
-
-/*
-** The following functions are default implementations, usually overwritten by
-** the architecture.
-*/
-
-/*
-** Test whether the given virtual address is mapped.
-*/
-[[gnu::weak]]
-bool
-vmm_is_mapped(
-    virtaddr_const_t va [[maybe_unused]]
-) {
-    unimplemented();
-}
-
-/*
-** Test whether the given virtual address is mapped and belongs to user-space.
-*/
-[[gnu::weak]]
-bool
-vmm_is_mapped_user(
-    virtaddr_const_t va [[maybe_unused]]
-) {
-    unimplemented();
-}
-
-/*
-** Map the virtual address `va` on the physical address `pa` with the
-** permission described in `flags`.
-**
-** This function doesn't overwrite any existing mapping, failing instead.
-*/
-[[gnu::weak]]
-status_t
-vmm_map_frame(
-    virtaddr_t va [[maybe_unused]],
-    physaddr_t pa [[maybe_unused]],
-    mmap_flags_t flags [[maybe_unused]]
-) {
-    unimplemented();
-}
-
-/*
-** Unmap the virtual address `va`.
-*/
-[[gnu::weak]]
-void
-vmm_unmap_frame(
-    virtaddr_t va [[maybe_unused]],
-    munmap_flags_t flags [[maybe_unused]]
-) {
-    unimplemented();
 }

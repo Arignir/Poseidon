@@ -113,7 +113,7 @@ tlb_invalidate_page(
 ** The following functions are implementations of the virtual memory manager
 ** API for the x86_64 architecture.
 **
-** See `poseidon/memory/vmm.h`.
+** See `poseidon/memory/vmm.h` and `arch/x86_64/api/vmm.h`
 */
 
 /*
@@ -123,7 +123,7 @@ tlb_invalidate_page(
 ** all have the `present` flag set.
 */
 bool
-vmm_is_mapped(
+arch_vmm_is_mapped(
     virtaddr_const_t va
 ) {
     struct virtaddr_layout val;
@@ -145,7 +145,7 @@ vmm_is_mapped(
 ** all have both the `present` and `user` flag set.
 */
 bool
-vmm_is_mapped_user(
+arch_vmm_is_mapped_user(
     virtaddr_const_t va
 ) {
     struct virtaddr_layout val;
@@ -179,7 +179,7 @@ vmm_is_mapped_user(
 **     entry.
 */
 status_t
-vmm_map_frame(
+arch_vmm_map_frame(
     virtaddr_t va,
     physaddr_t pa,
     mmap_flags_t flags
@@ -273,7 +273,7 @@ vmm_map_frame(
 **   * Any intermediate pt/pd/pdpt isn't freed, even if it is empty.
 */
 void
-vmm_unmap_frame(
+arch_vmm_unmap_frame(
     virtaddr_t va,
     munmap_flags_t flags
 ) {

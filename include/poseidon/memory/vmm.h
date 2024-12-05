@@ -46,10 +46,57 @@ status_t vmm_validate_user_buffer(void const *, size_t);
 status_t vmm_validate_user_str(char const *, size_t *);
 
 /*
-** The following functions are arch-dependent.
+** Implement safe wrappers around the arch-dependent API.
 */
 
-bool vmm_is_mapped(virtaddr_const_t va);
-bool vmm_is_mapped_user(virtaddr_const_t va);
-status_t vmm_map_frame(virtaddr_t va, physaddr_t pa, mmap_flags_t flags);
-void vmm_unmap_frame(virtaddr_t va, munmap_flags_t flags);
+#include "arch/target/api/vmm.h"
+
+/*
+** Test whether the given virtual address is mapped.
+*/
+static inline
+bool
+vmm_is_mapped(
+    virtaddr_const_t va
+) {
+    return arch_vmm_is_mapped(va);
+}
+
+/*
+** Test whether the given virtual address is mapped and belongs to user-space.
+*/
+static inline
+bool
+vmm_is_mapped_user(
+    virtaddr_const_t va
+) {
+    return arch_vmm_is_mapped_user(va);
+}
+
+/*
+** Map the virtual address `va` on the physical address `pa` with the
+** permission described in `flags`.
+**
+** This function doesn't overwrite any existing mapping, failing instead.
+*/
+static inline
+status_t
+vmm_map_frame(
+    virtaddr_t va,
+    physaddr_t pa,
+    mmap_flags_t flags
+) {
+    return arch_vmm_map_frame(va, pa, flags);
+}
+
+/*
+** Unmap the virtual address `va`.
+*/
+static inline
+void
+vmm_unmap_frame(
+    virtaddr_t va,
+    munmap_flags_t flags
+) {
+    return arch_vmm_unmap_frame(va, flags);
+}

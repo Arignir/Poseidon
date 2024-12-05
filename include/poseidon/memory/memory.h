@@ -55,3 +55,10 @@ typedef const void *virtaddr_const_t;
 extern uint8 kernel_start[];                    // Beginning of the kernel (virtual)
 extern uint8 kernel_end[];                      // End of the kernel (virtual)
 extern uint8 kernel_heap_start[];               // Beginning of the kernel's heap (virtual)
+
+virtaddr_t kheap_alloc(size_t);
+virtaddr_t kheap_alloc_aligned(size_t);
+virtaddr_t kheap_alloc_device(physaddr_t, size_t);
+virtaddr_t kheap_realloc(virtaddr_t, size_t);
+virtaddr_t kheap_alloc_zero(size_t);
+void kheap_free(virtaddr_t);
