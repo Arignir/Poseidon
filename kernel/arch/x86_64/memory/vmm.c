@@ -98,12 +98,8 @@ tlb_invalidate_page(
 
     g_tlb_shootdown_target = va;
 
-    /* Send the IPI to the other cores */
-    apic_send_ipi(
-        0,
-        INT_TLB | APIC_ICR_FIXED | APIC_ICR_BROADCAST | APIC_ICR_LEVEL
-    );
-
+    // Send the IPI to the other cores
+    apic_ipi_broadcast(INT_TLB);
     apic_ipi_acked();
 
     spinlock_release(&g_tlb_shootdown_target_lock);

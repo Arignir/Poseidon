@@ -30,11 +30,7 @@ panic(
     disable_interrupts();
 
     /* Send an IPI to stop all other cores. */
-    apic_send_ipi(
-        0,
-        INT_PANIC | APIC_ICR_FIXED | APIC_ICR_BROADCAST | APIC_ICR_LEVEL
-    );
-
+    apic_ipi_broadcast(INT_PANIC);
     apic_ipi_acked();
 
     va_start(va, fmt);

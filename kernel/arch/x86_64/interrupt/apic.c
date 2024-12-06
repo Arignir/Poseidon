@@ -84,15 +84,60 @@ apic_eoi(
 }
 
 /*
-** Send the given IPI to the given local APIC.
+** Send an IPI using the two given raw ICR values.
+*/
+static inline
+void
+apic_send_ipi_raw(
+    uint32_t icr_high,
+    uint32_t icr_low
+) {
+    apic_write(APIC_ICR_HIGH, icr_high);
+    apic_write(APIC_ICR_LOW, icr_low);
+}
+
+/*
+** Send the given IPI to all CPUs except self.
 */
 void
-apic_send_ipi(
-    uint32 apic_id,
-    uint32 flags
+apic_ipi_broadcast(
+    uint8_t vector
 ) {
-    apic_write(APIC_ICR_HIGH, apic_id << 24u);
-    apic_write(APIC_ICR_LOW, flags);
+    apic_send_ipi_raw(
+        0,
+        vector | APIC_ICR_FIXED | APIC_ICR_BROADCAST | APIC_ICR_LEVEL
+    );
+}
+
+/*
+** Send the init IPI to the given CPU.
+**
+** NOTE: The CPU *must* have a valid apic_id.
+*/
+void
+apic_ipi_send_init(
+    struct cpu const *cpu
+) {
+    apic_send_ipi_raw(
+        cpu->apic_id << 24u,
+        APIC_ICR_INIT
+    );
+}
+
+/*
+** Send the startup IPI to the given CPU.
+**
+** NOTE: The CPU *must* have a valid apic_id.
+*/
+void
+apic_ipi_send_startup(
+    struct cpu const *cpu,
+    uintptr addr
+) {
+    apic_send_ipi_raw(
+        cpu->apic_id << 24u,
+        APIC_ICR_STARTUP | (addr >> 12)
+    );
 }
 
 /*

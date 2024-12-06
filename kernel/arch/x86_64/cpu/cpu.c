@@ -66,7 +66,6 @@ cpu_start_ap(
     struct cpu *ap,
     uintptr addr
 ) {
-    uint32_t apic_id;
     ushort volatile * volatile wrv; // Volatile here is used to silent -Warray-bounds
 
     assert((addr & 0xFFF00FFF) == 0);
@@ -81,8 +80,6 @@ cpu_start_ap(
 
     g_ap_boot_stack = ap->scheduler_stack_top;
 
-    apic_id = ap->apic_id;
-
     // MP Specification says that we must initialize CMOS shutdown code to
     // 0xA and set the warm reset vector (DWORD based at 40:67) to point to the
     // AP startup code before doing the universal startup algorithm.
@@ -95,12 +92,12 @@ cpu_start_ap(
 
     // Universal Startup Algorithm
 
-    apic_send_ipi(apic_id, APIC_ICR_INIT);
+    apic_ipi_send_init(ap);
     assert(apic_ipi_acked());
     cpu_micro_wait();
 
     for (int i = 0; i < 2; ++i) {
-        apic_send_ipi(apic_id, APIC_ICR_STARTUP | (addr >> 12));
+        apic_ipi_send_startup(ap, addr);
         cpu_micro_wait();
     }
     return OK;
