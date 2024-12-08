@@ -20,6 +20,3 @@ bool arch_vmm_is_mapped(virtaddr_const_t va);
 bool arch_vmm_is_mapped_user(virtaddr_const_t va);
 status_t arch_vmm_map_frame(virtaddr_t va, physaddr_t pa, mmap_flags_t flags);
 void arch_vmm_unmap_frame(virtaddr_t va, munmap_flags_t flags);
-
-
-

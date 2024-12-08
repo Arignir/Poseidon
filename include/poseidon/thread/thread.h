@@ -53,34 +53,36 @@ enum exit_status {
     EXIT_PAGEFAULT      = 139,
 };
 
+/*
+** A thread.
+**
+** The thread can either be a kernel or userland thread, and two
+** threads might share the same address space (forming a process).
+** Those distinctions are meaningless at this level of abstraction.
+*/
 struct thread {
-    /*
-    ** The following are considered read-only past the thread's creation.
-    */
+    // The following are considered read-only past the thread's creation.
+    tid_t tid;                                  // Thread's TID
+    char name[256];                             // Thread's name
+    struct thread *parent;                      // Parent thread
+    thread_entry entry;                         // Entry point
 
-    tid_t tid;                              // Thread's TID
-    char name[256];                         // Thread's name
-    struct thread *parent;                  // Parent thread
-    thread_entry entry;                     // Entry point
-
-    /*
-    ** The following is protected by the rwlock within the structure.
-    */
+    // The following is protected by the rwlock within the structure.
     struct {
-        virtaddr_t stack;                   // Bottom of the thread's stack
-        virtaddr_t stack_top;               // Top of the thread's stack.
-        virtaddr_t stack_saved;             // Stack saved when a context switch occures
+        virtaddr_t stack;                       // Bottom of the thread's stack
+        virtaddr_t stack_top;                   // Top of the thread's stack.
+        virtaddr_t stack_saved;                 // Stack saved when a context switch occures
 
-        virtaddr_t kstack;                  // Bottom of kernel stack
-        virtaddr_t kstack_top;              // Top of kernel stack
+        virtaddr_t kstack;                      // Bottom of kernel stack
+        virtaddr_t kstack_top;                  // Top of kernel stack
 
-        enum thread_state state;            // State
-        struct linked_list runnable_threads;// List of runnable threads, used by the scheduler.
+        enum thread_state state;                // State
+        struct linked_list runnable_threads;    // List of runnable threads, used by the scheduler.
 
         struct spin_rwlock lock;
     } sched_info;
 
-    struct linked_list threads;     // List of all threads
+    struct linked_list threads;                 // List of all threads
 };
 
 status_t thread_new(thread_entry entry, struct thread **thread);

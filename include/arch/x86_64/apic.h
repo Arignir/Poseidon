@@ -44,7 +44,7 @@ enum apic_reg {
 #define APIC_LVT_MASKED     0x00010000
 #define APIC_SVR_ENABLED    0x00000100
 
-/* Bitfield for the Interrupt Command Register */
+// Bitfield for the Interrupt Command Register
 #define APIC_ICR_FIXED          (0b000 << 8)
 #define APIC_ICR_LOWPRI         (0b001 << 8)
 #define APIC_ICR_SMI            (0b010 << 8)

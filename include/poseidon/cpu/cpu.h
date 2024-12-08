@@ -18,9 +18,11 @@ struct thread;
 /*
 ** A structure representing the data local to each CPU.
 **
-** This structure can be accessed using `cpu_get_current_cpu_local_data()`.
+** This structure can be accessed using `arch_get_current_cpu_local_data()`.
 */
 struct cpu_local_data {
+    // Current CPU.
+    // Should never be NULL after the CPU's early initialization.
     struct cpu *cpu;
 
     // Current thread executed by the CPU.
@@ -44,7 +46,6 @@ struct cpu {
     void *scheduler_stack_top;
 
     size_t cpu_id;                  // ID of the CPU.
-
 };
 
 // Number of CPUs on the current system.
