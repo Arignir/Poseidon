@@ -11,6 +11,7 @@
 
 #include "poseidon/poseidon.h"
 #include "poseidon/kconfig.h"
+#include "poseidon/atomic.h"
 #include "arch/target/api/cpu.h"
 
 struct thread;
@@ -46,6 +47,14 @@ struct cpu {
     void *scheduler_stack_top;
 
     size_t cpu_id;                  // ID of the CPU.
+
+    // RCU related variables
+    struct rcu {
+        bool in_read_critical_section;  // Set if the CPU is within a read-critical section.
+
+        uint64_t generation;            // RCU Generation when the CPU entered its read-critical section.
+                                        // Undefined if `in_read_critical_section` is false
+    } rcu;
 };
 
 // Number of CPUs on the current system.

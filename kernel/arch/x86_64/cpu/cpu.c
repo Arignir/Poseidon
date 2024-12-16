@@ -131,7 +131,7 @@ cpu_start_all_aps(
         assert_ok(cpu_start_ap(cpu, CPU_TRAMPOLINE_START));
 
         while (42) {
-            if (volatile_read(cpu->started)) {
+            if (volatile_read(&cpu->started)) {
                 break;
             }
         }

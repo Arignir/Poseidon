@@ -113,47 +113,60 @@ typedef uintptr_t           uintptr;
 ** Function attribute to put the function in the boot text section,
 ** which will be freed at the end of kernel initialisation.
 */
-#define boot_text               gnu::section(".text.boot")
+#define boot_text                   gnu::section(".text.boot")
 
 /*
 ** Function attribute to put the function in the boot data section,
 ** which will be freed at the end of kernel initialisation.
 */
-#define boot_data               gnu::section(".data.boot")
+#define boot_data                   gnu::section(".data.boot")
 
 /*
 ** Function attribute to put the function in the boot rodata section,
 ** which will be freed at the end of kernel initialisation.
 */
-#define boot_rodata             gnu::section(".rodata.boot")
+#define boot_rodata                 gnu::section(".rodata.boot")
 
 /*
 ** Pre-processor trick to concat a macro with an other macro or static text.
 **
 ** Mostly used to forge a function name based on the target architecture.
 */
-#define XCONCAT(a, b)       a##b
-#define CONCAT(a, b)        XCONCAT(a, b)
+#define XCONCAT(a, b)               a##b
+#define CONCAT(a, b)                XCONCAT(a, b)
 
 /*
 ** Pre-processor trick to stringify a macro, usually used to debug a macro.
 */
-#define XSTRINGIFY(a)       #a
-#define STRINGIFY(a)        XSTRINGIFY(a)
+#define XSTRINGIFY(a)               #a
+#define STRINGIFY(a)                XSTRINGIFY(a)
 
 /*
 ** Round up `x` to be `y`-aligned.
 **
 ** `y` must be a power of two and the return value has the same type than `x`.
 */
-#define ALIGN(x, y)         ((typeof(x))(((uintptr)(x) + ((y) - 1)) & ~((y) - 1)))
+#define ALIGN(x, y)                 ((typeof(x))(((uintptr)(x) + ((y) - 1)) & ~((y) - 1)))
 
 /*
 ** Round down `x` to be `y`-aligned.
 **
 ** `y` must be a power of two and the return value has the same type than `x`.
 */
-#define ROUND_DOWN(x, y)    ((typeof(x))((uintptr)(x) & ~((y) - 1)))
+#define ROUND_DOWN(x, y)            ((typeof(x))((uintptr)(x) & ~((y) - 1)))
 
-#define volatile_read(x)    (*(const volatile typeof(x) *)&(x))
-#define volatile_write(x)   (*(volatile typeof(x) *)&(x) = (val))
+/*
+** Macro to access data using the properties of the `volatile` keyword.
+*/
+
+#define volatile_read(ptr)          (*(const volatile typeof(*ptr) *)(ptr))
+#define volatile_read8(ptr)         (*(const volatile uint8_t *)(ptr))
+#define volatile_read16(ptr)        (*(const volatile uint16_t *)(ptr))
+#define volatile_read32(ptr)        (*(const volatile uint32_t *)(ptr))
+#define volatile_read64(ptr)        (*(const volatile uint64_t *)(ptr))
+
+#define volatile_write(ptr, val)    (*(volatile typeof(*ptr) *)(ptr) = (typeof(*ptr))(val))
+#define volatile_write8(ptr, val)   (*(volatile uint8_t *)(ptr) = (uint8_t)(val))
+#define volatile_write16(ptr, val)  (*(volatile uint16_t *)(ptr) = (uint16_t)(val))
+#define volatile_write32(ptr, val)  (*(volatile uint32_t *)(ptr) = (uint32_t)(val))
+#define volatile_write64(ptr, val)  (*(volatile uint64_t *)(ptr) = (uint64_t)(val))
