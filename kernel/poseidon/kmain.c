@@ -31,7 +31,7 @@ thread_test(
     void
 ) {
     while (42) {
-        log("%zu", current_cpu()->cpu_id);
+        log("[%zu:%zu]", current_cpu()->id, current_thread()->tid);
         halt();
     }
 }
@@ -77,9 +77,7 @@ kmain(
     assert_ok(thread_new(thread_test, &kthread3));
     assert_ok(thread_new(thread_test, &kthread4));
 
-    logln("");
-    logln("Poseidon finished its initialization!");
-    logln("");
+    log("\nPoseidon finished its initialization!\n\n");
 
     /* Start init here (WIP) */
 

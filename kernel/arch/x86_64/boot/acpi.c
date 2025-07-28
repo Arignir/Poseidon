@@ -140,12 +140,14 @@ acpi_parse_madt(
     void
 ) {
     struct madt_entry_header const *header;
+    size_t cpu_count;
 
     debug_assert(g_madt);
 
     // Map the local APIC address
     apic_map(g_madt->lapic_addr);
 
+    cpu_count = 1;
     header = (struct madt_entry_header const *)g_madt->entries;
     while ((char *)header < (char *)g_madt + g_madt->len) {
         switch (header->type) {
@@ -153,12 +155,33 @@ acpi_parse_madt(
                 struct madt_processor_local_apic_entry const *entry;
 
                 entry = (struct madt_processor_local_apic_entry const *)header;
-                if (g_cpus_len < KCONFIG_MAX_CPUS) {
-                    g_cpus[g_cpus_len].acpi_id = entry->acpi_processor_id;
-                    g_cpus[g_cpus_len].apic_id = entry->apic_id;
-                    g_cpus[g_cpus_len].cpu_id = g_cpus_len;
-                    g_cpus_len++;
+
+                // Handle the BSP differently, since we do not
+                // need to allocate a CPU structure nor add it to the
+                // available CPU list.
+                if (apic_get_id() == entry->apic_id) {
+                    struct cpu *bsp;
+
+                    bsp = cpu_get_bsp();
+                    bsp->acpi_id = entry->acpi_processor_id;
+                } else {
+                    struct cpu *cpu;
+
+                    cpu = kheap_alloc(sizeof(*cpu));
+                    assert(cpu);
+
+                    cpu_init(cpu, cpu_count);
+                    cpu->acpi_id = entry->acpi_processor_id;
+                    cpu->apic_id = entry->apic_id;
+
+                    cpu_count += 1;
+
+                    // We're in a mono-core context since the other cores aren't discovered/booted yet
+                    // Therefore, there's no need for mutex or RCU logic to protect against modifying the linked list
+                    // of available cpus.
+                    list_add_tail(&g_cpus_available, &cpu->available_cpus);
                 }
+
                 break;
             };
             case MADT_IO_APIC: {

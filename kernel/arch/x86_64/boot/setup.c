@@ -24,6 +24,7 @@
 #include "poseidon/cpu/cpu.h"
 #include "poseidon/scheduler/scheduler.h"
 #include "platform/pc/pic8259.h"
+#include "lib/sync/rcu.h"
 #include "lib/log.h"
 
 static void    common_setup(void);
@@ -47,10 +48,12 @@ bsp_early_setup(
     struct cpu *cpu;
 
     idt_setup();
-    cpu_init();
 
-    // The BSP's CPU-local data are always at index zero.
-    msr_write(MSR_IA32_GSBASE, (uint64_t)&g_cpus_local_data[0]);
+    cpu = cpu_get_bsp();
+    cpu_init(cpu, 0);
+
+    // Set the BSP's CPU-local data.
+    msr_write(MSR_IA32_GSBASE, (uint64_t)&cpu->local_data);
 
     cpu = current_cpu();
 
@@ -58,6 +61,7 @@ bsp_early_setup(
     debug_assert(cpu == cpu_get_bsp());
 
     cpu->bsp = true;
+    cpu->apic_id = apic_get_id();
     cpu->scheduler_stack = bsp_kernel_stack_bot;
     cpu->scheduler_stack_top = bsp_kernel_stack_top;
 
@@ -70,6 +74,8 @@ bsp_early_setup(
     if (!cpu->cpuid.features.apic) {
         panic("Your CPU doesn't contain an APIC");
     }
+
+    list_add_tail(&g_cpus_available, &cpu->available_cpus);
 
     return OK;
 }
@@ -85,6 +91,7 @@ status_t
 bsp_setup(
     void
 ) {
+
     acpi_init();
     pic8259_init();
     ioapic_init();
@@ -93,12 +100,19 @@ bsp_setup(
     common_setup();
 
 #if KCONFIG_SMP
-    logln("Number of cpus: %u", g_cpus_len);
+    {
+        size_t ncpus;
 
-    // Start other processors
-    cpu_start_all_aps();
+        ncpus = list_length(&g_cpus_available);
+        logln("Number of cpus: %u", ncpus);
+
+        if (ncpus > 1) {
+            // Start other processors
+            cpu_start_all_aps();
+        }
+
+    }
 #endif /* KCONFIG_SMP */
-
 
     return OK;
 }
@@ -141,7 +155,12 @@ common_setup(
     idt_load();
 
     cpu = current_cpu();
-    cpu->started = true;
+    cpu->active = true;
+
+    spinlock_acquire(&g_cpus_lock);
+    list_add_tail(&g_cpus_active, &cpu->active_cpus);
+    rcu_synchronize();
+    spinlock_release(&g_cpus_lock);
 }
 
 /*

@@ -8,44 +8,33 @@
 \******************************************************************************/
 
 #include "poseidon/cpu/cpu.h"
+#include "lib/sync/spinlock.h"
+#include "lib/string.h"
 
-// Number of CPUs on the current system.
-uint g_cpus_len = 0;
+struct cpu bsp;
 
-// An array for all cpus.
-struct cpu g_cpus[KCONFIG_MAX_CPUS] = { 0 };
+LIST_HEAD(g_cpus_available);
+LIST_HEAD(g_cpus_active);
 
-// The end of `g_cpus`. Used for iterating over `g_cpus`.
-struct cpu const *g_cpus_end = g_cpus + KCONFIG_MAX_CPUS;
-
-// An array of all cpu-local data .
-struct cpu_local_data g_cpus_local_data[KCONFIG_MAX_CPUS] = { 0 };
+struct spinlock g_cpus_lock = SPINLOCK_DEFAULT;
 
 /*
-** Get the bootstrap processor's CPU structure.
-**
-** It is assumed to always be `g_cpus[0]`.
+** Initialise a cpu structure.
 */
+void
+cpu_init(
+    struct cpu *cpu,
+    size_t id
+) {
+    memset(cpu, 0, sizeof(*cpu));
+
+    cpu->id = id;
+    cpu->local_data.cpu = cpu;
+}
+
 struct cpu *
 cpu_get_bsp(
     void
 ) {
-    return &g_cpus[0];
-}
-
-/*
-** Initialize the CPU-local table.
-**
-** This needs only to be called once by the BSP.
-*/
-void
-cpu_init(
-    void
-) {
-    size_t i;
-
-    for (i = 0; i < KCONFIG_MAX_CPUS; ++i) {
-        g_cpus_local_data[i].cpu = &g_cpus[i];
-        g_cpus_local_data[i].thread = NULL;
-    }
+    return &bsp;
 }

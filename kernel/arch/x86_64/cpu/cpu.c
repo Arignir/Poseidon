@@ -15,7 +15,9 @@
 #include "poseidon/poseidon.h"
 #include "poseidon/cpu/cpu.h"
 #include "poseidon/memory/memory.h"
+#include "lib/sync/rcu.h"
 #include "lib/log.h"
+#include "lib/list.h"
 
 // Variable shared with the AP starting up to give it its kernel stack.
 [[boot_data]]
@@ -29,14 +31,17 @@ struct cpu_local_data const *
 cpu_fetch_current_cpu_local_data_manually(
     void
 ) {
+    struct linked_list *cursor;
     uint32_t apic_id;
-    size_t i;
 
     apic_id = apic_get_id();
 
-    for (i = 0; i < KCONFIG_MAX_CPUS; ++i) {
-        if (g_cpus[i].apic_id == apic_id) {
-            return &g_cpus_local_data[i];
+    list_for_each(cursor, &g_cpus_available) {
+        struct cpu *cpu;
+
+        cpu = list_entry(cursor, struct cpu, available_cpus);
+        if (cpu->apic_id == apic_id) {
+            return &cpu->local_data;
         }
     }
 
@@ -110,33 +115,50 @@ void
 cpu_start_all_aps(
     void
 ) {
-    struct cpu *cpu;
+    struct linked_list *cursor;
+    bool done;
 
-    /*
-    ** Boot code is size-limited, so we only do a far-jump to boot_ap,
-    ** where it's more convienent and not restricted.
-    */
-    *(uchar *)(CPU_TRAMPOLINE_START) = 0xEA; /* Far jump, IP, CS */
+    // Boot code is size-limited, so we only do a far-jump to `start_ap()`,
+    // where it's more convienent and not restricted.
+    *(uchar *)(CPU_TRAMPOLINE_START) = 0xEA; // Far jump, IP, CS
     *(ushort *)(CPU_TRAMPOLINE_START + 1) = (uint16)(uintptr)&start_ap + 0x10;
     *(ushort *)(CPU_TRAMPOLINE_START + 3) = 0xFFFF;
 
-    /* Start all available cpus */
-    for (cpu = g_cpus; cpu < g_cpus + g_cpus_len; ++cpu) {
-        if (cpu == cpu_get_bsp()) {
+    rcu_acquire_read();
+
+    list_for_each(cursor, &g_cpus_available) {
+        struct cpu *cpu;
+
+        cpu = list_entry(cursor, struct cpu, available_cpus);
+        if (cpu->bsp) {
             continue;
         }
 
-        log("Starting AP processor %zu ...", cpu->cpu_id);
+        logln("Starting co-processor %zu...", cpu->id);
 
         assert_ok(cpu_start_ap(cpu, CPU_TRAMPOLINE_START));
+    }
 
-        while (42) {
-            if (volatile_read(&cpu->started)) {
+    // Wait until all CPUs are active.
+    do {
+        done = true;
+
+
+        list_for_each(cursor, &g_cpus_available) {
+            struct cpu *cpu;
+
+            cpu = list_entry(cursor, struct cpu, available_cpus);
+
+            if (!volatile_read(&cpu->active)) {
+                done = false;
                 break;
             }
         }
 
-        logln(" done!");
-    }
+    } while (!done);
+
+    rcu_release_read();
+
+    logln("All co-processors are initialized & active.");
 }
 

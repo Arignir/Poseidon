@@ -26,7 +26,6 @@ CFLAGS	+= \
 	-W \
 	-Wall \
 	-Wextra \
-	-Wcast-align \
 	-Winline \
 	-Wno-format \
 	-Wno-missing-braces \

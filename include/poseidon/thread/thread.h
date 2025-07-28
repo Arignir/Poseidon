@@ -86,27 +86,3 @@ struct thread {
 };
 
 status_t thread_new(thread_entry entry, struct thread **thread);
-
-/*
-** Return the current thread, aka the thread the CPU was running before an
-** interruption occured.
-*/
-static inline
-struct thread *
-current_thread(
-    void
-) {
-    return arch_fetch_current_cpu_local_data()->thread;
-}
-
-/*
-** Set the current thread, aka the thread the CPU was running before an
-** interruption occured.
-*/
-static inline
-void
-set_current_thread(
-    struct thread *new_thread
-) {
-    arch_fetch_current_cpu_local_data()->thread = new_thread;
-}

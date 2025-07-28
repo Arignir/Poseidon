@@ -9,7 +9,6 @@
 
 #include "arch/x86_64/interrupt.h"
 #include "poseidon/poseidon.h"
-#include "poseidon/interrupt.h"
 #include "poseidon/cpu/cpu.h"
 #include "lib/log.h"
 
@@ -24,7 +23,7 @@ exception_breakpoint(
         "     R8=%p  R9=%p R10=%p R11=%p\n"
         "    R12=%p R13=%p R14=%p R15=%p\n"
         "    RIP=%p RFLAGS=%08zx",
-        (uint32)current_cpu()->cpu_id,
+        (uint32)current_cpu()->id,
         iframe->rax,
         iframe->rbx,
         iframe->rcx,

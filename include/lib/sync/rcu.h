@@ -10,6 +10,7 @@
 #pragma once
 
 #include "poseidon/interrupt.h"
+#include "poseidon/atomic.h"
 #include "poseidon/cpu/cpu.h"
 
 static uint64_t g_rcu_generation = 0;
@@ -61,6 +62,8 @@ rcu_release_read(
     cpu->rcu.generation = 0;
 }
 
+#include "lib/log.h"
+
 /*
 ** Wait for all the remaining read-side critical sections entered by the other cores to finish.
 **
@@ -72,29 +75,26 @@ void
 rcu_synchronize(
     void
 ) {
-    size_t i;
     uint64_t current_gen;
     struct cpu *current;
+    struct linked_list *cursor;
     bool done;
-
-    // If we're running in a mono-core context, the equation is pretty simple:
-    // there's nothing to synchronize and we can early return.
-    if (g_cpus_len <= 1) {
-        return ;
-    }
 
     current = current_cpu();
     current_gen = atomic_load(&g_rcu_generation, ATOMIC_SEQ_CST);
 
+    rcu_acquire_read();
+
     do {
         done = true;
-        for (i = 0; i < g_cpus_len; ++i) {
+
+        list_for_each(cursor, &g_cpus_active) {
             struct cpu *cpu;
 
-            cpu = &g_cpus[i];
+            cpu = list_entry(cursor, struct cpu, active_cpus);
+
             if (
-                cpu->started
-                && cpu->cpu_id != current->cpu_id
+                cpu->id != current->id // Skip current CPU
                 && atomic_load(&cpu->rcu.in_read_critical_section, ATOMIC_SEQ_CST)
                 && cpu->rcu.generation <= current_gen
             ) {
@@ -103,4 +103,6 @@ rcu_synchronize(
             }
         }
     } while (!done);
+
+    rcu_release_read();
 }

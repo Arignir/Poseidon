@@ -50,6 +50,3 @@
 
 // Size of the boot kheap (in bytes). Atm it is 4MB.
 #define KCONFIG_BOOT_KHEAP_SIZE                (4u * 1024u * 1024u)
-
-// Maximum amount of CPUs theoretically available.
-#define KCONFIG_MAX_CPUS                       16

@@ -7,9 +7,16 @@
 **
 \******************************************************************************/
 
+/*
+** Heavily inspired by `list.h` in the Linux Kernel, also made available under
+** the terms of the GNU General Public License version 2.
+**
+** https://github.com/torvalds/linux/tree/master/include/linux/list.h
+*/
+
 #pragma once
 
-#include "poseidon/poseidon.h"
+#include <stddef.h>
 
 struct linked_list {
     struct linked_list *next;
@@ -17,6 +24,7 @@ struct linked_list {
 };
 
 #define LIST_HEAD_INIT(name)    ((struct linked_list) { &(name), &(name) })
+#define LIST_HEAD(name)         struct linked_list name = LIST_HEAD_INIT(name)
 
 static inline
 bool
@@ -103,21 +111,36 @@ list_move_tail(
     list_add_tail(head, node);
 }
 
-#define list_entry(ptr, type, member) ({                                    \
-        unsigned char *uptr = (unsigned char *)(ptr);                       \
-        (type *)(uptr - offsetof(type, member));                            \
+#define list_entry(cursor, type, member) ({                                     \
+        unsigned char *ucursor = (unsigned char *)(cursor);                     \
+        (type *)(ucursor - offsetof(type, member));                             \
     })
 
-#define list_next_entry(ptr, member) ({                                     \
-        list_entry((ptr)->member.next, typeof(*(ptr)), member);             \
+#define list_next_entry(cursor, member) ({                                      \
+        list_entry((cursor)->member.next, typeof(*(cursor)), member);           \
     })
 
-#define list_first_entry_or_null(ptr, type, member) ({                      \
-        struct linked_list *head = (ptr);                                   \
-        struct linked_list *cursor = head->next;                            \
-                                                                            \
-        (head != cursor) ? list_entry(cursor, type, member) : NULL;         \
+#define list_first_entry_or_null(_head, type, member) ({                        \
+        struct linked_list *head = (_head);                                     \
+        struct linked_list *cursor = head->next;                                \
+                                                                                \
+        (head != cursor) ? list_entry(cursor, type, member) : NULL;             \
     })
 
-#define list_for_each(cursor, head)                                         \
-    for (cursor = (head)->next; cursor != (head); cursor = cursor ->next)
+#define list_for_each(cursor, head)                                             \
+    for (cursor = (head)->next; cursor != (head); cursor = cursor->next)
+
+static inline
+size_t
+list_length(
+    struct linked_list *head
+) {
+    struct linked_list *cursor;
+    size_t length;
+
+    length = 0;
+    list_for_each(cursor, head) {
+        length += 1;
+    }
+    return length;
+}
