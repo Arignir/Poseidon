@@ -26,7 +26,7 @@ typedef int (*thread_entry)();
 /*
 ** An enum of all states a thread can be in.
 */
-enum thread_state {
+enum thread_state : uint32_t {
     NONE = 0,
     RUNNABLE,
     RUNNING,
@@ -67,7 +67,8 @@ struct thread {
     struct thread *parent;                      // Parent thread
     thread_entry entry;                         // Entry point
 
-    // The following is protected by the rwlock within the structure.
+    // Beside RCU-protected linked lists, the following fields can only be accessed
+    // by the CPU running this thread.
     struct {
         virtaddr_t stack;                       // Bottom of the thread's stack
         virtaddr_t stack_top;                   // Top of the thread's stack.
@@ -76,10 +77,8 @@ struct thread {
         virtaddr_t kstack;                      // Bottom of kernel stack
         virtaddr_t kstack_top;                  // Top of kernel stack
 
-        enum thread_state state;                // State
+        uint32_t state;                         // State. Must be atomically accessed.
         struct linked_list runnable_threads;    // List of runnable threads, used by the scheduler.
-
-        struct spin_rwlock lock;
     } sched_info;
 
     struct linked_list threads;                 // List of all threads

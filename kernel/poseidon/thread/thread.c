@@ -8,20 +8,24 @@
 \******************************************************************************/
 
 #include "arch/target/api/thread.h"
+#include "lib/sync/spinlock.h"
 #include "poseidon/poseidon.h"
 #include "poseidon/thread/thread.h"
 #include "poseidon/memory/memory.h"
 #include "poseidon/scheduler/scheduler.h"
-#include "lib/sync/spinrwlock.h"
 #include "lib/list.h"
 #include "lib/string.h"
 
-static struct linked_list g_threads_list = LIST_HEAD_INIT(g_threads_list);
-static tid_t g_next_pid = 1;
+LIST_HEAD(g_threads_list);
+static struct spinlock g_threads_list_lock = SPINLOCK_DEFAULT;
+
+static tid_t g_next_tid = 1;
+
 
 /*
 ** Set the new name of the thread
 */
+static
 void
 thread_set_name(
     struct thread *thread,
@@ -92,10 +96,9 @@ thread_new(
         return ERR_OUT_OF_MEMORY;
     }
 
-    thread->tid = g_next_pid++;             // Set the thread's TID
+    thread->tid = g_next_tid++;             // Set the thread's TID
     thread->entry = entry;                  // Set the thread's entry point
     thread->sched_info.state = RUNNABLE;    // Set the state of the new thread to `RUNNABLE`
-    thread->sched_info.lock = SPIN_RWLOCK_DEFAULT;
 
     if (current_thread()) {
         thread->parent = current_thread();                  // Set the current thread as the new thread's parent
@@ -113,7 +116,9 @@ thread_new(
 
     arch_thread_new(thread);                // Initialize the arch-dependant side of this thread.
 
+    spinlock_acquire(&g_threads_list_lock);
     list_add_tail(&g_threads_list, &thread->threads);
+    spinlock_release(&g_threads_list_lock);
 
     spinlock_acquire(&g_sched_runnable_threads_lock);
     list_add_tail(&g_sched_runnable_threads, &thread->sched_info.runnable_threads);

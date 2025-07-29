@@ -36,7 +36,7 @@ rcu_acquire_read(
     assert(!interrupts_enabled());
 
     // Increase the generation by one.
-    generation = atomic_fetch_add(&g_rcu_generation, 1, ATOMIC_ACQ_REL);
+    generation = atomic_fetch_add(&g_rcu_generation, 1, ATOMIC_RELAXED);
 
     // Set the CPU's RCU generation
     cpu->rcu.generation = generation;

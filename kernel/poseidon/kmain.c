@@ -48,7 +48,6 @@ kmain(
     void
 ) {
     struct init_hook const *hook;
-    status_t s;
     struct thread *kthread1;
     struct thread *kthread2;
     struct thread *kthread3;
@@ -60,6 +59,8 @@ kmain(
     /* Trigger all init hooks, panic if one failed. */
     hook = find_next_init_hook(NULL, __INIT_LEVEL_EARLIEST);
     while (hook != NULL) {
+        status_t s;
+
         s = hook->hook();
         if (s != OK) {
             panic(

@@ -13,17 +13,20 @@
 
 #pragma once
 
-#include "poseidon/poseidon.h"
-
 /*
 ** `memorder` can be any of those constants.
+**
+** ATOMIC_RELAXED: No ordering constraints. Use only when atomicity matters (e.g., counters or flags without dependencies).
+** ATOMIC_ACQUIRE: Prevents reads/writes after the atomic operation from moving before it. Use when reading shared data after acquiring a lock or flag.
+** ATOMIC_RELEASE: Prevents reads/writes before the atomic operation from moving after it. Use when releasing a lock or publishing data to other threads.
+** ATOMIC_ACQ_REL: Combines acquire and release. Use for read-modify-write operations like atomic increment with synchronization.
+** ATOMIC_SEQ_CST: Strongest ordering (sequential consistency). Use when strict global ordering is required across threads.
 **
 ** See the GCC documentation for more informations:
 **   - https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html
 **   - https://gcc.gnu.org/wiki/Atomic/GCCMM/AtomicSync
 */
 #define ATOMIC_RELAXED                                  __ATOMIC_RELAXED
-#define ATOMIC_CONSUME                                  __ATOMIC_CONSUME
 #define ATOMIC_ACQUIRE                                  __ATOMIC_ACQUIRE
 #define ATOMIC_RELEASE                                  __ATOMIC_RELEASE
 #define ATOMIC_ACQ_REL                                  __ATOMIC_ACQ_REL
@@ -65,3 +68,9 @@
 #define atomic_and_fetch(ptr, value, memorder)          __atomic_and_fetch(ptr, value, memorder)
 #define atomic_xor_fetch(ptr, value, memorder)          __atomic_xor_fetch(ptr, value, memorder)
 #define atomic_nand_fetch(ptr, value, memorder)         __atomic_nand_fetch(ptr, value, memorder)
+
+/*
+** Shortcuts
+*/
+#define atomic_read(ptr)                                atomic_load((ptr), ATOMIC_ACQ_REL)
+#define atomic_write(ptr, value)                        atomic_store((ptr), (value), ATOMIC_ACQ_REL)
